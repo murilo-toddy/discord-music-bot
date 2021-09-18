@@ -1,58 +1,6 @@
-import os
-import discord, youtube_dl
+import os, youtube_dl, discord
+from main import client
 import asyncio
-from discord.ext import commands
-from dotenv import load_dotenv
-
-
-load_dotenv()
-
-TOKEN = os.getenv('TOKEN')
-client = commands.Bot(command_prefix='!')
-
-@client.event
-async def on_ready():
-    print("Liguei")
-
-# @client.event
-# async def on_message(message):
-#     if message.author == client.useru:
-#         return   
-
-#     if message.content.startswith("!hello"):
-#         await message.channel.send("yes")
-
-
-@client.command()
-async def print(ctx, arg):
-    await ctx.channel.send("aaaaa")
-
-
-@client.command()
-async def join(ctx):
-    bot_channel = ctx.guild.voice_client
-    
-    if bot_channel:
-        await ctx.channel.send("ja to conectado parsa")
-    
-    else:
-        await ctx.author.voice.channel.connect()
-        voice = ctx.guild.voice_client
-        voice.pause()
-
-
-
-@client.command()
-async def leave(ctx):
-    voice = ctx.guild.voice_client
-
-    if voice:
-        await ctx.channel.send("To de saidas")
-        await ctx.voice_client.disconnect()
-
-    else:
-        await ctx.channel.send("Não to conectado")
-
 
 @client.command(aliases=['p'])
 async def play(ctx, url : str):
@@ -104,11 +52,3 @@ async def play(ctx, url : str):
     
     # if voice_client:
         # await ctx.voice_client.disconnect()
-
-
-
-
-if __name__ == '__main__':
-    client.run(TOKEN)
-
-
