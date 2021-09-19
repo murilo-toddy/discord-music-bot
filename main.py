@@ -52,8 +52,18 @@ async def join(ctx):
 
 
 @client.command()
+async def loopqueue(ctx):
+    await _loopqueue.loopqueue(client,ctx)
+
+
+@client.command()
+async def loop(ctx):
+    await _loop.loop(client,ctx)
+
+
+@client.command()
 async def leave(ctx):
-    await _leave.leave(ctx)
+    await _leave.leave(client,ctx)
 
 
 @client.command(brief="", aliases=["p"])
