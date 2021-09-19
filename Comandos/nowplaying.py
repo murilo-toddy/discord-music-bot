@@ -1,7 +1,6 @@
 import sys, discord
 from typing import Text
 from discord.colour import Color
-import collections
 
 from .play import GetCurrentURL
 
@@ -36,6 +35,8 @@ async def ShowMessage(client,ctx,info):
 
     for i in range(NumberAfter):
         ProgressBar += "-"
+
+
 
     embedVar = discord.Embed(
         title = '',
