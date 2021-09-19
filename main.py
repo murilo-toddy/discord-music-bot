@@ -34,10 +34,10 @@ queue = Lista()
 
 @client.event
 async def on_ready():
-    print("\n [*] The bot is running.")
+    print("\n [!] Bot iniciado.")
 
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
-    print("\n [*] The bot's status was successfully set.")
+    print("\n [!] Status do Bot modificado com sucesso.")
 
 
 
@@ -51,7 +51,7 @@ async def join(ctx):
 #     await _clear.clear(queue)
 
 
-@client.command()
+@client.command(aliases=["loopq", "lq"])
 async def loopqueue(ctx):
     await _loopqueue.loopqueue(client,ctx)
 

@@ -1,8 +1,6 @@
-import discord, sys
-import youtube_dl
-import os
-import asyncio
-import collections
+import discord, sys, os
+import youtube_dl, asyncio
+import log
 
 sys.path.append("..")
 from EstruturaV2 import Lista
@@ -31,7 +29,7 @@ async def ForceSkip():
 
 async def play(client, ctx, queue, *url):
     
-    print('\n [*] \'!play\' command called.')
+    log.log_function("play")
 
     if len(url) == 0:
         await ctx.channel.send("precisa passar um url ne arrombado")

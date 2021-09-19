@@ -1,9 +1,9 @@
-import discord
+import discord, log
 
 async def pause(client, ctx):
     
-    print('\n [*] \'!pause\' command called.')
-
+    log.log_function("pause")
+    
     voice_client:  discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
 
     if not voice_client:
