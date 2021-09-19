@@ -131,6 +131,5 @@ class ListaEncadeada:
         random.shuffle(self.listaShuffle)   
         for i in range(len(self.listaShuffle)):
             self[0] = self.listaShuffle[i]
-
-
              
+
