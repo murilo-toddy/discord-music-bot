@@ -1,19 +1,18 @@
-from pprint import pprint
-from Google import Create_Service
+from requests_html import HTMLSession
+from bs4 import BeautifulSoup as bs
 
-CLIENT_SECRET_FILE = 'client-secret.json'
-API_NAME = 'youtube'
-API_VERSION = 'v3'
-SCOPES = ['https://www.googleapis.com/auth/youtube']
+def get_video_data(url):
+	session = HTMLSession()
+	response = session.get(url)
 
-service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
+	response.html.render(sleep=1)
+	soup = bs(response.html.html, "html.parser")
 
-part_string = 'contentDetails,statistics,snippet'
-video_ids = '<Video Id>'
+	video_info = {}
 
-response = service.videos().list(
-	part=part_string,
-	id=video_ids
-).execute()
+	video_info["title"] = soup.find("meta", itemprop="name")["content"]
+	video_info["views"] = soup.find("meta", itemprop="interactionCount")['content']
+	video_info["published"] = soup.find("meta", itemprop="datePublished")['content']
+	video_info["duration"] = soup.find("span", {"class": "ytp-time-duration"}).text
 
-pprint(response)
+	return video_info
