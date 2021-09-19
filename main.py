@@ -19,6 +19,7 @@ import Comandos.seek as _seek
 import Comandos.shuffle as _shuffle
 import Comandos.log as _log
 import Comandos.queue as _queue
+import Comandos.move as _move
 
 
 load_dotenv()
@@ -97,11 +98,14 @@ async def shuffle(ctx):
     await _shuffle.shuffle(ctx, queue)
 
 
-# @client.command()
-# async def queue(ctx):
-#     print("lalalala")
-    # _log.log_function("queue")
-    # await _queue.queue(ctx, queue)
+
+@client.command(aliases=["m"])
+async def move(ctx, *args):
+    _log.log_function("move")
+    print(args)
+    await _move.move(ctx, queue, *args)
+
+
 
 @client.command(aliases=["queue", "q"])
 async def queue_(ctx):
