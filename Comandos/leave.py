@@ -1,7 +1,4 @@
-
-
 async def leave(ctx):
-
 
     voice = ctx.guild.voice_client
 

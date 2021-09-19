@@ -18,6 +18,8 @@ import Comandos.nowplaying as _nowplaying
 import Comandos.seek as _seek
 import Comandos.shuffle as _shuffle
 import Comandos.log as _log
+import Comandos.queue as _queue
+import Comandos.move as _move
 
 
 load_dotenv()
@@ -69,7 +71,7 @@ async def loop(ctx):
 @client.command()
 async def leave(ctx):
     _log.log_function("leave")
-    await _leave.leave(client,ctx)
+    await _leave.leave(ctx)
 
 
 @client.command(brief="", aliases=["p"])
@@ -88,6 +90,27 @@ async def pause(ctx):
 async def resume(ctx):
     _log.log_function("resume")
     await _resume.resume(client, ctx)
+
+
+@client.command()
+async def shuffle(ctx):
+    _log.log_function("shuffle")
+    await _shuffle.shuffle(ctx, queue)
+
+
+
+@client.command(aliases=["m"])
+async def move(ctx, *args):
+    _log.log_function("move")
+    print(args)
+    await _move.move(ctx, queue, *args)
+
+
+
+@client.command(aliases=["queue", "q"])
+async def queue_(ctx):
+    _log.log_function("queue")
+    await _queue.queue(ctx, queue)
 
 
 

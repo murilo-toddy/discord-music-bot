@@ -10,7 +10,7 @@ from youtube import get_video_data
 
 async def nowplaying(client,ctx):
     url = await GetCurrentURL()
-    info =  await get_video_data(url)
+    info = await get_video_data(url)
     await ShowMessage(client,ctx,info)
 
 async def ShowMessage(client,ctx,info):
