@@ -9,15 +9,20 @@ async def move(ctx, queue, *args):
     
     elif len(args) == 1:
         try:
-            pos = int(args[0])
-            if pos > len(queue):
-                await ctx.channel("Posicao invalida arrombado")
-                return
-            queue.move((pos-1),0)
-            await ctx.channel.send("movi de " + args[0] + " para 1")
+            pos = int(*args[0])
 
         except:
-            await ctx.channel.send("tem que inserir um numero filadaputa")
+            await ctx.channel.send("tem que inserir um numero valido")
+            return
+
+        if pos > len(queue):
+            await ctx.channel.send("Posicao invalida arrombado")
+            return
+
+        queue.move((pos-1),0)
+        await ctx.channel.send("movi de " + args[0] + " para 1")
+            
+
 
     elif len(args) == 2:
         try:
@@ -25,9 +30,9 @@ async def move(ctx, queue, *args):
             pos2 = int(*args[1])
             
             if pos1 > len(queue) or pos2 > len(queue):
-                await ctx.channel("Posicao invalida arrombado")
+                await ctx.channel.send("Posicao invalida arrombado")
                 return
-                
+
             await ctx.channel.send("mandei o " + args[0] + " pra " + args[1])
 
         except:
