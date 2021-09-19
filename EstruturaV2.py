@@ -1,7 +1,7 @@
 import collections
 import random
 
-class   Lista:
+class Lista:
     def __init__(self):
         self.MusicList = []
 
@@ -18,7 +18,7 @@ class   Lista:
         self.MusicList.append(url)
 
     def remove(self,index):
-        self.MusicList.pop(index)
+        return self.MusicList.pop(index)
 
     def imprime(self):
         print(self.MusicList)
