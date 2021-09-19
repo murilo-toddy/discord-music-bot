@@ -1,8 +1,6 @@
-import log
-
 async def join(ctx):
 
-    log.log_function("join")
+
     bot_channel = ctx.guild.voice_client
     
     if bot_channel:

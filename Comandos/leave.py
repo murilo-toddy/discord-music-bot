@@ -1,7 +1,7 @@
-import log
+
 
 async def leave(ctx):
-    log.log_function("leave")
+
 
     voice = ctx.guild.voice_client
 

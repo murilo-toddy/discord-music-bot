@@ -1,6 +1,6 @@
 import discord, sys, os
 import youtube_dl, asyncio
-import log
+
 
 sys.path.append("..")
 from EstruturaV2 import Lista
@@ -12,6 +12,9 @@ loop = False
 loop_queue = False
 
 
+
+async def GetCurrentURL():
+    return current_song_url
 
 async def ChangeLoop():
     global loop
@@ -29,7 +32,6 @@ async def ForceSkip():
 
 async def play(client, ctx, queue, *url):
     
-    log.log_function("play")
 
     if len(url) == 0:
         await ctx.channel.send("precisa passar um url ne arrombado")
