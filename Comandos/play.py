@@ -1,9 +1,12 @@
-import discord
+import discord, sys
 import youtube_dl
 import os
 import asyncio
 
-async def play(client, ctx, *url):
+sys.path.append("..")
+from EstruturaV2 import Lista
+
+async def play(client, ctx, queue, *url):
     
     print('\n [*] \'!play\' command called.')
 
@@ -14,12 +17,25 @@ async def play(client, ctx, *url):
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
     
+    ############################
+    # Adicionar novo link na fila
+    queue.append(url[0])
+    ############################
+
+    
     if voice_client and voice_client.is_playing():
         await ctx.channel.send("vo adiciona essa parada na fila valeu")
-        # Adicionar novo link na fila
-        return
+        
+    else:
+        await play_next(client, ctx, queue)
 
 
+
+
+
+async def play_next(client, ctx, queue : Lista):
+
+    guild = ctx.guild
     song = os.path.isfile("song.mp3")
 
     try:
@@ -40,12 +56,17 @@ async def play(client, ctx, *url):
     }
 
     with youtube_dl.YoutubeDL(ydl_opt) as ydl:
-        ydl.download([url[0]])
+        ydl.download([queue[0]])
 
     for file in os.listdir("./"):
         if file.endswith(".mp3"):
             song_name = file
             os.rename(file, "song.mp3")
+
+    ##################################
+    #Remove da queue
+    queue.remove(0)
+    #################################
 
     bot_voice = guild.voice_client
 
@@ -59,12 +80,14 @@ async def play(client, ctx, *url):
         voice_client.play(audio_source, after=None)
         await ctx.channel.send("vo toca essa musica chamada " + str(song_name[0:len(song_name)-16]))
 
-    else:
-        await ctx.channel.send("vo adiciona na lista")
-
+    
     while voice_client.is_playing():
         await asyncio.sleep(1)
     
-    if voice_client:
+    voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
+
+    if voice_client and not voice_client.is_paused() :
         #baixar proxima musica da lsita
         await ctx.channel.send("terminei a musica, vo começa a proxima")
+        if not len(queue) == 0:
+            await play_next(client, ctx, queue)

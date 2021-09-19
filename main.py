@@ -25,6 +25,13 @@ TOKEN = os.getenv('TOKEN')
 client = commands.Bot(command_prefix='!')
 
 
+########################################
+
+queue = Lista()
+
+########################################
+
+
 @client.event
 async def on_ready():
     print("\n [*] The bot is running.")
@@ -39,9 +46,9 @@ async def join(ctx):
     await _join.join(ctx)
 
 
-@client.command()
-async def clear(ctx):
-    await _clear.clear(client, ctx)
+# @client.command()
+# async def clear(ctx):
+#     await _clear.clear(queue)
 
 
 @client.command()
@@ -51,7 +58,7 @@ async def leave(ctx):
 
 @client.command(brief="", aliases=["p"])
 async def play(ctx, *url):
-    await _play.play(client, ctx, *url)
+    await _play.play(client, ctx, queue, *url)
 
 
 @client.command()

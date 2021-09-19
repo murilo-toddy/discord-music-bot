@@ -1,7 +1,6 @@
 import collections
 import random
 
-
 class   Lista:
     def __init__(self):
         self.MusicList = []
@@ -32,8 +31,3 @@ class   Lista:
 
     def shuffle(self):
         random.shuffle(self.MusicList)
-
-
-        
-
-
