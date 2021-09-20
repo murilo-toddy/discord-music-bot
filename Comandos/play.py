@@ -1,16 +1,14 @@
 import discord, sys, os
 import youtube_dl, asyncio
 
-
 sys.path.append("..")
 from EstruturaV2 import Lista
 
 
-song_name = ""
 current_song_url = ""
 loop = False
 loop_queue = False
-
+#force_skip = False
 
 
 async def GetCurrentURL():
@@ -25,9 +23,28 @@ async def ChangeLoopQueue():
     loop_queue = not loop_queue
     print("Loop queue em estado " + str(loop_queue))
 
-async def ForceSkip():
-    global current_song_url
-    current_song_url.clear()
+# async def ForceSkip():
+#     global force_skip
+#     force_skip = True
+    
+
+
+async def search_play(client, ctx, queue, *url):
+    if len(url) == 0:
+        ctx.channel.send("forneca uma chave p busca")
+        return
+
+    link = url[0]
+    if link.find("spotify",11,21) != -1:
+        #PLAY SPOTIFY
+        print("SPOTIFY")
+    elif link.find("youtube",11,21) != -1:
+        #PLAY youtube
+        print("youtube")
+    else:
+        #Pesquisa no youtube
+        print("busca")
+
 
 
 async def play(client, ctx, queue, *url):
@@ -52,15 +69,22 @@ async def play(client, ctx, queue, *url):
     else:
         await play_next(client, ctx, queue)
         
+        
 
-async def play_next(client, ctx, queue : Lista):
+async def play_next(client, ctx, queue: Lista):
 
     global current_song_url 
     global loop
     global loop_queue
+    global force_skip
 
     guild = ctx.guild
     song = os.path.isfile("song.mp3")
+
+    bot_voice = guild.voice_client
+
+    if not bot_voice:
+        await ctx.author.voice.channel.connect()
 
     try:
         if song:
@@ -110,10 +134,6 @@ async def play_next(client, ctx, queue : Lista):
         queue.append(next_song)
     #################################
 
-    bot_voice = guild.voice_client
-
-    if not bot_voice:
-        await ctx.author.voice.channel.connect()
 
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
     audio_source = discord.FFmpegPCMAudio("song.mp3")
@@ -122,8 +142,11 @@ async def play_next(client, ctx, queue : Lista):
         voice_client.play(audio_source, after=None)
         await ctx.channel.send("vo toca essa musica chamada " + str(song_name[0:len(song_name)-16]))
 
-    
+    # FORCESKIP
     while voice_client.is_playing():
+        # if force_skip:
+        #     force_skip = False
+        #     break  
         await asyncio.sleep(1)
     
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)

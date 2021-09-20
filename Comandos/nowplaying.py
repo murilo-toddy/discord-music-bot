@@ -1,7 +1,7 @@
 import sys, discord
 from typing import Text
 from discord.colour import Color
-import collections
+
 
 from .play import GetCurrentURL
 
