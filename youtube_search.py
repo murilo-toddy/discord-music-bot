@@ -2,7 +2,13 @@ import urllib.request
 import re
 import urllib.parse
 
-def YoutubeSearch(url):
+def YoutubeSearch(*url_cru):
+
+    url=""
+
+    for i in url_cru:
+        url += (i+" ")
+
     urlBusca = urllib.parse.quote(url)
     html = urllib.request.urlopen("https://www.youtube.com/results?search_query="+urlBusca)
     video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
@@ -13,6 +19,4 @@ def YoutubeSearch(url):
     Video_Identificator["url"] = UrlVideo
     Video_Identificator["id"] = video_ids[0]
 
-    print(UrlVideo)
-
-YoutubeSearch("neymar é gol")
+    return Video_Identificator

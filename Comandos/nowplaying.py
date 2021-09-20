@@ -6,12 +6,12 @@ from .play import GetCurrentURL
 
 sys.path.append("..")
 
-from youtube import get_video_data
+#from youtube import get_video_data
 
 async def nowplaying(client,ctx):
     url = await GetCurrentURL()
-    info = await get_video_data(url)
-    await ShowMessage(client,ctx,info)
+    #info = await get_video_data(url)
+    #await ShowMessage(client,ctx,info)
 
 async def ShowMessage(client,ctx,info):
 

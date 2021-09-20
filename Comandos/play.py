@@ -4,6 +4,7 @@ import youtube_dl, asyncio
 sys.path.append("..")
 from EstruturaV2 import Lista
 
+import youtube_search
 
 current_song_url = ""
 loop = False
@@ -29,7 +30,7 @@ async def ChangeLoopQueue():
     
 
 
-async def search_play(client, ctx, queue, *url):
+async def play(client, ctx, queue, *url):
     if len(url) == 0:
         ctx.channel.send("forneca uma chave p busca")
         return
@@ -40,14 +41,14 @@ async def search_play(client, ctx, queue, *url):
         print("SPOTIFY")
     elif link.find("youtube",11,21) != -1:
         #PLAY youtube
-        print("youtube")
+        await youtube_play(client,ctx,queue,*url)
     else:
-        #Pesquisa no youtube
-        print("busca")
+        Dados_Video = youtube_search.YoutubeSearch(*url)
+        await youtube_play(client,ctx,queue,(Dados_Video["url"]))
 
 
 
-async def play(client, ctx, queue, *url):
+async def youtube_play(client, ctx, queue, *url):
     
 
     if len(url) == 0:
