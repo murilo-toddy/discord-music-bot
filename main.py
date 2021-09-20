@@ -123,7 +123,7 @@ async def forceskip(ctx):
     _log.log_function("forceskip")
     await _forceskip.force_skip(client, ctx, queue)
 
-@client.command(aliases=["c"])
+@client.command(aliases=["c","clean"])
 async def clear(ctx):
     _log.log_function("clear")
     await _clear.clear(ctx, queue)
