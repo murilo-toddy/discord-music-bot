@@ -1,7 +1,3 @@
-import sys
-sys.path.append("..")
-from EstruturaV2 import Lista
-
-async def queue(ctx, queue: Lista):
+async def queue(ctx, queue):
     for item in queue:
         await ctx.channel.send(str(item))

@@ -1,8 +1,3 @@
-import sys
-sys.path.append("..")
-
-from EstruturaV2 import Lista
-
 async def move(ctx, queue, *args):
     if len(args) == 0:
         await ctx.channel.send("precisa fornecer uma posicao")

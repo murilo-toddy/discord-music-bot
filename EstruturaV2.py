@@ -26,7 +26,7 @@ class Lista:
     def move(self,indiceInicial,IndiceFinal):
         self.MusicList.insert(IndiceFinal,self.MusicList.pop(indiceInicial))
 
-    def clean(self):
+    def clear(self):
         self.MusicList.clear()
 
     def shuffle(self):
