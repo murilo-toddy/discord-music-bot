@@ -45,7 +45,7 @@ async def on_ready():
 
 
 
-@client.command()
+@client.command(aliases=["j"])
 async def join(ctx):
     _log.log_function("join")
     await _join.join(ctx)
@@ -63,19 +63,19 @@ async def loopqueue(ctx):
     await _loopqueue.loopqueue(client,ctx)
 
 
-@client.command()
+@client.command(aliases=["l"])
 async def loop(ctx):
     _log.log_function("loop")
     await _loop.loop(client,ctx)
 
 
-@client.command()
+@client.command(aliases=["dc","disconnect"])
 async def leave(ctx):
     _log.log_function("leave")
     await _leave.leave(ctx)
 
 
-@client.command(brief="", aliases=["p"])
+@client.command(brief="", aliases=["p","P"])
 async def play(ctx, *url):
     _log.log_function("play")
     await _play.play(client, ctx, queue, *url)
