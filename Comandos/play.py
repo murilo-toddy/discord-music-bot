@@ -9,11 +9,16 @@ import youtube_search
 current_song_url = ""
 loop = False
 loop_queue = False
+url_entrada = ""
+song_name = ""
 #force_skip = False
 
 
 async def GetCurrentURL():
-    return current_song_url
+    return url_entrada
+
+async def GetMusicName():
+    return str(song_name[0:len(song_name)-16])
 
 async def ChangeLoop():
     global loop
@@ -78,6 +83,8 @@ async def play_next(client, ctx, queue: Lista):
     global loop
     global loop_queue
     global force_skip
+    global url_entrada
+    global song_name
 
     guild = ctx.guild
     song = os.path.isfile("song.mp3")
