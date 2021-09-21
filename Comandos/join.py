@@ -1,6 +1,6 @@
 async def join(ctx):
     bot_channel = ctx.guild.voice_client
-    
+
     if bot_channel:
         await ctx.channel.send("**Already connected**")
     

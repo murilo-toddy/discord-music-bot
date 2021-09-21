@@ -59,9 +59,12 @@ async def play(client, ctx, queue, *url):
         #PLAY youtube
         await youtube_play(client,ctx,queue,*url)
     else:
+        
         urlPesquisa=""
         for i in url:
             urlPesquisa += (i+" ")
+        urlPesquisa = urlPesquisa[:-1] 
+
         await ctx.channel.send(":musical_note: **Searching** :mag_right: `"+urlPesquisa+"`")
         Dados_Video = youtube_search.YoutubeSearch(urlPesquisa)
         await youtube_play(client,ctx,queue,(Dados_Video["url"]))
