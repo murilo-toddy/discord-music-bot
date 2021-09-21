@@ -57,7 +57,7 @@ async def nowplaying(ctx):
     await _nowplaying.nowplaying(client,ctx)
 
 
-@client.command(aliases=["loopq", "lq"])
+@client.command(aliases=["loopq", "lq","loop queue"])
 async def loopqueue(ctx):
     _log.log_function("loopqueue")
     await _loopqueue.loopqueue(client,ctx)
@@ -72,12 +72,15 @@ async def loop(ctx):
 @client.command(aliases=["dc","disconnect"])
 async def leave(ctx):
     _log.log_function("leave")
-    await _leave.leave(ctx)
+    await _leave.leave(ctx,queue)
 
 
 @client.command(brief="", aliases=["p","P"])
 async def play(ctx, *url):
     _log.log_function("play")
+    connected = ctx.guild.voice_client
+    if not connected:
+        await _join.join(ctx)
     await _play.play(client, ctx, queue, *url)
 
 

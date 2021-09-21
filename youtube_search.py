@@ -2,14 +2,10 @@ import urllib.request
 import re
 import urllib.parse
 
-def YoutubeSearch(*url_cru):
+def YoutubeSearch(urlPesquisa):
 
-    url=""
 
-    for i in url_cru:
-        url += (i+" ")
-
-    urlBusca = urllib.parse.quote(url)
+    urlBusca = urllib.parse.quote(urlPesquisa)
     html = urllib.request.urlopen("https://www.youtube.com/results?search_query="+urlBusca)
     video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
     UrlVideo ="https://www.youtube.com/watch?v=" + video_ids[0]
