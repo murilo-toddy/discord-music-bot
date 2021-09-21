@@ -41,6 +41,12 @@ async def ForceSkip():
 
 
 async def play(client, ctx, queue, *url):
+
+    connected = ctx.guild.voice_client
+    if not connected:
+        await join(ctx)
+
+
     if len(url) == 0:
         ctx.channel.send("forneca uma chave p busca")
         return

@@ -39,7 +39,6 @@ queue = Lista()
 @client.event
 async def on_ready():
     print("\n [!] Bot iniciado.")
-
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Status do Bot modificado com sucesso.")
 
@@ -78,9 +77,6 @@ async def leave(ctx):
 @client.command(brief="", aliases=["p","P"])
 async def play(ctx, *url):
     _log.log_function("play")
-    connected = ctx.guild.voice_client
-    if not connected:
-        await _join.join(ctx)
     await _play.play(client, ctx, queue, *url)
 
 
