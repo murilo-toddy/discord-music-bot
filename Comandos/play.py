@@ -104,15 +104,9 @@ async def play_next(client, ctx, queue: Lista):
         }],
     }
 
-    current_song_url = queue[0]
-
-    if loop:
-        url_entrada = current_song_url
-
-    else:
-         url_entrada = queue[0]    
+ 
+    url_entrada = queue[0]    
     
-    current_song_url = url_entrada
         
 
     with youtube_dl.YoutubeDL(ydl_opt) as ydl:
@@ -123,19 +117,6 @@ async def play_next(client, ctx, queue: Lista):
             song_name = file
             os.rename(file, "song.mp3")
 
-
-    ##################################
-    #Remove da queue
-    if not loop_queue and len(queue) != 0:
-        queue.remove(0)
-        
-    elif len(queue) != 0 and not loop:
-        next_song = queue[0]
-        queue.remove(0)
-        queue.append(next_song)
-    #################################
-
-
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
     audio_source = discord.FFmpegPCMAudio("song.mp3")
 
@@ -145,12 +126,24 @@ async def play_next(client, ctx, queue: Lista):
 
     # FORCESKIP
     while voice_client.is_playing():
-        # if force_skip:
-        #     force_skip = False
-        #     break  
         await asyncio.sleep(1)
     
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
+
+
+    ##################################
+    #Remove da queue
+
+    if not loop:
+        if not loop_queue and len(queue) != 0:
+            queue.remove(0)
+            
+        elif len(queue) != 0:
+            next_song = queue[0]
+            queue.remove(0)
+            queue.append(next_song)
+    #################################
+
 
     if voice_client and not voice_client.is_paused() :
         #baixar proxima musica da lsita
