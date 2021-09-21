@@ -1,5 +1,14 @@
+from Comandos.nowplaying import ShowMessage
 from .play import ChangeLoop
 
 
 async def loop(client, ctx):
-    await ChangeLoop()
+   boolLoop = await ChangeLoop()
+   ShowMessage(ctx,boolLoop)
+
+async def ShowMessage(ctx,boolLoop):
+    if boolLoop:
+        await ctx.channel.send(":repeat_one: **Enabled!**")
+    else:
+        await ctx.channel.send(":repeat_one: **Disabled!**")
+   

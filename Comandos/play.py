@@ -23,12 +23,14 @@ async def GetMusicName():
 async def ChangeLoop():
     global loop
     loop = not loop
+    return loop
+
 
 async def ChangeLoopQueue():
     global loop_queue
     loop_queue = not loop_queue
-    print("Loop queue em estado " + str(loop_queue))
-
+    return loop_queue
+    
 # async def ForceSkip():
 #     global force_skip
 #     force_skip = True
