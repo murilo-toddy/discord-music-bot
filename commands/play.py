@@ -5,6 +5,7 @@ import youtube_dl, asyncio
 from youtube_dl.YoutubeDL import YoutubeDL
 
 sys.path.append("..")
+from GoogleSearch import YoutubeGetVideosInfo
 from EstruturaV2 import Lista
 
 import youtube_search
@@ -88,7 +89,8 @@ async def play(client, ctx, queue, *url):
         print("SPOTIFY")
     elif link.find("youtube",11,21) != -1:
         #PLAY youtube
-        await youtube_play(client, ctx, queue, *url)
+        YoutubeGetVideosInfo(url[0], ctx, queue)
+        await youtube_play(client, ctx, queue)
     else:
         urlPesquisa=""
         for i in url:
@@ -97,7 +99,8 @@ async def play(client, ctx, queue, *url):
 
         await ctx.channel.send(":musical_note: **Searching** :mag_right: `"+urlPesquisa+"`")
         Info_Music = youtube_search.YoutubeSearch(urlPesquisa)
-        await youtube_play(client, ctx, queue, (Info_Music["url"]))
+        YoutubeGetVideosInfo(Info_Music["url"], ctx, queue)
+        await youtube_play(client, ctx, queue)
 
 
 
@@ -133,7 +136,7 @@ async def play_next(client, ctx, queue: Lista):
     if not bot_voice:
         await join(ctx)
 
-    url_entrada = queue[0]      
+    url_entrada = queue[0]["url"]
     
     with YoutubeDL(YDL_OPTIONS) as ydl:
         try:
