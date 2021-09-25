@@ -13,6 +13,4 @@ def YoutubeSearch(url):
     Video_Identificator["url"] = UrlVideo
     Video_Identificator["id"] = video_ids[0]
 
-    print(UrlVideo)
-
-YoutubeSearch("neymar é gol")
+    return Video_Identificator
