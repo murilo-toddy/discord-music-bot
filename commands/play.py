@@ -39,13 +39,35 @@ async def ForceSkip():
     force_skip = True
     
 
+async def GetYoutubeUrl(URL):
+
+    ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s', 'quiet':True,})
+    video = ""
+
+    with ydl:
+        result = ydl.extract_info \
+        (URL,
+        download=False) #We just want to extract the info
+
+    if 'entries' in result:
+        # Can be a playlist or a list of videos
+        video = result['entries']
+        print("Playlist")
+
+        #loops entries to grab each video_url
+        for i, item in enumerate(video):
+            video = result['entries'][i]
+            print(video['webpage_url'])
+    else:
+        print("Apenas Link")  
+        print(URL)  
+
 
 async def play(client, ctx, queue, *url):
 
     connected = ctx.guild.voice_client
     if not connected:
         await join(ctx)
-
 
     if len(url) == 0:
         await ctx.channel.send("forneca uma chave p busca")
@@ -66,18 +88,13 @@ async def play(client, ctx, queue, *url):
         urlPesquisa = urlPesquisa[:-1] 
 
         await ctx.channel.send(":musical_note: **Searching** :mag_right: `"+urlPesquisa+"`")
-        Dados_Video = youtube_search.YoutubeSearch(urlPesquisa)
-        await youtube_play(client,ctx,queue,(Dados_Video["url"]))
+        Info_Music = youtube_search.YoutubeSearch(urlPesquisa)
+        await youtube_play(client,ctx,queue,(Info_Music["url"]))
 
 
 
 async def youtube_play(client, ctx, queue, *url):
     
-
-    if len(url) == 0:
-        await ctx.channel.send("precisa passar um url ne arrombado")
-        return
-
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
     
@@ -148,15 +165,14 @@ async def play_next(client, ctx, queue: Lista):
 
     if not voice_client.is_playing():
         voice_client.play(audio_source, after=None)
-   
 
-    # FORCESKIP
     while voice_client.is_playing():
         await asyncio.sleep(1)
         while voice_client.is_paused():
             await asyncio.sleep(1)
     
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
+
 
 
     ##################################
