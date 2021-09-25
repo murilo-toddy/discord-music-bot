@@ -27,7 +27,7 @@ import commands.remove as _remove
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
-client = commands.Bot(command_prefix="!", case_sensitive=True)
+client = commands.Bot(command_prefix="!", case_insensitive=True)
 
 
 ########################################
@@ -85,7 +85,7 @@ async def leave(ctx):
     await _leave.leave(ctx,queue)
 
 
-@client.command(brief="", aliases=["p","P"])
+@client.command(brief="", aliases=["p"])
 async def play(ctx, *url):
     if not await verify_channel(ctx):
         return

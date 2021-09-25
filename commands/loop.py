@@ -1,4 +1,4 @@
-from Comandos.nowplaying import ShowMessage
+from .nowplaying import ShowMessage
 from .play import ChangeLoop
 
 

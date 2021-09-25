@@ -48,7 +48,7 @@ async def play(client, ctx, queue, *url):
 
 
     if len(url) == 0:
-        ctx.channel.send("forneca uma chave p busca")
+        await ctx.channel.send("forneca uma chave p busca")
         return
 
     link = url[0]
