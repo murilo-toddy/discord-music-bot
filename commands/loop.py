@@ -1,4 +1,3 @@
-from .nowplaying import ShowMessage
 from .play import ChangeLoop
 
 

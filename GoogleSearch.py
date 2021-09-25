@@ -9,7 +9,6 @@ def YoutubeGetVideosInfo(url_busca, ctx,queue):
     
     part_string = 'contentDetails,statistics,snippet'
 
-
     API_KEY = "AIzaSyAGHJDAg1c8nBMRWEYdAZUOMNx2BcEF5a4"
 
     url = url_busca
@@ -61,7 +60,11 @@ def YoutubeSetVideoInfo(ctx, response,queue):
     Minutes = ""
     Seconds = ""
 
-    Duration = response["items"][0]["contentDetails"]["duration"].split("PT")[1]
+    try:
+        Duration = response["items"][0]["contentDetails"]["duration"][2:]
+    except:
+        print("\n\n\nErro ao baixar musica\n\n\n")
+        return
     if Duration.find("H") != -1:
         [Hours,Duration] = Duration.split("H")
     if Duration.find("M") != -1:

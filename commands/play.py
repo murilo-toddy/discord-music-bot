@@ -12,22 +12,14 @@ import youtube_search
 
 from .join import join
 
-current_song_url = ""
+
 loop = False
 loop_queue = False
 url_entrada = ""
-song_name = ""
 force_skip = False
 
 YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
-
-
-async def GetCurrentURL():
-    return url_entrada
-
-async def GetMusicName():
-    return str(song_name[0:len(song_name)-16])
 
 async def ChangeLoop():
     global loop
@@ -44,35 +36,6 @@ async def ForceSkip():
     global force_skip
     force_skip = True
     
-
-async def GetYoutubeUrl(URL,queue):
-
-    ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s', 'quiet':True,})
-    video = ""
-
-    with ydl:
-        result = ydl.extract_info \
-        (URL,
-        download=False) #We just want to extract the info
-
-    print(result)
-
-    if 'entries' in result:
-        # Can be a playlist or a list of videos
-        video = result['entries']
-        print("Playlist")
-
-        #loops entries to grab each video_url
-        for i, item in enumerate(video):
-            video = result['entries'][i]
-            queue.append(video['webpage_url'])
-            print(video['webpage_url'])
-            
-    else:
-        print("Apenas Link")  
-        print(URL)
-        queue.append(URL) 
-
 
 async def play(client, ctx, queue, *url):
     connected = ctx.guild.voice_client

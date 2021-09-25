@@ -58,7 +58,7 @@ async def nowplaying(ctx):
     if not await verify_channel(ctx):
         return
     log_function("nowplaying")
-    await _nowplaying.nowplaying(client,ctx)
+    await _nowplaying.nowplaying(client,ctx,queue)
 
 
 @client.command(aliases=["loopq", "lq","loop queue"])
