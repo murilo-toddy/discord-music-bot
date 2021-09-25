@@ -39,7 +39,7 @@ async def ForceSkip():
     force_skip = True
     
 
-async def GetYoutubeUrl(URL):
+async def GetYoutubeUrl(URL,queue):
 
     ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s', 'quiet':True,})
     video = ""
@@ -49,6 +49,8 @@ async def GetYoutubeUrl(URL):
         (URL,
         download=False) #We just want to extract the info
 
+    print(result)
+
     if 'entries' in result:
         # Can be a playlist or a list of videos
         video = result['entries']
@@ -57,10 +59,13 @@ async def GetYoutubeUrl(URL):
         #loops entries to grab each video_url
         for i, item in enumerate(video):
             video = result['entries'][i]
+            queue.append(video['webpage_url'])
             print(video['webpage_url'])
+            
     else:
         print("Apenas Link")  
-        print(URL)  
+        print(URL)
+        queue.append(URL) 
 
 
 async def play(client, ctx, queue, *url):
@@ -79,9 +84,9 @@ async def play(client, ctx, queue, *url):
         print("SPOTIFY")
     elif link.find("youtube",11,21) != -1:
         #PLAY youtube
-        await youtube_play(client,ctx,queue,*url)
+        await GetYoutubeUrl(url[0],queue)
+        await youtube_play(client,ctx,queue)
     else:
-        
         urlPesquisa=""
         for i in url:
             urlPesquisa += (i+" ")
@@ -89,20 +94,15 @@ async def play(client, ctx, queue, *url):
 
         await ctx.channel.send(":musical_note: **Searching** :mag_right: `"+urlPesquisa+"`")
         Info_Music = youtube_search.YoutubeSearch(urlPesquisa)
-        await youtube_play(client,ctx,queue,(Info_Music["url"]))
+        await GetYoutubeUrl(Info_Music["url"],queue)
+        await youtube_play(client,ctx,queue)
 
 
 
-async def youtube_play(client, ctx, queue, *url):
+async def youtube_play(client, ctx, queue):
     
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
-    
-    ############################
-    # Adicionar novo link na fila
-    queue.append(url[0])
-    ############################
-
     
     if voice_client and voice_client.is_playing():
         await ctx.channel.send("vo adiciona essa parada na fila valeu")
