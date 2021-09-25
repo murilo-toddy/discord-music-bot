@@ -157,11 +157,11 @@ async def clear(ctx):
     await _clear.clear(ctx, queue)
 
 
-async def verify_channel(ctx, sender_equals_bot: bool = True):
 
+async def verify_channel(ctx, sender_equals_bot: bool = True):
     sender = ctx.author.voice
     if not sender:
-        await ctx.channel.send("Precisa estar conectado")
+        await ctx.channel.send("You must be connected to a voice channel")
         return False
 
     sender_channel = sender.channel
