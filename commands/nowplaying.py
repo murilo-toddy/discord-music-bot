@@ -2,21 +2,19 @@ import sys, discord
 from typing import Text
 from discord.colour import Color
 
-from .play import GetCurrentURL
+from .play import GetCurrentURL, GetMusicName
 
 sys.path.append("..")
 
-from youtube import get_video_data
-
 async def nowplaying(client,ctx):
     url = await GetCurrentURL()
-    info = await get_video_data(url)
-    await ShowMessage(client,ctx,info)
+    name =  await GetMusicName()
+    await ShowMessage(client,ctx,url,name)
 
-async def ShowMessage(client,ctx,info):
+async def ShowMessage(client,ctx,url,name):
 
-    url_musica= str(info["url"])
-    titulo_musica = str(info["title"])
+    url_musica= url
+    titulo_musica = name
 
     music_current_time = 10
     music_duration = 90

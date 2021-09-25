@@ -10,11 +10,11 @@ async def remove(ctx, queue, *args):
             await ctx.channel.send("insira um numero valido")
             return
 
-        if pos > len(queue):
+        if pos > (len(queue)+1) and pos !=0:
             await ctx.channel.send("out of bounds")
             return
 
-        url = queue.remove(pos-1)
+        url = queue.remove(pos)
         await ctx.channel.send("item " + str(url) + " removido") 
     
     else:

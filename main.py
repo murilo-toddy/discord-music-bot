@@ -27,7 +27,7 @@ import commands.remove as _remove
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
-client = commands.Bot(command_prefix='!')
+client = commands.Bot(command_prefix="!", case_sensitive=True)
 
 
 ########################################
@@ -40,68 +40,87 @@ queue = Lista()
 @client.event
 async def on_ready():
     print("\n [!] Bot iniciado.")
-
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Status do Bot modificado com sucesso.")
 
 
 
-@client.command()
+@client.command(aliases=["j"])
 async def join(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("join")
     await _join.join(ctx)
 
 
 @client.command(aliases=["np"])
 async def nowplaying(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("nowplaying")
     await _nowplaying.nowplaying(client,ctx)
 
 
-@client.command(aliases=["loopq", "lq"])
+@client.command(aliases=["loopq", "lq","loop queue"])
 async def loopqueue(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("loopqueue")
     await _loopqueue.loopqueue(client,ctx)
 
 
-@client.command()
+@client.command(aliases=["l"])
 async def loop(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("loop")
     await _loop.loop(client,ctx)
 
 
-@client.command()
+@client.command(aliases=["dc","disconnect"])
 async def leave(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("leave")
-    await _leave.leave(ctx)
+    await _leave.leave(ctx,queue)
 
 
-@client.command(brief="", aliases=["p"])
+@client.command(brief="", aliases=["p","P"])
 async def play(ctx, *url):
+    if not await verify_channel(ctx):
+        return
     log_function("play")
     await _play.play(client, ctx, queue, *url)
 
 
 @client.command()
 async def pause(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("pause")
     await _pause.pause(client, ctx)
 
 
 @client.command()
 async def resume(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("resume")
     await _resume.resume(client, ctx)
 
 
 @client.command()
 async def shuffle(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("shuffle")
     await _shuffle.shuffle(ctx, queue)
 
 
 @client.command(aliases=["m"])
 async def move(ctx, *args):
+    if not await verify_channel(ctx):
+        return
     log_function("move")
     print(args)
     await _move.move(ctx, queue, *args)
@@ -109,27 +128,44 @@ async def move(ctx, *args):
 
 @client.command(aliases=["queue", "q"])
 async def queue_(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("queue")
     await _queue.queue(ctx, queue)
 
 
 @client.command(aliases=["r"])
 async def remove(ctx, *args):
+    if not await verify_channel(ctx):
+        return
     log_function("remove")
     await _remove.remove(ctx, queue, *args)
 
 
 @client.command(aliases=["fs", "skip", "s", "skp"])
 async def forceskip(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("forceskip")
     await _forceskip.force_skip(client, ctx, queue)
 
-@client.command(aliases=["c"])
+@client.command(aliases=["c","clean"])
 async def clear(ctx):
+    if not await verify_channel(ctx):
+        return
     log_function("clear")
     await _clear.clear(ctx, queue)
 
 
+async def verify_channel(ctx):
+    if not ctx.author.voice:
+        await ctx.channel.send("Não aceito comandos de estrangeiros! :ghost: ")
+        return False
+    else:
+        return True
+
 
 if __name__ == '__main__':
     client.run(TOKEN)
+
+

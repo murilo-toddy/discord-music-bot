@@ -1,3 +1,4 @@
 async def queue(ctx, queue):
-    for item in queue:
-        await ctx.channel.send(str(item))
+    for i in range(len(queue)):
+        if i != 0:
+            await ctx.channel.send(str(queue[i]))
