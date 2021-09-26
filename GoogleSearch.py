@@ -4,8 +4,29 @@ import googleapiclient.discovery
 from urllib.parse import parse_qs, urlparse
 from dotenv import load_dotenv
 import os
-
+import random
 from pyasn1.type.univ import Null
+
+API_KEYS_NUMBER = 10
+
+def GetKey():
+    load_dotenv()
+    global API_KEYS_NUMBER
+    Key = random.randint(1, API_KEYS_NUMBER)
+   
+    Dic = []
+    for i in range(API_KEYS_NUMBER):
+        text = "API_KEY"+str(i+1)
+        text = os.getenv(text)
+        Dic.append(text)
+    try:
+        Key = Dic[Key]
+    except:
+        Key = os.getenv('API_KEY1')
+    return Key
+
+
+
 
 #extract playlist id from url
 def YoutubeGetVideosInfo(url_busca, ctx,queue):
@@ -13,7 +34,8 @@ def YoutubeGetVideosInfo(url_busca, ctx,queue):
     part_string = 'contentDetails,statistics,snippet'
 
     load_dotenv()
-    API_KEY = os.getenv('API_KEY')
+    API_KEY = GetKey()
+    print(API_KEY)
 
     url = url_busca
     query = parse_qs(urlparse(url).query, keep_blank_values=True)
