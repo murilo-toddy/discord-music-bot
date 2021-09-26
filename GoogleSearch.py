@@ -1,6 +1,9 @@
+from json import load
 from logging import exception
 import googleapiclient.discovery
 from urllib.parse import parse_qs, urlparse
+from dotenv import load_dotenv
+import os
 
 from pyasn1.type.univ import Null
 
@@ -9,7 +12,8 @@ def YoutubeGetVideosInfo(url_busca, ctx,queue):
     
     part_string = 'contentDetails,statistics,snippet'
 
-    API_KEY = "AIzaSyAGHJDAg1c8nBMRWEYdAZUOMNx2BcEF5a4"
+    load_dotenv()
+    API_KEY = os.getenv('API_KEY')
 
     url = url_busca
     query = parse_qs(urlparse(url).query, keep_blank_values=True)
