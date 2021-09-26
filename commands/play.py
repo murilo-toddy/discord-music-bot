@@ -50,10 +50,12 @@ async def play(client, ctx, queue, *url):
     if link.find("spotify",11,21) != -1:
         #PLAY SPOTIFY
         print("SPOTIFY")
+        return
     elif link.find("youtube",11,21) != -1:
         #PLAY youtube
         YoutubeGetVideosInfo(url[0], ctx, queue)
         await youtube_play(client, ctx, queue)
+        return
     else:
         urlPesquisa=""
         for i in url:
@@ -64,6 +66,7 @@ async def play(client, ctx, queue, *url):
         Info_Music = youtube_search.YoutubeSearch(urlPesquisa)
         YoutubeGetVideosInfo(Info_Music["url"], ctx, queue)
         await youtube_play(client, ctx, queue)
+        return
 
 
 
@@ -82,12 +85,10 @@ async def youtube_play(client, ctx, queue):
 
 async def play_next(client, ctx, queue: Lista):
 
-    global current_song_url 
     global loop
     global loop_queue
     global force_skip
     global url_entrada
-    global song_name
 
     if(len(queue)) <= 0:
         return
@@ -110,13 +111,16 @@ async def play_next(client, ctx, queue: Lista):
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
 
     if not voice_client.is_playing():
-        voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
+        try:
+            voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
+        except:
+            print("Erro Play_next")
 
     while voice_client.is_playing():
         await asyncio.sleep(1)
         while voice_client.is_paused():
             await asyncio.sleep(1)
-    
+
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
 
     ##################################

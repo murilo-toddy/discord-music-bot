@@ -39,6 +39,7 @@ def YoutubeGetVideosInfo(url_busca, ctx,queue):
     response = request.execute()
 
     playlist_items = []
+
     while request is not None:
         response = request.execute()
 
@@ -49,9 +50,7 @@ def YoutubeGetVideosInfo(url_busca, ctx,queue):
             ).execute()
             YoutubeSetVideoInfo(ctx,responsePlaylist,queue)
         request = youtube.playlistItems().list_next(request, response)
-
-        
-    
+           
 def YoutubeSetVideoInfo(ctx, response,queue):
 
     Info_Musica = {}
@@ -59,12 +58,12 @@ def YoutubeSetVideoInfo(ctx, response,queue):
     Hours = ""
     Minutes = ""
     Seconds = ""
-
     try:
         Duration = response["items"][0]["contentDetails"]["duration"][2:]
     except:
-        print("\n\n\nErro ao baixar musica\n\n\n")
-        return
+        print("\n\nVideo Indisponivel\n\n")
+        return False
+
     if Duration.find("H") != -1:
         [Hours,Duration] = Duration.split("H")
     if Duration.find("M") != -1:
@@ -104,4 +103,4 @@ def YoutubeSetVideoInfo(ctx, response,queue):
 
     queue.append(Info_Musica)
 
-    return
+    return True

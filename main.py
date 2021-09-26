@@ -131,7 +131,7 @@ async def queue_(ctx):
     if not await verify_channel(ctx):
         return
     log_function("queue")
-    await _queue.queue(ctx, queue)
+    await _queue.queue(ctx, queue,client)
 
 
 @client.command(aliases=["r"])
