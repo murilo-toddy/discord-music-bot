@@ -8,7 +8,6 @@ discord.py[voice]~=1.6
 GitPython
 isodate~=0.6.0
 mutagen
-pymongo~=3.11
 requests
 tweepy~=3.8.0
 youtube_dl
@@ -16,9 +15,7 @@ yfinance~=0.1.54
 lxml
 fuzzywuzzy~=0.18.0
 python-Levenshtein
-pandas~=1.0.1
 beautifulsoup4~=4.8.1
-yahoo_fin
 requests_html
 numpy
 pytz
