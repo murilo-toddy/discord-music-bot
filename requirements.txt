@@ -9,8 +9,5 @@ GitPython
 isodate~=0.6.0
 requests
 youtube_dl
-lxml
-fuzzywuzzy~=0.18.0
-numpy
 ffmpeg
 youtube-search-python
