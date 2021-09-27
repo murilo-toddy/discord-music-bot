@@ -3,7 +3,7 @@ from discord.voice_client import VoiceClient
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from EstruturaV2 import Lista
+from data_structure import Queue
 
 from commands.log import log_function
 
@@ -32,16 +32,16 @@ client = commands.Bot(command_prefix="!", case_insensitive=True)
 
 ########################################
 
-queue = Lista()
+queue = Queue()
 
 ########################################
 
 
 @client.event
 async def on_ready():
-    print("\n [!] Bot iniciado.")
+    print("\n [!] Bot started.")
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
-    print("\n [!] Status do Bot modificado com sucesso.")
+    print("\n [!] Bot Status changed successfully.")
 
 
 
@@ -66,7 +66,7 @@ async def loopqueue(ctx):
     if not await verify_channel(ctx):
         return
     log_function("loopqueue")
-    await _loopqueue.loopqueue(client,ctx)
+    await _loopqueue.loopqueue(ctx)
 
 
 @client.command(aliases=["l"])
@@ -122,7 +122,6 @@ async def move(ctx, *args):
     if not await verify_channel(ctx):
         return
     log_function("move")
-    print(args)
     await _move.move(ctx, queue, *args)
 
 
@@ -147,7 +146,7 @@ async def forceskip(ctx):
     if not await verify_channel(ctx):
         return
     log_function("forceskip")
-    await _forceskip.force_skip(client, ctx, queue)
+    await _forceskip.force_skip(client, ctx)
 
 @client.command(aliases=["c","clean"])
 async def clear(ctx):

@@ -9,19 +9,19 @@ API_KEYS_NUMBER = 10
 
 def GetKey():
     load_dotenv()
-    global API_KEYS_NUMBER
-    Key = random.randint(1, API_KEYS_NUMBER)
+    # global API_KEYS_NUMBER
+    # Key = random.randint(1, API_KEYS_NUMBER)
    
-    Dic = []
-    for i in range(API_KEYS_NUMBER):
-        text = "API_KEY"+str(i+1)
-        text = os.getenv(text)
-        Dic.append(text)
-    try:
-        Key = Dic[Key]
-    except:
-        Key = os.getenv('API_KEY1')
-    return Key
+    # Dic = []
+    # for i in range(API_KEYS_NUMBER):
+    #     text = "API_KEY"+str(i+1)
+    #     text = os.getenv(text)
+    #     Dic.append(text)
+    # try:
+    #     Key = Dic[Key]
+    # except:
+    #     Key = os.getenv('API_KEY1')
+    return os.getenv("API_KEY")
 
 
 
@@ -33,7 +33,6 @@ async def YoutubeGetVideosInfo(url_busca, ctx,queue):
 
     load_dotenv()
     API_KEY = GetKey()
-    print(API_KEY)
 
     url = url_busca
     query = parse_qs(urlparse(url).query, keep_blank_values=True)
@@ -55,9 +54,9 @@ async def YoutubeGetVideosInfo(url_busca, ctx,queue):
         return
    
     request = youtube.playlistItems().list(
-    part = "contentDetails",
-    playlistId = playlist_id,
-    maxResults = 50
+        part = "contentDetails",
+        playlistId = playlist_id,
+        maxResults = 50
     )
     response = request.execute()
 
@@ -125,8 +124,6 @@ def YoutubeSetVideoInfo(ctx, response,queue):
     Info_Musica["likes"] = response["items"][0]["statistics"]["likeCount"]
     Info_Musica["views"] = response["items"][0]["statistics"]["viewCount"]
     Info_Musica["dislikes"] = response["items"][0]["statistics"]["dislikeCount"]
-
-    print(Info_Musica)
 
     queue.append(Info_Musica)
 

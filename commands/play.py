@@ -1,17 +1,12 @@
-from logging import exception
-import discord, sys, os
-import youtube_dl, asyncio
-
+import discord, sys, asyncio
 from youtube_dl.YoutubeDL import YoutubeDL
 
 sys.path.append("..")
 from GoogleSearch import YoutubeGetVideosInfo
-from EstruturaV2 import Lista
+from data_structure import Queue
 
 import youtube_search
-
 from .join import join
-
 
 loop = False
 loop_queue = False
@@ -37,26 +32,25 @@ async def ForceSkip():
     force_skip = True
     
 
-async def play(client, ctx, queue, *url):
+async def play(client, ctx, queue: Queue, *url):
     connected = ctx.guild.voice_client
     if not connected:
         await join(ctx)
 
     if len(url) == 0:
-        await ctx.channel.send("Você precisa fornecer uma chave de busca / URL")
+        await ctx.channel.send("You must specify a search key or an Youtube URL")
         return
 
     link = url[0]
-    if link.find("spotify",11,21) != -1:
-        #PLAY SPOTIFY
-        print("SPOTIFY")
+    if link.find("spotify",11,21) != -1: # Spotify URL
+        await ctx.channel.send("We currently do not accept Spotify URLs")
         return
-    elif link.find("youtube",11,21) != -1:
-        #PLAY youtube
+
+    elif link.find("youtube",11,21) != -1: # Youtube URL
         await YoutubeGetVideosInfo(url[0], ctx, queue)
         await youtube_play(client, ctx, queue)
         return
-    else:
+    else: # Search query
         urlPesquisa=""
         for i in url:
             urlPesquisa += (i+" ")
@@ -70,20 +64,18 @@ async def play(client, ctx, queue, *url):
 
 
 
-async def youtube_play(client, ctx, queue):
-    
+async def youtube_play(client, ctx, queue: Queue):
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
     
     if voice_client and voice_client.is_playing():
         return
-        
     else:
         await play_next(client, ctx, queue)
     
 
 
-async def play_next(client, ctx, queue: Lista):
+async def play_next(client, ctx, queue: Queue):
 
     global loop
     global loop_queue
@@ -126,7 +118,7 @@ async def play_next(client, ctx, queue: Lista):
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
 
     ##################################
-    #Remove da queue
+    # Removes music from queue
     if not loop:
         if not loop_queue:
             if len(queue) > 0:
@@ -140,6 +132,5 @@ async def play_next(client, ctx, queue: Lista):
     #################################
 
     if voice_client and not voice_client.is_paused() and len(queue) > 0:
-        #baixar proxima musica da lsita
         await play_next(client, ctx, queue)
     

@@ -1,6 +1,5 @@
 .env
 __pycache__
-ListaEncadeada.py
-song.mp3
 client-secret.json
-out.mp4
+*.mp3
+*.mp4

@@ -1,10 +1,7 @@
-from .play import play_next, ForceSkip
 import discord
 
-
-async def force_skip(client, ctx, queue):
+async def force_skip(client, ctx):
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
-   # await ForceSkip()
     voice_client.stop()
     await ShowMessage(ctx)
 

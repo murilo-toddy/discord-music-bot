@@ -1,5 +1,3 @@
-import sys
-
 async def shuffle(ctx, queue):
     if len(queue) > 0:
         UrlAtual = queue[0]

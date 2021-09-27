@@ -1,9 +1,6 @@
-import urllib.request
-import re
-import urllib.parse
+import urllib.request, urllib.parse, re
 
 def YoutubeSearch(urlPesquisa):
-
 
     urlBusca = urllib.parse.quote(urlPesquisa)
     html = urllib.request.urlopen("https://www.youtube.com/results?search_query="+urlBusca)

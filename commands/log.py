@@ -1,2 +1,2 @@
 def log_function(func: str):
-    print("\n [!] função \'" + func + "\' chamada\n")
+    print("\n [!] Command \'" + func + "\' issued\n")

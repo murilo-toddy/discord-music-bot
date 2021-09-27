@@ -2,23 +2,23 @@ import discord
 
 async def move(ctx, queue, *args):
     if len(args) == 0:
-        await ctx.channel.send("precisa fornecer uma posicao :japanese_goblin:")
+        await ctx.channel.send("You must specify a position :japanese_goblin:")
     
     elif len(args) == 1:
         try:
             pos = int(*args[0])
 
         except:
-            await ctx.channel.send("tem que inserir um numero valido :japanese_goblin:")
+            await ctx.channel.send("Argument must be a valid number :japanese_goblin:")
             return
 
         if pos > (len(queue)+1) and pos !=0:
-            await ctx.channel.send("Posicao invalida arrombado :japanese_goblin:")
+            await ctx.channel.send("Invalid position :japanese_goblin:")
             return
 
         title = queue[pos]["title"]
         queue.move((pos),1)
-        await ShowMessage(ctx,title,pos)
+        await send_message(ctx,title,pos)
             
 
 
@@ -28,25 +28,25 @@ async def move(ctx, queue, *args):
             pos2 = int(*args[1])
             
             if pos1 > (len(queue)+1) or pos2 > (len(queue)+1) and pos1!=0 and pos2 !=0:
-                await ctx.channel.send("Posicao invalida arrombado :japanese_goblin:")
+                await ctx.channel.send("Invalid position :japanese_goblin:")
                 return
 
             title = queue[pos1]["title"]
             queue.move((pos1),pos2)
-            await ShowMessage(ctx,title,pos1,pos2)
+            await send_message(ctx,title,pos1,pos2)
 
         except:
-            await ctx.channel.send("vc nao mandou numero direito corno :japanese_goblin:")
+            await ctx.channel.send("Argument must be a valid number :japanese_goblin:")
 
     else:
-        await ctx.channel.send("sintaxe incorreta")
+        await ctx.channel.send("Bad syntax :japanese_goblin:")
 
 
-async def ShowMessage(ctx,tituloVideo,PosicaoInicial, PosicaoFinal=1):
+async def send_message(ctx, title, starting_position, final_position=1):
 
     embedVar = discord.Embed(
         title = "**Moved!**",
-        description ="Changed `"+str(tituloVideo)+"` position from `"+str(PosicaoInicial)+"` to `"+str(PosicaoFinal)+"`",
+        description ="Changed `"+str(title)+"` position from `"+str(starting_position)+"` to `"+str(final_position)+"`",
         color = discord.Color.red()
     )
 
