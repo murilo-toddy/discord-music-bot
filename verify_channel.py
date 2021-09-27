@@ -17,7 +17,6 @@ async def verify_channel(ctx, sender_equals_bot: bool = True):
     return True
 
 
-
 async def verify_channel_play(ctx):
     Sender = ctx.author.voice
     if not Sender:
