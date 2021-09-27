@@ -1,10 +1,11 @@
-import os, discord
+import discord, os, json
 from discord.voice_client import VoiceClient
 from discord.ext import commands
 from dotenv import load_dotenv
 
 from data_structure import Queue
 
+from verify_channel import verify_channel, verify_channel_play
 from commands.log import log_function
 
 import commands.pause as _pause
@@ -41,162 +42,112 @@ queue = Queue()
 async def on_ready():
     print("\n [!] Bot started.")
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
-    print("\n [!] Bot Status changed successfully.")
+    print("\n [!] Bot Status updated successfully.")
 
 
 
 @client.command(aliases=["j"])
 async def join(ctx):
-    if not await verify_channel(ctx, False):
-        return
     log_function("join")
+    if not await verify_channel(ctx, False): return
     await _join.join(ctx)
 
 
 @client.command(aliases=["np"])
 async def nowplaying(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("nowplaying")
+    if not await verify_channel(ctx): return
     await _nowplaying.nowplaying(client,ctx,queue)
 
 
 @client.command(aliases=["loopq", "lq","loop queue"])
 async def loopqueue(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("loopqueue")
+    if not await verify_channel(ctx): return
     await _loopqueue.loopqueue(ctx)
 
 
 @client.command(aliases=["l"])
 async def loop(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("loop")
-    await _loop.loop(client,ctx)
+    if not await verify_channel(ctx): return
+    await _loop.loop(ctx)
 
 
 @client.command(aliases=["dc","disconnect"])
 async def leave(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("leave")
+    if not await verify_channel(ctx): return
     await _leave.leave(ctx,queue)
 
 
-@client.command(brief="", aliases=["p"])
+@client.command(brief="Toca uma música maneira", aliases=["p"])
 async def play(ctx, *url):
-    if not await verify_channel_play(ctx):
-        return
     log_function("play")
+    if not await verify_channel_play(ctx): return
     await _play.play(client, ctx, queue, *url)
 
 
 @client.command()
 async def pause(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("pause")
+    if not await verify_channel(ctx): return
     await _pause.pause(client, ctx)
 
 
 @client.command()
 async def resume(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("resume")
+    if not await verify_channel(ctx): return
     await _resume.resume(client, ctx)
 
 
 @client.command()
 async def shuffle(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("shuffle")
+    if not await verify_channel(ctx): return
     await _shuffle.shuffle(ctx, queue)
 
 
 @client.command(aliases=["m"])
 async def move(ctx, *args):
-    if not await verify_channel(ctx):
-        return
     log_function("move")
+    if not await verify_channel(ctx): return
     await _move.move(ctx, queue, *args)
 
 
 @client.command(aliases=["queue", "q"])
 async def queue_(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("queue")
+    if not await verify_channel(ctx): return
     await _queue.queue(ctx, queue,client)
 
 
 @client.command(aliases=["r"])
 async def remove(ctx, *args):
-    if not await verify_channel(ctx):
-        return
     log_function("remove")
+    if not await verify_channel(ctx): return
     await _remove.remove(ctx, queue, *args)
 
 
 @client.command(aliases=["fs", "skip", "s", "skp"])
 async def forceskip(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("forceskip")
+    if not await verify_channel(ctx): return
     await _forceskip.force_skip(client, ctx)
+
 
 @client.command(aliases=["c","clean"])
 async def clear(ctx):
-    if not await verify_channel(ctx):
-        return
     log_function("clear")
+    if not await verify_channel(ctx): return
     await _clear.clear(ctx, queue)
 
 
-
-async def verify_channel(ctx, sender_equals_bot: bool = True):
-    sender = ctx.author.voice
-    if not sender:
-        await ctx.channel.send("You must be connected to a voice channel")
-        return False
-
-    sender_channel = sender.channel
-    if sender_equals_bot:
-        if ctx.guild.voice_client:
-            bot_channel = ctx.guild.voice_client.channel
-            if bot_channel != sender_channel:
-                await ctx.channel.send("Não aceito comandos de estrangeiros! :ghost: ")
-                return False
-        else:
-            await ctx.channel.send("***Not connected***")
-            return False
-    return True
-
-
-
-async def verify_channel_play(ctx):
-    Sender = ctx.author.voice
-    if not Sender:
-        await ctx.channel.send("Precisa estar conectado")   
-        return False
-
-    sender_channel = Sender.channel
-    bot_channel = ctx.guild.voice_client
-    if bot_channel:
-        if not bot_channel.channel == sender_channel:
-            await ctx.channel.send("Não aceito comandos de estrangeiros! :ghost: ")
-            return False
-        else:
-            return True
-
-    await ctx.channel.send(":wave: ***Hello Hello***")
-    await ctx.author.voice.channel.connect()
-    bot_channel = ctx.guild.voice_client
-    bot_channel.pause()
-    return True
+@client.command()
+async def seek(ctx):
+    log_function("seek")
+    await ctx.channel.send("Função ainda não implementada")
 
 
 

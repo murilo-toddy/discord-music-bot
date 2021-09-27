@@ -1,48 +1,51 @@
 import googleapiclient.discovery
 from urllib.parse import parse_qs, urlparse
 from dotenv import load_dotenv
-import os
-import random
-import discord
+import discord, os, random
 
-API_KEYS_NUMBER = 10
+API_KEYS_NUMBER = 3
+MULTIPLE_KEYS = True
 
-def GetKey():
+def get_key():
     load_dotenv()
-    # global API_KEYS_NUMBER
-    # Key = random.randint(1, API_KEYS_NUMBER)
-   
-    # Dic = []
-    # for i in range(API_KEYS_NUMBER):
-    #     text = "API_KEY"+str(i+1)
-    #     text = os.getenv(text)
-    #     Dic.append(text)
-    # try:
-    #     Key = Dic[Key]
-    # except:
-    #     Key = os.getenv('API_KEY1')
-    return os.getenv("API_KEY")
+
+    if MULTIPLE_KEYS:
+        global API_KEYS_NUMBER
+        key = random.randint(1, API_KEYS_NUMBER)
+    
+        Dic = []
+        for i in range(API_KEYS_NUMBER):
+            text = "API_KEY"+str(i+1)
+            text = os.getenv(text)
+            Dic.append(text)
+        try:
+            key = Dic[key]
+        except:
+            key = os.getenv('API_KEY1')
+
+    else:
+        key = os.getenv("API_KEY")
+    
+    return key
 
 
 
-
-#extract playlist id from url
-async def YoutubeGetVideosInfo(url_busca, ctx,queue):
+# Extract video or playlist info from URL
+async def YoutubeGetVideosInfo(url_busca, ctx, queue):
     
     part_string = 'contentDetails,statistics,snippet'
 
     load_dotenv()
-    API_KEY = GetKey()
+    API_KEY = get_key()
 
     url = url_busca
     query = parse_qs(urlparse(url).query, keep_blank_values=True)
 
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
 
-    try:
+    try: # Playlist
         playlist_id = query["list"][0]
-    except:
-    #Video comum    
+    except: # Video comum    
         IdMusic = url.split("watch?v=")[1][0:11]
         response = youtube.videos().list(
         	part=part_string,

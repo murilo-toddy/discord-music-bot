@@ -1,7 +1,5 @@
 async def leave(ctx,queue):
-
     voice = ctx.guild.voice_client
-
     if len(queue)>0:
         queue.clear()
 
@@ -10,4 +8,4 @@ async def leave(ctx,queue):
         await ctx.voice_client.disconnect()
 
     else:
-        await ctx.channel.send("**Not connected**")
+        await ctx.channel.send("**Não estou conectado**")

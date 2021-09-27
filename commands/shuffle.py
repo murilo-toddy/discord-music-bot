@@ -4,4 +4,4 @@ async def shuffle(ctx, queue):
         queue.remove(0)
         queue.shuffle()
         queue[0] = UrlAtual
-    await ctx.channel.send("**Shuffled queue** :ok_hand:")
+    await ctx.channel.send("**Fila embaralhada** :ok_hand:")

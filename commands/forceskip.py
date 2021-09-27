@@ -6,7 +6,7 @@ async def force_skip(client, ctx):
     await ShowMessage(ctx)
 
 async def ShowMessage(ctx):
-    await ctx.channel.send(":fast_forward: ***Skipped :mechanical_leg:***")
+    await ctx.channel.send(":fast_forward: ***Pulado :mechanical_leg:***")
 
     
     

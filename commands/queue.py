@@ -6,7 +6,7 @@ import math
 
 async def queue(ctx, queue,client):
     if(len(queue))<=1:
-        await ctx.channel.send("***Queue empty***")
+        await ctx.channel.send("***Fila vazia***")
         return
 
     TamanhoJ = math.ceil(len(queue)/10)

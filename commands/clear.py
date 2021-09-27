@@ -4,4 +4,4 @@ async def clear(ctx, queue):
         queue.remove(0)
         queue.clear()
         queue[0] = UrlAtual
-    await ctx.channel.send("Queue cleared :mechanical_arm:")
+    await ctx.channel.send("Fila limpa :mechanical_arm:")

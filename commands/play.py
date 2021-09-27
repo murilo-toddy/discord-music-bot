@@ -38,12 +38,12 @@ async def play(client, ctx, queue: Queue, *url):
         await join(ctx)
 
     if len(url) == 0:
-        await ctx.channel.send("You must specify a search key or an Youtube URL")
+        await ctx.channel.send("Você precisa fornecer uma chave de busca ou um URL do Youtube")
         return
 
     link = url[0]
     if link.find("spotify",11,21) != -1: # Spotify URL
-        await ctx.channel.send("We currently do not accept Spotify URLs")
+        await ctx.channel.send("Ainda não aceito URLs do Spotify")
         return
 
     elif link.find("youtube",11,21) != -1: # Youtube URL
