@@ -13,7 +13,7 @@ loop_queue = False
 url_entrada = ""
 force_skip = False
 
-YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
+YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'} #'quiet' = True
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 async def change_loop():
@@ -99,6 +99,7 @@ async def play_next(client, ctx, queue: Queue):
 
     if not voice_client.is_playing():
         try:
+            print(" [!] Trying FFMPEG")
             voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
         except:
             print(" [!] Error in playing song")

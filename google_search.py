@@ -27,6 +27,7 @@ def get_key():
     else:
         key = os.getenv("API_KEY")
     
+    print(key)
     return key
 
 
