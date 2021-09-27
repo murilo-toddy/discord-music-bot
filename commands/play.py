@@ -53,7 +53,7 @@ async def play(client, ctx, queue, *url):
         return
     elif link.find("youtube",11,21) != -1:
         #PLAY youtube
-        YoutubeGetVideosInfo(url[0], ctx, queue)
+        await YoutubeGetVideosInfo(url[0], ctx, queue)
         await youtube_play(client, ctx, queue)
         return
     else:
@@ -64,7 +64,7 @@ async def play(client, ctx, queue, *url):
 
         await ctx.channel.send(":musical_note: **Searching** :mag_right: `"+urlPesquisa+"`")
         Info_Music = youtube_search.YoutubeSearch(urlPesquisa)
-        YoutubeGetVideosInfo(Info_Music["url"], ctx, queue)
+        await YoutubeGetVideosInfo(Info_Music["url"], ctx, queue)
         await youtube_play(client, ctx, queue)
         return
 
@@ -76,7 +76,7 @@ async def youtube_play(client, ctx, queue):
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
     
     if voice_client and voice_client.is_playing():
-        await ctx.channel.send("vo adiciona essa parada na fila valeu")
+        return
         
     else:
         await play_next(client, ctx, queue)

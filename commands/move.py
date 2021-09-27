@@ -1,3 +1,5 @@
+import discord
+
 async def move(ctx, queue, *args):
     if len(args) == 0:
         await ctx.channel.send("precisa fornecer uma posicao :japanese_goblin:")
@@ -14,8 +16,9 @@ async def move(ctx, queue, *args):
             await ctx.channel.send("Posicao invalida arrombado :japanese_goblin:")
             return
 
+        title = queue[pos]["title"]
         queue.move((pos),1)
-        await ctx.channel.send("movi de " + args[0] + " para 1")
+        await ShowMessage(ctx,title,pos)
             
 
 
@@ -28,11 +31,23 @@ async def move(ctx, queue, *args):
                 await ctx.channel.send("Posicao invalida arrombado :japanese_goblin:")
                 return
 
+            title = queue[pos1]["title"]
             queue.move((pos1),pos2)
-            await ctx.channel.send("mandei o " + args[0] + " pra " + args[1])
+            await ShowMessage(ctx,title,pos1,pos2)
 
         except:
             await ctx.channel.send("vc nao mandou numero direito corno :japanese_goblin:")
 
     else:
         await ctx.channel.send("sintaxe incorreta")
+
+async def ShowMessage(ctx,tituloVideo,PosicaoInicial, PosicaoFinal=1):
+
+    embedVar = discord.Embed(
+        title = "**Moved!**",
+        description ="Changed `"+str(tituloVideo)+"` position from `"+str(PosicaoInicial)+"` to `"+str(PosicaoFinal)+"`",
+        color = discord.Color.red()
+    )
+
+    embedVar.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
+    await ctx.channel.send(embed = embedVar)

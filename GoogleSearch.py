@@ -1,11 +1,9 @@
-from json import load
-from logging import exception
 import googleapiclient.discovery
 from urllib.parse import parse_qs, urlparse
 from dotenv import load_dotenv
 import os
 import random
-from pyasn1.type.univ import Null
+import discord
 
 API_KEYS_NUMBER = 10
 
@@ -29,7 +27,7 @@ def GetKey():
 
 
 #extract playlist id from url
-def YoutubeGetVideosInfo(url_busca, ctx,queue):
+async def YoutubeGetVideosInfo(url_busca, ctx,queue):
     
     part_string = 'contentDetails,statistics,snippet'
 
@@ -53,10 +51,9 @@ def YoutubeGetVideosInfo(url_busca, ctx,queue):
         ).execute()
 
         YoutubeSetVideoInfo(ctx,response,queue)
-
+        await ShowMessageVideo( response["items"][0]["snippet"]["title"],ctx,queue)
         return
    
-
     request = youtube.playlistItems().list(
     part = "contentDetails",
     playlistId = playlist_id,
@@ -64,7 +61,9 @@ def YoutubeGetVideosInfo(url_busca, ctx,queue):
     )
     response = request.execute()
 
-    playlist_items = []
+    
+    NumeroMusicas=0
+    NomePlaylist = ""
 
     while request is not None:
         response = request.execute()
@@ -74,8 +73,10 @@ def YoutubeGetVideosInfo(url_busca, ctx,queue):
         	part=part_string,
         	id = response["items"][i]["contentDetails"]["videoId"]
             ).execute()
-            YoutubeSetVideoInfo(ctx,responsePlaylist,queue)
+            if YoutubeSetVideoInfo(ctx,responsePlaylist,queue):
+                NumeroMusicas+=1
         request = youtube.playlistItems().list_next(request, response)
+    await ShowMessagePlaylist(NumeroMusicas,NomePlaylist,ctx)
            
 def YoutubeSetVideoInfo(ctx, response,queue):
 
@@ -130,3 +131,32 @@ def YoutubeSetVideoInfo(ctx, response,queue):
     queue.append(Info_Musica)
 
     return True
+
+async def ShowMessagePlaylist(NumeroMusicas,NomePlaylist,ctx):
+
+
+    embedVar = discord.Embed(
+        title = '**Enqueued! '+NomePlaylist+"**",
+        description = "Total `"+str(NumeroMusicas)+"` musics were enqueued",
+        color = discord.Color.red()
+    )
+
+    embedVar.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
+    await ctx.channel.send(embed = embedVar)
+
+async def ShowMessageVideo(VideoTittle,ctx,queue):
+
+    if len(queue)==1:
+        desc="["+str(VideoTittle)+"]("+str(queue[len(queue)-1]["url"])+") was enqueued\n\nPlaying Now!"
+    else:
+        desc="["+str(VideoTittle)+"]("+str(queue[len(queue)-1]["url"])+") was enqueued\n\nPosition in queue `"+str(len(queue)-1)+"`"
+
+    embedVar = discord.Embed(
+        title = "**Enqueued!**",
+        description =desc,
+        color = discord.Color.red()
+    )
+
+    embedVar.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
+    await ctx.channel.send(embed = embedVar)
+
