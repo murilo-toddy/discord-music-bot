@@ -28,6 +28,7 @@ import commands.remove as _remove
 load_dotenv()
 
 # TOKEN = os.getenv('TOKEN')
+TOKEN = os.environ['TOKEN']
 client = commands.Bot(command_prefix="!", case_insensitive=True)
 queue = Queue()
 
@@ -142,7 +143,6 @@ async def clear(ctx):
 async def seek(ctx):
     log_function("seek")
     await ctx.channel.send("Função ainda não implementada")
-
 
 
 if __name__ == '__main__':
