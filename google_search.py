@@ -6,7 +6,7 @@ API_KEYS_NUMBER = 3
 MULTIPLE_KEYS = True
 
 def get_key():
-    load_dotenv()
+    # load_dotenv()
     if MULTIPLE_KEYS:
         global API_KEYS_NUMBER
         dic = []
@@ -14,7 +14,7 @@ def get_key():
         
         for i in range(API_KEYS_NUMBER):
             text = "API_KEY"+str(i+1)
-            text = os.getenv(text)
+            # text = os.getenv(text)
             dic.append(text)
         try:
             key = dic[key]

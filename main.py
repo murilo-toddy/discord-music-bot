@@ -1,4 +1,4 @@
-import discord, os, json
+import discord, os
 from discord.voice_client import VoiceClient
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -27,7 +27,7 @@ import commands.remove as _remove
 
 load_dotenv()
 
-TOKEN = os.getenv('TOKEN')
+# TOKEN = os.getenv('TOKEN')
 client = commands.Bot(command_prefix="!", case_insensitive=True)
 queue = Queue()
 
