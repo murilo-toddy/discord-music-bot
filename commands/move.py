@@ -41,6 +41,7 @@ async def move(ctx, queue, *args):
     else:
         await ctx.channel.send("sintaxe incorreta")
 
+
 async def ShowMessage(ctx,tituloVideo,PosicaoInicial, PosicaoFinal=1):
 
     embedVar = discord.Embed(

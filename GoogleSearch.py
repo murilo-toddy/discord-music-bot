@@ -136,7 +136,7 @@ async def ShowMessagePlaylist(NumeroMusicas,NomePlaylist,ctx):
 
 
     embedVar = discord.Embed(
-        title = '**Enqueued! '+NomePlaylist+"**",
+        title = '**Playlist Enqueued! '+NomePlaylist+"**",
         description = "Total `"+str(NumeroMusicas)+"` musics were enqueued",
         color = discord.Color.red()
     )
@@ -152,7 +152,7 @@ async def ShowMessageVideo(VideoTittle,ctx,queue):
         desc="["+str(VideoTittle)+"]("+str(queue[len(queue)-1]["url"])+") was enqueued\n\nPosition in queue `"+str(len(queue)-1)+"`"
 
     embedVar = discord.Embed(
-        title = "**Enqueued!**",
+        title = "**Video Enqueued!**",
         description =desc,
         color = discord.Color.red()
     )
