@@ -1,25 +1,23 @@
-import googleapiclient.discovery
+import discord, os, random, googleapiclient.discovery
 from urllib.parse import parse_qs, urlparse
 from dotenv import load_dotenv
-import discord, os, random
 
 API_KEYS_NUMBER = 3
 MULTIPLE_KEYS = True
 
 def get_key():
     load_dotenv()
-
     if MULTIPLE_KEYS:
         global API_KEYS_NUMBER
+        dic = []
         key = random.randint(1, API_KEYS_NUMBER)
-    
-        Dic = []
+        
         for i in range(API_KEYS_NUMBER):
             text = "API_KEY"+str(i+1)
             text = os.getenv(text)
-            Dic.append(text)
+            dic.append(text)
         try:
-            key = Dic[key]
+            key = dic[key]
         except:
             key = os.getenv('API_KEY1')
 
@@ -64,8 +62,8 @@ async def YoutubeGetVideosInfo(url_busca, ctx, queue):
     response = request.execute()
 
     
-    NumeroMusicas=0
-    NomePlaylist = ""
+    musics = 0
+    playlist_name = ""
 
     while request is not None:
         response = request.execute()
@@ -75,66 +73,66 @@ async def YoutubeGetVideosInfo(url_busca, ctx, queue):
         	part=part_string,
         	id = response["items"][i]["contentDetails"]["videoId"]
             ).execute()
-            if YoutubeSetVideoInfo(ctx,responsePlaylist,queue):
-                NumeroMusicas+=1
+            if YoutubeSetVideoInfo(ctx, responsePlaylist, queue):
+                musics += 1
+
         request = youtube.playlistItems().list_next(request, response)
-    await ShowMessagePlaylist(NumeroMusicas,NomePlaylist,ctx)
-           
+
+    await ShowMessagePlaylist(musics, playlist_name, ctx)
+
+
 def YoutubeSetVideoInfo(ctx, response,queue):
+    music_info = {}
 
-    Info_Musica = {}
-
-    Hours = ""
-    Minutes = ""
-    Seconds = ""
+    hours = ""
+    minutes = ""
+    seconds = ""
     try:
-        Duration = response["items"][0]["contentDetails"]["duration"][2:]
+        duration = response["items"][0]["contentDetails"]["duration"][2:]
     except:
-        print("\n\nVideo Indisponivel\n\n")
+        print("\n\n [!] Video unavailable\n\n")
         return False
 
-    if Duration.find("H") != -1:
-        [Hours,Duration] = Duration.split("H")
-    if Duration.find("M") != -1:
-        [Minutes,Duration] = Duration.split("M")
-    if Duration.find("S") != -1:
-        [Seconds,Duration] = Duration.split("S")
+    if duration.find("H") != -1:
+        [hours,duration] = duration.split("H")
+    if duration.find("M") != -1:
+        [minutes,duration] = duration.split("M")
+    if duration.find("S") != -1:
+        [seconds,duration] = duration.split("S")
 
-    Duration = ""
+    duration = ""
 
-    if Hours != "":
-        Duration+= Hours + ":"
-    if Minutes != "":
-        if len(Minutes) == 1:
-            Duration+="0"
-        Duration+= Minutes + ":"
+    if hours != "":
+        duration+= hours + ":"
+    if minutes != "":
+        if len(minutes) == 1:
+            duration+="0"
+        duration+= minutes + ":"
     else:
-            Duration+= "00:"
-    if Seconds == "":
-            Duration+= "00"
+            duration+= "00:"
+    if seconds == "":
+            duration+= "00"
     else:
-        if len(Seconds) == 1:
-            Duration+="0"
-        Duration+= Seconds
+        if len(seconds) == 1:
+            duration+="0"
+        duration+= seconds
 
-    Info_Musica["title"]= response["items"][0]["snippet"]["title"]
-    Info_Musica["id"] = response["items"][0]["id"]
-    Info_Musica["url"]= "https://www.youtube.com/watch?v="  + Info_Musica["id"]
-    Info_Musica["thumb"]= response["items"][0]["snippet"]["thumbnails"]["high"]["url"]
-    Info_Musica["user"]= ctx.message.author.name
-    Info_Musica["userAvatar"]= ctx.message.author.avatar_url
-    Info_Musica["duration"]= Duration
-    Info_Musica["likes"] = response["items"][0]["statistics"]["likeCount"]
-    Info_Musica["views"] = response["items"][0]["statistics"]["viewCount"]
-    Info_Musica["dislikes"] = response["items"][0]["statistics"]["dislikeCount"]
+    music_info["title"] = response["items"][0]["snippet"]["title"]
+    music_info["id"] = response["items"][0]["id"]
+    music_info["url"] = "https://www.youtube.com/watch?v=" + music_info["id"]
+    music_info["thumb"] = response["items"][0]["snippet"]["thumbnails"]["high"]["url"]
+    music_info["duration"] = duration
+    music_info["views"] = response["items"][0]["statistics"]["viewCount"]
+    music_info["likes"] = response["items"][0]["statistics"]["likeCount"]
+    music_info["dislikes"] = response["items"][0]["statistics"]["dislikeCount"]
+    music_info["user"] = ctx.message.author.name
+    music_info["userAvatar"]= ctx.message.author.avatar_url
 
-    queue.append(Info_Musica)
-
+    queue.append(music_info)
     return True
 
+
 async def ShowMessagePlaylist(NumeroMusicas,NomePlaylist,ctx):
-
-
     embedVar = discord.Embed(
         title = '**Playlist Enqueued! '+NomePlaylist+"**",
         description = "Total `"+str(NumeroMusicas)+"` musics were enqueued",
@@ -143,6 +141,7 @@ async def ShowMessagePlaylist(NumeroMusicas,NomePlaylist,ctx):
 
     embedVar.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
     await ctx.channel.send(embed = embedVar)
+
 
 async def ShowMessageVideo(VideoTittle,ctx,queue):
 

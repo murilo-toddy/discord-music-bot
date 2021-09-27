@@ -23,7 +23,7 @@ class Queue:
         print(self.music_list)
 
     def move(self, starting_index, final_index):
-        self.music_list.insert(final_index,self.MusicList.pop(starting_index))
+        self.music_list.insert(final_index,self.music_list.pop(starting_index))
 
     def clear(self):
         self.music_list.clear()

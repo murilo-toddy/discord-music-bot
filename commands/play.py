@@ -2,7 +2,7 @@ import discord, sys, asyncio
 from youtube_dl.YoutubeDL import YoutubeDL
 
 sys.path.append("..")
-from GoogleSearch import YoutubeGetVideosInfo
+from google_search import YoutubeGetVideosInfo
 from data_structure import Queue
 
 import youtube_search
@@ -16,21 +16,17 @@ force_skip = False
 YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
-async def ChangeLoop():
+async def change_loop():
     global loop
     loop = not loop
     return loop
 
 
-async def ChangeLoopQueue():
+async def change_loop_queue():
     global loop_queue
     loop_queue = not loop_queue
     return loop_queue
 
-async def ForceSkip():
-    global force_skip
-    force_skip = True
-    
 
 async def play(client, ctx, queue: Queue, *url):
     connected = ctx.guild.voice_client
@@ -79,7 +75,6 @@ async def play_next(client, ctx, queue: Queue):
 
     global loop
     global loop_queue
-    global force_skip
     global url_entrada
 
     if(len(queue)) <= 0:
