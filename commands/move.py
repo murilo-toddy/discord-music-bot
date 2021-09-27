@@ -18,7 +18,7 @@ async def move(ctx, queue, *args):
 
         title = queue[pos]["title"]
         queue.move((pos),1)
-        await send_message(ctx,title,pos)
+        await send_message(ctx, title, pos)
             
 
 

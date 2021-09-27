@@ -29,13 +29,7 @@ load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
 client = commands.Bot(command_prefix="!", case_insensitive=True)
-
-
-########################################
-
 queue = Queue()
-
-########################################
 
 
 @client.event
@@ -81,7 +75,7 @@ async def leave(ctx):
     await _leave.leave(ctx,queue)
 
 
-@client.command(brief="Toca uma música maneira", aliases=["p"])
+@client.command(brief="", aliases=["p"])
 async def play(ctx, *url):
     log_function("play")
     if not await verify_channel_play(ctx): return

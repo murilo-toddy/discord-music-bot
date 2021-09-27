@@ -14,6 +14,7 @@ async def remove(ctx, queue, *args):
             return
 
         url = queue.remove(pos)
+        
         #TODO deixar mensagem bonita
         await ctx.channel.send("Item " + str(url) + " removido com sucesso.") 
     
