@@ -101,8 +101,8 @@ async def play_next(client, ctx, queue: Queue):
         try:
             voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
         except:
-            print("Erro Play_next")
-            play_next(client, ctx, queue)
+            print(" [!] Error in playing song")
+            await play_next(client, ctx, queue)
             return
 
     while voice_client.is_playing():
