@@ -2,7 +2,7 @@ import discord, os, random, googleapiclient.discovery
 from urllib.parse import parse_qs, urlparse
 from dotenv import load_dotenv
 
-API_KEYS_NUMBER = 3
+API_KEYS_NUMBER = 2
 MULTIPLE_KEYS = True
 
 def get_key():
