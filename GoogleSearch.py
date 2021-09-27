@@ -3,7 +3,7 @@ from urllib.parse import parse_qs, urlparse
 from dotenv import load_dotenv
 import discord, os, random
 
-API_KEYS_NUMBER = 3
+API_KEYS_NUMBER = 2
 MULTIPLE_KEYS = True
 
 def get_key():
