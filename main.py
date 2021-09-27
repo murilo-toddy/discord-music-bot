@@ -24,11 +24,13 @@ import commands.queue as _queue
 import commands.move as _move
 import commands.remove as _remove
 
+if os.path.isfile("./.env"):
+    load_dotenv()
+    TOKEN = os.getenv('TOKEN')
 
-load_dotenv()
+else:
+    TOKEN = os.environ['TOKEN']
 
-# TOKEN = os.getenv('TOKEN')
-TOKEN = os.environ['TOKEN']
 client = commands.Bot(command_prefix="!", case_insensitive=True)
 queue = Queue()
 

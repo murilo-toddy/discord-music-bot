@@ -6,15 +6,18 @@ API_KEYS_NUMBER = 3
 MULTIPLE_KEYS = True
 
 def get_key():
-    # load_dotenv()
     if MULTIPLE_KEYS:
         global API_KEYS_NUMBER
         dic = []
         key = random.randint(1, API_KEYS_NUMBER)
+
+        if os.path.isfile("./.env"):
+            load_dotenv()
         
         for i in range(API_KEYS_NUMBER):
             text = "API_KEY"+str(i+1)
-            # text = os.getenv(text)
+            if os.path.isfile("./.env"): text = os.getenv(text)
+            else: text = os.environ[text]
             dic.append(text)
         try:
             key = dic[key]
