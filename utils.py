@@ -38,6 +38,5 @@ spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 
 def get_youtube_key():
     key_index = randint(0, YOUTUBE_API_KEYS - 1)
-    print(key_index)
     return YOUTUBE_CREDENTIALS[key_index]
 

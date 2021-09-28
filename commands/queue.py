@@ -18,7 +18,7 @@ async def queue(ctx, queue,client):
 
         if i%10 == 0 or i == (len(queue)-1):
             Pag = discord.Embed(
-                title = "**Queue Songs!  Total = `"+str(len(queue)-1)+"` **",
+                title = "**Queue Songs!  Total: `"+str(len(queue)-1)+"` **",
                 description = desc+"\n`"+str(math.ceil(i/10))+"/"+str(Npaginas)+"`",
                 color = discord.Color.red()
             )

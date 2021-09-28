@@ -96,7 +96,6 @@ async def play_next(client, ctx, queue: Queue, seek=False):
         await join(ctx)
 
     url_entrada = queue[0]["url"]
-    print(url_entrada)
     
     with YoutubeDL(YDL_OPTIONS) as ydl:
         # try:
