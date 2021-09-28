@@ -1,4 +1,4 @@
-import discord, googleapiclient.discovery, utils
+import discord, googleapiclient.discovery, config
 from urllib.parse import parse_qs, urlparse
 
 
@@ -7,7 +7,7 @@ async def YoutubeGetVideosInfo(url_busca, ctx, queue):
     
     part_string = 'contentDetails,statistics,snippet'
 
-    API_KEY = utils.get_youtube_key()
+    API_KEY = config.get_youtube_key()
 
     url = url_busca
     query = parse_qs(urlparse(url).query, keep_blank_values=True)

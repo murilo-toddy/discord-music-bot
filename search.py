@@ -1,8 +1,8 @@
-import googleapiclient.discovery, utils
+import googleapiclient.discovery, config
 
 async def BuscaPorPesquisaYoutube(url):
 
-    API_KEY = utils.get_youtube_key()
+    API_KEY = config.get_youtube_key()
 
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
 

@@ -2,6 +2,7 @@ import discord, os
 from dotenv import load_dotenv
 
 from data_structure import Queue
+from config import *
 from utils import *
 
 from verify_channel import verify_channel, verify_channel_play
@@ -29,6 +30,7 @@ async def on_ready():
     print("\n [!] Bot started.")
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Bot Status updated successfully.")
+    asyncio.get_event_loop().create_task(create_counter())
     for guild in client.guilds: 
         queue[str(guild.id)] = Queue()
 
@@ -143,6 +145,18 @@ async def seek(ctx, *args):
 async def on_guild_join(guild):
     queue[str(guild.id)] = Queue()
 
+
+@client.command()
+async def create(ctx):
+    print(await get_time())
+
+@client.command()
+async def gettime(ctx):
+    print(await get_time())
+
+@client.command()
+async def reset(ctx):
+    await reset_timer()
 
 
 if __name__ == '__main__':

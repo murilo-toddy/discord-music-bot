@@ -1,26 +1,18 @@
-import discord, sys, asyncio
-from youtube_dl.YoutubeDL import YoutubeDL
+import discord, asyncio
 
-sys.path.append("..")
+from youtube_dl.YoutubeDL import YoutubeDL
 from google_search import YoutubeGetVideosInfo
-from Pesquisa import BuscaPorPesquisaYoutube
+from search import BuscaPorPesquisaYoutube
 from spotify import get_spotify_info
 from data_structure import Queue
-
-import youtube_search
 from .join import join
+from utils import *
 
 loop = False
 loop_queue = False
 url_entrada = ""
-force_skip = False
 
-YDL_OPTIONS = {
-    'format': 'bestaudio',
-    'noplaylist':'True', 
-    'quiet': True,
-}
-
+YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 async def change_loop():
@@ -84,6 +76,7 @@ async def play_next(client, ctx, queue: Queue, seek=False):
     global loop
     global loop_queue
     global url_entrada
+    await reset_timer()
 
     if(len(queue)) <= 0:
         return
@@ -112,6 +105,8 @@ async def play_next(client, ctx, queue: Queue, seek=False):
         # try:
         print(" [!] Trying FFMPEG")
         voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
+        await reset_timer()
+        
 
         if seek:
             FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
@@ -143,5 +138,6 @@ async def play_next(client, ctx, queue: Queue, seek=False):
     #################################
 
     if voice_client and not voice_client.is_paused() and len(queue) > 0:
+        await reset_timer()
         await play_next(client, ctx, queue)
     

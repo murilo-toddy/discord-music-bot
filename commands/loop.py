@@ -1,12 +1,14 @@
 from .play import change_loop
+from utils import embedded_message
 
+# Loops a single song
 async def loop(ctx):
-    bool_loop = await change_loop()
-    await show_message(ctx, bool_loop)
+    loop = await change_loop()
+    await show_message(ctx, loop)
 
-async def show_message(ctx, bool_loop):
-    if bool_loop:
-        await ctx.channel.send(":repeat_one: **Enabled!**")
+async def show_message(ctx, loop):
+    if loop:
+        await embedded_message(ctx, ":repeat_one: **Enabled**", "_Loop is now enabled!_")
     else:
-        await ctx.channel.send(":repeat_one: **Disabled!**")
+        await embedded_message(ctx, ":repeat_one: **Disabled**", "_Loop is now disabled!_")
    

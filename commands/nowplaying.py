@@ -1,11 +1,10 @@
 import discord
-from typing import Text
-from discord.colour import Color
+from utils import embedded_message, get_time
 
 async def nowplaying(client, ctx, queue):
 
     if len(queue) == 0:
-        await ctx.channel.send("**Nothing playing**")
+        await embedded_message(ctx, "**Not Playing**", "_There's nothing playing at the moment")
         return
 
     music_url= queue[0]["url"]
@@ -15,8 +14,8 @@ async def nowplaying(client, ctx, queue):
     username_request = queue[0]["user"]
     username_img_request = queue[0]["userAvatar"]
 
-    music_current_time = 10
-    music_duration = 90
+    music_duration = 10
+    music_current_time = await get_time()
     progress_bar = ""
 
     total = 30
@@ -31,10 +30,10 @@ async def nowplaying(client, ctx, queue):
     for i in range(number_after):
         progress_bar += "-"
 
-
     embed_var = discord.Embed(
         title = '',
-        description = "\n["+music_title +"]("+ music_url+") \n\n**"+progress_bar+"**\n\n"+"`music_current_time/"+music_duration+"`",
+        description = "\n["+music_title +"]("+ music_url+") \n\n**"+progress_bar+"**\n\n"+"`"+str(music_current_time)
+                        +"/"+music_duration+"`",
         color = discord.Color.red()
     )
 

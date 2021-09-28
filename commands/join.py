@@ -1,10 +1,12 @@
+from utils import embedded_message
+
+# Connects the bot to a voice channel
 async def join(ctx):
 
     if ctx.guild.voice_client:
-        await ctx.channel.send("**Já estou conectado**")
+        await embedded_message(ctx, "**Already Connected**", "_I am already connected to a voice channel_")
     
     else:
-        await ctx.channel.send(":wave: **Hello Hello**")
         await ctx.author.voice.channel.connect()
-        bot_channel = ctx.guild.voice_client
-        bot_channel.pause()
+        ctx.guild.voice_client.pause()
+        await embedded_message(ctx, "**:wave: Hello Hello**", "_Connected successfully_")

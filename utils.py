@@ -1,41 +1,31 @@
-import os, spotipy
-from dotenv import load_dotenv
-from discord.ext import commands
-from spotipy.oauth2 import SpotifyClientCredentials
-from random import randint
+import asyncio
+import discord
 
-YOUTUBE_API_KEYS = 3
-SPOTIFY_CREDENTIALS = {}
-YOUTUBE_CREDENTIALS = []
+counter = 0
 
-client = commands.Bot(command_prefix="!", case_insensitive=True)
-queue = {}
+async def create_counter():
+    global counter
+    while True:
+        await asyncio.sleep(1)
+        counter += 1
 
+async def reset_timer():
+    global counter
+    counter = 0
 
-if os.path.isfile("./.env"):
-    load_dotenv()
-    TOKEN = os.getenv("DISCORD_TOKEN")
-    SPOTIFY_CREDENTIALS["id"] = os.getenv("SPOTIFY_ID")
-    SPOTIFY_CREDENTIALS["secret"] = os.getenv("SPOTIFY_SECRET")
-    for i in range(1, YOUTUBE_API_KEYS + 1):
-        YOUTUBE_CREDENTIALS.append(os.getenv("YOUTUBE_API_KEY" + str(i)))
-    
-
-else:
-    TOKEN = os.environ["DISCORD_TOKEN"]
-    SPOTIFY_CREDENTIALS["id"] = os.environ["SPOTIFY_ID"]
-    SPOTIFY_CREDENTIALS["secret"] = os.environ["SPOTIFY_SECRET"]
-    for i in range(1, YOUTUBE_API_KEYS + 1):
-        YOUTUBE_CREDENTIALS.append(os.environ["YOUTUBE_API_KEY" + str(i)])
-        
+async def get_time():
+    global counter
+    return counter
 
 
-spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
-    client_id = SPOTIFY_CREDENTIALS["id"],
-    client_secret = SPOTIFY_CREDENTIALS["secret"]
-))
 
 
-def get_youtube_key(): 
-    return YOUTUBE_CREDENTIALS[randint(0, YOUTUBE_API_KEYS - 1)]
+async def embedded_message(ctx, title, description):
+    embed = discord.Embed(
+        title = title,
+        description = description,
+        color = discord.Color.red()
+    )
 
+    embed.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
+    await ctx.channel.send(embed = embed)

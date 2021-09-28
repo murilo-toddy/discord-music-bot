@@ -1,6 +1,6 @@
 from google_search import YoutubeGetVideosInfo
-from Pesquisa import BuscaPorPesquisaYoutube
-from utils import *
+from search import BuscaPorPesquisaYoutube
+from config import *
 
 async def get_spotify_info(url, ctx, queue):
 
