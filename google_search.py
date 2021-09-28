@@ -37,7 +37,6 @@ async def YoutubeGetVideosInfo(url_busca, ctx, queue):
     
     part_string = 'contentDetails,statistics,snippet'
 
-    load_dotenv()
     API_KEY = get_key()
 
     url = url_busca
@@ -51,7 +50,8 @@ async def YoutubeGetVideosInfo(url_busca, ctx, queue):
         IdMusic = url.split("watch?v=")[1][0:11]
         response = youtube.videos().list(
         	part=part_string,
-        	id = IdMusic
+        	id = IdMusic,
+            regionCode = "BR",
         ).execute()
 
         YoutubeSetVideoInfo(ctx,response,queue)

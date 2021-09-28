@@ -1,6 +1,7 @@
 import spotipy, os, youtube_search, google_search
 from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv
+from Pesquisa import BuscaPorPesquisaYoutube
 
 
 async def get_spotify_info(url, ctx, queue):
@@ -28,10 +29,10 @@ async def get_spotify_info(url, ctx, queue):
             name = track["name"]
             artist = track["artists"][0]["name"]
             query = str(name) + " - " + str(artist)
-            info = youtube_search.YoutubeSearch(query)
-            await google_search.YoutubeGetVideosInfo(info["url"], ctx, queue)
+            info = await BuscaPorPesquisaYoutube(query)
+            await google_search.YoutubeGetVideosInfo(info, ctx, queue)
 
     else:
         music_info = spotify.track(url)
-        info = youtube_search.YoutubeSearch(music_info["name"] + " - " + music_info["album"]["artists"][0]["name"])
-        await google_search.YoutubeGetVideosInfo(info["url"], ctx, queue)
+        info = await BuscaPorPesquisaYoutube(music_info["name"] + " - " + music_info["album"]["artists"][0]["name"])
+        await google_search.YoutubeGetVideosInfo(info, ctx, queue)

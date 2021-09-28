@@ -3,6 +3,7 @@ from youtube_dl.YoutubeDL import YoutubeDL
 
 sys.path.append("..")
 from google_search import YoutubeGetVideosInfo
+from Pesquisa import BuscaPorPesquisaYoutube
 from spotify import get_spotify_info
 from data_structure import Queue
 
@@ -55,8 +56,8 @@ async def play(client, ctx, queue: Queue, *url):
         urlPesquisa = urlPesquisa[:-1] 
 
         await ctx.channel.send(":musical_note: **Searching** :mag_right: `"+urlPesquisa+"`")
-        Info_Music = youtube_search.YoutubeSearch(urlPesquisa)
-        await YoutubeGetVideosInfo(Info_Music["url"], ctx, queue)
+        Info_Music = await BuscaPorPesquisaYoutube(urlPesquisa)
+        await YoutubeGetVideosInfo(Info_Music, ctx, queue)
         await youtube_play(client, ctx, queue)
         return
 
