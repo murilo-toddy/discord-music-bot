@@ -9,7 +9,7 @@ YOUTUBE_API_KEYS = 3
 SPOTIFY_CREDENTIALS = {}
 YOUTUBE_CREDENTIALS = []
 
-client = commands.Bot(command_prefix="!", case_insensitive=True)
+client = commands.Bot(command_prefix="!", case_insensitive=True, help_command=None)
 queue = {}
 counter = Counter()
 

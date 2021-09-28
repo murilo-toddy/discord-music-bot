@@ -22,6 +22,7 @@ import commands.shuffle as _shuffle
 import commands.queue as _queue
 import commands.move as _move
 import commands.remove as _remove
+import commands.help as _help
 
 
 @client.event
@@ -149,6 +150,11 @@ async def seek(ctx, *args):
     if not await verify_channel(ctx): return
     await _seek.seek(client, ctx, queue[str(ctx.guild.id)], *args)
     
+
+@client.command()
+async def help(ctx, *args):
+    log_function("help")
+    await _help.help(client, ctx, *args)
 
 
 
