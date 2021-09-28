@@ -14,20 +14,19 @@ queue = {}
 
 if os.path.isfile("./.env"):
     load_dotenv()
-    TOKEN = os.getenv("TOKEN")
+    TOKEN = os.getenv("DISCORD_TOKEN")
     SPOTIFY_CREDENTIALS["id"] = os.getenv("SPOTIFY_ID")
     SPOTIFY_CREDENTIALS["secret"] = os.getenv("SPOTIFY_SECRET")
-    for i in range(YOUTUBE_API_KEYS):
-        YOUTUBE_CREDENTIALS.append(os.getenv("YOUTUBE_API_KEY" + str(i+1)))
-        print(YOUTUBE_CREDENTIALS[i])
+    for i in range(1, YOUTUBE_API_KEYS + 1):
+        YOUTUBE_CREDENTIALS.append(os.getenv("YOUTUBE_API_KEY" + str(i)))
     
 
 else:
-    TOKEN = os.environ["TOKEN"]
+    TOKEN = os.environ["DISCORD_TOKEN"]
     SPOTIFY_CREDENTIALS["id"] = os.environ["SPOTIFY_ID"]
     SPOTIFY_CREDENTIALS["secret"] = os.environ["SPOTIFY_SECRET"]
-    for i in range(YOUTUBE_API_KEYS):
-        YOUTUBE_CREDENTIALS.append(os.environ["YOUTUBE_API_KEY" + str(i+1)])
+    for i in range(1, YOUTUBE_API_KEYS + 1):
+        YOUTUBE_CREDENTIALS.append(os.environ["YOUTUBE_API_KEY" + str(i)])
         
 
 
