@@ -142,9 +142,12 @@ async def clear(ctx):
 
 
 @client.command()
-async def seek(ctx):
+async def seek(ctx, *args):
     log_function("seek")
-    await ctx.channel.send("Função ainda não implementada")
+    if not await verify_channel(ctx): return
+    await ctx.channel.send("Seeked")
+    await _seek.seek(client, ctx, queue[str(ctx.guild.id)], *args)
+    
 
 
 @client.event

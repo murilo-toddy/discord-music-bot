@@ -15,7 +15,12 @@ loop_queue = False
 url_entrada = ""
 force_skip = False
 
-YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True}
+YDL_OPTIONS = {
+    'format': 'bestaudio',
+    'noplaylist':'True', 
+    'quiet': True,
+}
+
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 async def change_loop():
@@ -74,7 +79,7 @@ async def youtube_play(client, ctx, queue: Queue):
     
 
 
-async def play_next(client, ctx, queue: Queue):
+async def play_next(client, ctx, queue: Queue, seek=False):
 
     global loop
     global loop_queue
@@ -91,19 +96,26 @@ async def play_next(client, ctx, queue: Queue):
         await join(ctx)
 
     url_entrada = queue[0]["url"]
+    print(url_entrada)
     
     with YoutubeDL(YDL_OPTIONS) as ydl:
-        try:
-            info = ydl.extract_info("ytsearch:%s" % url_entrada, download=False)['entries'][0]
-        except:
-            return False
+        # try:
+        info = ydl.extract_info("ytsearch:%s" % url_entrada, download=False)['entries'][0]
+        # except:
+            # return False
 
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
+
+    if seek:
+        voice_client.stop()
 
     if not voice_client.is_playing():
         # try:
         print(" [!] Trying FFMPEG")
         voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
+
+        if seek:
+            FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         # except:
         #     print(" [!] Error in playing song")
         #     queue.remove(0)

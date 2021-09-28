@@ -1,5 +1,4 @@
 import os, random, googleapiclient.discovery
-from urllib.parse import parse_qs, urlparse
 from dotenv import load_dotenv
 
 
@@ -39,12 +38,12 @@ async def BuscaPorPesquisaYoutube(url):
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
 
     search_response = youtube.search().list(
-    q=url,
-    part="id",
-    type="video",
-    maxResults=1,
-    regionCode = "BR"
-  ).execute()
+        q = url,
+        part = "id",
+        type = "video",
+        maxResults = 1,
+        regionCode = "BR"
+    ).execute()
 
     videoId = search_response["items"][0]["id"]["videoId"]
     UrlFinal = "https://www.youtube.com/watch?v=" + videoId
