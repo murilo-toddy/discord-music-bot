@@ -126,7 +126,7 @@ async def ShowMessageVideo(VideoTittle,ctx,queue):
 
     embedVar = discord.Embed(
         title = "**Video Enqueued!**",
-        description =desc,
+        description = desc,
         color = discord.Color.red()
     )
 

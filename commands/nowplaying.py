@@ -17,7 +17,6 @@ async def nowplaying(client, ctx, queue):
 
     music_current_time = 10
     music_duration = 90
-
     progress_bar = ""
 
     total = 30

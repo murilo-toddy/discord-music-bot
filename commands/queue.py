@@ -1,40 +1,44 @@
-from typing import Text
-import discord
-from discord.colour import Color
-import asyncio
-import math
+import discord, asyncio, math
 
 async def queue(ctx, queue,client):
+    
+    # Fila vazia
     if(len(queue)) <= 1:
         await ctx.channel.send("***Fila vazia***")
         return
 
-    Paginas = []
-    desc = ""
-    Npaginas = math.ceil(len(queue)/10)
+    pages = []
+    description = ""
+    num_pages = math.ceil(len(queue) / 10)
+    
     for i in range(1, len(queue)):
-        desc += str(i) +" - ["+str(queue[i]["title"] +"]("+str(queue[i]["url"])+")" + 
+        
+        # Adds information from music to description
+        description += str(i) +" - ["+str(queue[i]["title"] +"]("+str(queue[i]["url"])+")" + 
                 " `"+str(queue[i]["duration"])+"` ("+str(queue[i]["user"]))+")\n"
 
-        if i%10 == 0 or i == (len(queue)-1):
-            Pag = discord.Embed(
+        # Finished loading a page
+        if i % 10 == 0 or i == (len(queue) - 1):
+
+            page = discord.Embed(
                 title = "**Queue Songs!  Total: `"+str(len(queue)-1)+"` **",
-                description = desc+"\n`"+str(math.ceil(i/10))+"/"+str(Npaginas)+"`",
+                description = description+"\n`"+str(math.ceil(i/10))+"/"+str(num_pages)+"`",
                 color = discord.Color.red()
             )
-            desc = ""
+            description = ""
 
-            Pag.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
-            Pag.set_thumbnail(url = queue[0]["thumb"]) #Change to thumbnail
-            Paginas.append(Pag)
+            page.set_footer(text = " Resquested by " + ctx.message.author.name, icon_url = ctx.message.author.avatar_url)
+            page.set_thumbnail(url = queue[0]["thumb"]) #Change to thumbnail
+            pages.append(page)
     
-    await PrintPaginas(ctx,Paginas,client)
+    await print_pages(client, ctx, pages)
 
 
-async def PrintPaginas(ctx,Paginas,client):
+
+async def print_pages(client, ctx, pages):
     buttons = [u"\u23EA", u"\u2B05", u"\u27A1", u"\u23E9"] # skip to start, left, right, skip to end
     current = 0
-    client.help_pages = Paginas
+    client.help_pages = pages
     msg = await ctx.send(embed=client.help_pages[current])
     
     for button in buttons:

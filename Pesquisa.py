@@ -14,8 +14,12 @@ async def BuscaPorPesquisaYoutube(url):
         regionCode = "BR"
     ).execute()
 
-    videoId = search_response["items"][0]["id"]["videoId"]
-    UrlFinal = "https://www.youtube.com/watch?v=" + videoId
-    
-    return UrlFinal
+    try:
+        video_id = search_response["items"][0]["id"]["videoId"]
+        final_url = "https://www.youtube.com/watch?v=" + video_id
+        return final_url
+
+    except:
+        print(" [!!] Error in \'youtube_search\'\n      * Could not convert to URL")
+        return False
 

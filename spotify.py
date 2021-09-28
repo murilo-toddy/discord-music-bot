@@ -2,11 +2,6 @@ from google_search import YoutubeGetVideosInfo
 from Pesquisa import BuscaPorPesquisaYoutube
 from utils import *
 
-async def add_to_queue(ctx, queue, query):
-    info = await BuscaPorPesquisaYoutube(query)
-    await YoutubeGetVideosInfo(info, ctx, queue)
-
-
 async def get_spotify_info(url, ctx, queue):
 
     # Playlist
@@ -29,3 +24,8 @@ async def get_spotify_info(url, ctx, queue):
 
     else:
         await ctx.channel.send("Forneça um link para uma Musica / Playist válida")
+
+
+async def add_to_queue(ctx, queue, query):
+    info = await BuscaPorPesquisaYoutube(query)
+    await YoutubeGetVideosInfo(info, ctx, queue)

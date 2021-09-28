@@ -2,14 +2,14 @@ import urllib.request, urllib.parse, re
 
 def YoutubeSearch(urlPesquisa):
 
-    urlBusca = urllib.parse.quote(urlPesquisa)
-    html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + urlBusca)
+    search_url = urllib.parse.quote(urlPesquisa)
+    html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + search_url)
     video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
-    UrlVideo ="https://www.youtube.com/watch?v=" + video_ids[0]
+    video_url ="https://www.youtube.com/watch?v=" + video_ids[0]
 
-    Video_Identificator = {}
+    video_identifier = {}
 
-    Video_Identificator["url"] = UrlVideo
-    Video_Identificator["id"] = video_ids[0]
+    video_identifier["url"] = video_url
+    video_identifier["id"] = video_ids[0]
 
-    return Video_Identificator
+    return video_identifier
