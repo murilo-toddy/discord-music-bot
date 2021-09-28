@@ -1,39 +1,8 @@
-import os, random, googleapiclient.discovery
-from dotenv import load_dotenv
-
-
-API_KEYS_NUMBER = 3
-MULTIPLE_KEYS = True
-
-
-def get_key():
-    if MULTIPLE_KEYS:
-        global API_KEYS_NUMBER
-        dic = []
-        key = random.randint(1, API_KEYS_NUMBER)
-
-        if os.path.isfile("./.env"):
-            load_dotenv()
-        
-        for i in range(API_KEYS_NUMBER):
-            text = "API_KEY"+str(i+1)
-            if os.path.isfile("./.env"): text = os.getenv(text)
-            else: text = os.environ[text]
-            dic.append(text)
-        try:
-            key = dic[key]
-        except:
-            key = os.getenv('API_KEY1')
-
-    else:
-        key = os.getenv("API_KEY")
-    
-    print(key)
-    return key
+import googleapiclient.discovery, utils
 
 async def BuscaPorPesquisaYoutube(url):
 
-    API_KEY = get_key()
+    API_KEY = utils.get_youtube_key()
 
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
 

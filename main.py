@@ -1,9 +1,8 @@
 import discord, os
-from discord.voice_client import VoiceClient
-from discord.ext import commands
 from dotenv import load_dotenv
 
 from data_structure import Queue
+from utils import *
 
 from verify_channel import verify_channel, verify_channel_play
 from commands.log import log_function
@@ -24,15 +23,6 @@ import commands.queue as _queue
 import commands.move as _move
 import commands.remove as _remove
 
-if os.path.isfile("./.env"):
-    load_dotenv()
-    TOKEN = os.getenv('TOKEN')
-
-else:
-    TOKEN = os.environ['TOKEN']
-
-client = commands.Bot(command_prefix="!", case_insensitive=True)
-queue = {}
 
 @client.event
 async def on_ready():
@@ -145,7 +135,6 @@ async def clear(ctx):
 async def seek(ctx, *args):
     log_function("seek")
     if not await verify_channel(ctx): return
-    await ctx.channel.send("Seeked")
     await _seek.seek(client, ctx, queue[str(ctx.guild.id)], *args)
     
 

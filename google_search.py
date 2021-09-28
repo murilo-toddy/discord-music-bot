@@ -1,35 +1,5 @@
-import discord, os, random, googleapiclient.discovery
+import discord, googleapiclient.discovery, utils
 from urllib.parse import parse_qs, urlparse
-from dotenv import load_dotenv
-
-API_KEYS_NUMBER = 3
-MULTIPLE_KEYS = True
-
-def get_key():
-    if MULTIPLE_KEYS:
-        global API_KEYS_NUMBER
-        dic = []
-        key = random.randint(1, API_KEYS_NUMBER)
-
-        if os.path.isfile("./.env"):
-            load_dotenv()
-        
-        for i in range(API_KEYS_NUMBER):
-            text = "API_KEY"+str(i+1)
-            if os.path.isfile("./.env"): text = os.getenv(text)
-            else: text = os.environ[text]
-            dic.append(text)
-        try:
-            key = dic[key]
-        except:
-            key = os.getenv('API_KEY1')
-
-    else:
-        key = os.getenv("API_KEY")
-    
-    print(key)
-    return key
-
 
 
 # Extract video or playlist info from URL
@@ -37,7 +7,7 @@ async def YoutubeGetVideosInfo(url_busca, ctx, queue):
     
     part_string = 'contentDetails,statistics,snippet'
 
-    API_KEY = get_key()
+    API_KEY = utils.get_youtube_key()
 
     url = url_busca
     query = parse_qs(urlparse(url).query, keep_blank_values=True)
