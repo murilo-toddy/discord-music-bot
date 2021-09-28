@@ -162,4 +162,3 @@ async def ShowMessageVideo(VideoTittle,ctx,queue):
 
     embedVar.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
     await ctx.channel.send(embed = embedVar)
-

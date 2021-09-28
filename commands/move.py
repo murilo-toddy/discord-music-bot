@@ -6,7 +6,7 @@ async def move(ctx, queue, *args):
     
     elif len(args) == 1:
         try:
-            pos = int(*args[0])
+            pos = int(args[0])
 
         except:
             await ctx.channel.send("O argumento precisa ser um número válido :japanese_goblin:")
@@ -24,8 +24,8 @@ async def move(ctx, queue, *args):
 
     elif len(args) == 2:
         try:
-            pos1 = int(*args[0])
-            pos2 = int(*args[1])
+            pos1 = int(args[0])
+            pos2 = int(args[1])
             
             if pos1 > (len(queue)+1) or pos2 > (len(queue)+1) and pos1!=0 and pos2 !=0:
                 await ctx.channel.send("Posição inválida :japanese_goblin:")
