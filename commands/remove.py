@@ -16,10 +16,8 @@ async def remove(ctx, queue, *args):
             await embedded_message(ctx, ":exclamation: **Invalid Position**", "_To check the queue use_ `!queue`")
             return
 
-        url = queue.remove(pos)
-        
-        #TODO deixar mensagem bonita
-        await embedded_message(ctx, "**Removed**", "`" + url["title"] + "` _was successfully removed_")
+        music = queue.remove(pos)
+        await embedded_message(ctx, "**Removed**", "`" + music["title"] + "` _was successfully removed_")
     
     else:
         await embedded_message(ctx, ":exclamation: **Invalid Syntax**", "_Function only takes two arguments_")

@@ -1,5 +1,5 @@
 import os, spotipy
-from utils import Counter
+from data_structure import Counter
 from dotenv import load_dotenv
 from discord.ext import commands
 from spotipy.oauth2 import SpotifyClientCredentials

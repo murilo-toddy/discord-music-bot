@@ -96,9 +96,9 @@ def YoutubeSetVideoInfo(ctx, response,queue):
     music_info["url"] = "https://www.youtube.com/watch?v=" + music_info["id"]
     music_info["thumb"] = response["items"][0]["snippet"]["thumbnails"]["high"]["url"]
     music_info["duration"] = duration
-    music_info["views"] = response["items"][0]["statistics"]["viewCount"]
-    music_info["likes"] = response["items"][0]["statistics"]["likeCount"]
-    music_info["dislikes"] = response["items"][0]["statistics"]["dislikeCount"]
+    # music_info["views"] = response["items"][0]["statistics"]["viewCount"]
+    # music_info["likes"] = response["items"][0]["statistics"]["likeCount"]
+    # music_info["dislikes"] = response["items"][0]["statistics"]["dislikeCount"]
     music_info["user"] = ctx.message.author.name
     music_info["userAvatar"]= ctx.message.author.avatar_url
 

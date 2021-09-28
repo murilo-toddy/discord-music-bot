@@ -1,5 +1,4 @@
-import discord, os
-from dotenv import load_dotenv
+import discord, asyncio
 
 from data_structure import Queue
 from config import *
@@ -28,11 +27,22 @@ import commands.remove as _remove
 @client.event
 async def on_ready():
     print("\n [!] Bot started.")
+    
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Bot Status updated successfully.")
+    
     asyncio.get_event_loop().create_task(counter.start_timer())
     for guild in client.guilds: 
         queue[str(guild.id)] = Queue()
+
+    print("\n [!] Finished startup process")
+
+
+@client.event
+async def on_guild_join(guild):
+    print(" [!] Bot added to channel " + str(guild.name))
+    queue[str(guild.id)] = Queue()
+
 
 
 @client.command(aliases=["j"])
@@ -140,23 +150,6 @@ async def seek(ctx, *args):
     await _seek.seek(client, ctx, queue[str(ctx.guild.id)], *args)
     
 
-
-@client.event
-async def on_guild_join(guild):
-    queue[str(guild.id)] = Queue()
-
-
-# @client.command()
-# async def create(ctx):
-#     print(await get_time())
-
-# @client.command()
-# async def gettime(ctx):
-#     print(await get_time())
-
-# @client.command()
-# async def reset(ctx):
-#     await reset_timer()
 
 
 if __name__ == '__main__':
