@@ -30,7 +30,7 @@ async def on_ready():
     print("\n [!] Bot started.")
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Bot Status updated successfully.")
-    asyncio.get_event_loop().create_task(create_counter())
+    asyncio.get_event_loop().create_task(counter.start_timer())
     for guild in client.guilds: 
         queue[str(guild.id)] = Queue()
 
@@ -146,17 +146,17 @@ async def on_guild_join(guild):
     queue[str(guild.id)] = Queue()
 
 
-@client.command()
-async def create(ctx):
-    print(await get_time())
+# @client.command()
+# async def create(ctx):
+#     print(await get_time())
 
-@client.command()
-async def gettime(ctx):
-    print(await get_time())
+# @client.command()
+# async def gettime(ctx):
+#     print(await get_time())
 
-@client.command()
-async def reset(ctx):
-    await reset_timer()
+# @client.command()
+# async def reset(ctx):
+#     await reset_timer()
 
 
 if __name__ == '__main__':

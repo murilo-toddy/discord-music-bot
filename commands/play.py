@@ -1,5 +1,4 @@
 import discord, asyncio
-
 from youtube_dl.YoutubeDL import YoutubeDL
 from google_search import YoutubeGetVideosInfo
 from search import BuscaPorPesquisaYoutube
@@ -7,6 +6,7 @@ from spotify import get_spotify_info
 from data_structure import Queue
 from .join import join
 from utils import *
+from config import counter
 
 loop = False
 loop_queue = False
@@ -76,7 +76,7 @@ async def play_next(client, ctx, queue: Queue, seek=False):
     global loop
     global loop_queue
     global url_entrada
-    await reset_timer()
+    await counter.reset()
 
     if(len(queue)) <= 0:
         return
@@ -105,7 +105,7 @@ async def play_next(client, ctx, queue: Queue, seek=False):
         # try:
         print(" [!] Trying FFMPEG")
         voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
-        await reset_timer()
+        await counter.reset()
         
 
         if seek:
@@ -138,6 +138,6 @@ async def play_next(client, ctx, queue: Queue, seek=False):
     #################################
 
     if voice_client and not voice_client.is_paused() and len(queue) > 0:
-        await reset_timer()
+        await counter.reset()
         await play_next(client, ctx, queue)
     
