@@ -3,6 +3,7 @@ from youtube_dl.YoutubeDL import YoutubeDL
 
 sys.path.append("..")
 from google_search import YoutubeGetVideosInfo
+from spotify import get_spotify_info
 from data_structure import Queue
 
 import youtube_search
@@ -39,7 +40,8 @@ async def play(client, ctx, queue: Queue, *url):
 
     link = url[0]
     if link.find("spotify",11,21) != -1: # Spotify URL
-        await ctx.channel.send("Ainda não aceito URLs do Spotify")
+        await get_spotify_info(url[0], ctx, queue)
+        await youtube_play(client, ctx, queue)
         return
 
     elif link.find("youtube",11,21) != -1: # Youtube URL

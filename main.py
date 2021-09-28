@@ -1,4 +1,3 @@
-import asyncio
 import discord, os
 from discord.voice_client import VoiceClient
 from discord.ext import commands
@@ -42,7 +41,6 @@ async def on_ready():
     print("\n [!] Bot Status updated successfully.")
     for guild in client.guilds: 
         queue[str(guild.id)] = Queue()
-
 
 
 @client.command(aliases=["j"])
