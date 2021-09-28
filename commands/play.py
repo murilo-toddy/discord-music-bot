@@ -3,6 +3,7 @@ from youtube_dl.YoutubeDL import YoutubeDL
 
 sys.path.append("..")
 from google_search import YoutubeGetVideosInfo
+from spotify import get_spotify_info
 from data_structure import Queue
 
 import youtube_search
@@ -13,7 +14,7 @@ loop_queue = False
 url_entrada = ""
 force_skip = False
 
-YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
+YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 async def change_loop():
@@ -39,7 +40,8 @@ async def play(client, ctx, queue: Queue, *url):
 
     link = url[0]
     if link.find("spotify",11,21) != -1: # Spotify URL
-        await ctx.channel.send("Ainda não aceito URLs do Spotify")
+        await get_spotify_info(url[0], ctx, queue)
+        await youtube_play(client, ctx, queue)
         return
 
     elif link.find("youtube",11,21) != -1: # Youtube URL
@@ -98,12 +100,14 @@ async def play_next(client, ctx, queue: Queue):
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
 
     if not voice_client.is_playing():
-        try:
-            voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
-        except:
-            print("Erro Play_next")
-            play_next(client, ctx, queue)
-            return
+        # try:
+        print(" [!] Trying FFMPEG")
+        voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
+        # except:
+        #     print(" [!] Error in playing song")
+        #     queue.remove(0)
+        #     await play_next(client, ctx, queue)
+        #     return
 
     while voice_client.is_playing():
         await asyncio.sleep(1)

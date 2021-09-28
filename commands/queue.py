@@ -9,27 +9,27 @@ async def queue(ctx, queue,client):
         await ctx.channel.send("***Fila vazia***")
         return
 
-    TamanhoJ = math.ceil(len(queue)/10)
-
     Paginas = []
-    for j in range(TamanhoJ):
-        print(j)
-        desc = ""
-        for i in range(10):
-            if i+j != 0 and i<len(queue):
-                desc += str(i+j*10) +" - ["+str(queue[i+j*10]["title"] +"]("+str(queue[i+j*10]["url"])+")"+ " `"+str(queue[i+j*10]["duration"])+"` ("+str(queue[i+j*10]["user"]))+")\n"
+    desc = ""
+    Npaginas = math.ceil(len(queue)/10)
+    for i in range(1, len(queue)):
+        desc += str(i) +" - ["+str(queue[i]["title"] +"]("+str(queue[i]["url"])+")" + 
+                " `"+str(queue[i]["duration"])+"` ("+str(queue[i]["user"]))+")\n"
 
-        Pag = discord.Embed(
-            title = "**Queue Songs!  Total = `"+str(len(queue)-1)+"` **",
-            description = desc+"\n`"+str(j+1)+"/"+str(TamanhoJ)+"`",
-            color = discord.Color.red()
-        )
+        if i%10 == 0 or i == (len(queue)-1):
+            Pag = discord.Embed(
+                title = "**Queue Songs!  Total = `"+str(len(queue)-1)+"` **",
+                description = desc+"\n`"+str(math.ceil(i/10))+"/"+str(Npaginas)+"`",
+                color = discord.Color.red()
+            )
+            desc = ""
 
-        Pag.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
-        Pag.set_thumbnail(url = queue[0]["thumb"]) #Change to thumbnail
-        Paginas.append(Pag)
+            Pag.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
+            Pag.set_thumbnail(url = queue[0]["thumb"]) #Change to thumbnail
+            Paginas.append(Pag)
     
     await PrintPaginas(ctx,Paginas,client)
+
 
 async def PrintPaginas(ctx,Paginas,client):
     buttons = [u"\u23EA", u"\u2B05", u"\u27A1", u"\u23E9"] # skip to start, left, right, skip to end
