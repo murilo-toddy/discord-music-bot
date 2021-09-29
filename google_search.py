@@ -5,7 +5,7 @@ from urllib.parse import parse_qs, urlparse
 # Extract video or playlist info from URL
 async def YoutubeGetVideosInfo(url_busca, ctx, queue):
     
-    part_string = 'contentDetails,statistics,snippet'
+    part_string = 'contentDetails,snippet'
 
     API_KEY = config.get_youtube_key()
 
@@ -14,9 +14,12 @@ async def YoutubeGetVideosInfo(url_busca, ctx, queue):
 
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
 
-    try: # Playlist
+    # Playlist
+    try:
         playlist_id = query["list"][0]
-    except: # Video comum    
+    
+    # Single video
+    except:    
         IdMusic = url.split("watch?v=")[1][0:11]
         response = youtube.videos().list(
         	part=part_string,
@@ -61,6 +64,9 @@ def YoutubeSetVideoInfo(ctx, response,queue):
     hours = ""
     minutes = ""
     seconds = ""
+    duration = ""
+    duration_in_seconds = 0
+    
     try:
         duration = response["items"][0]["contentDetails"]["duration"][2:]
     except:
@@ -74,31 +80,31 @@ def YoutubeSetVideoInfo(ctx, response,queue):
     if duration.find("S") != -1:
         [seconds,duration] = duration.split("S")
 
-    duration = ""
-
     if hours != "":
-        duration+= hours + ":"
+        duration += hours + ":"
+        duration_in_seconds += 60*60*int(hours)
+
     if minutes != "":
-        if len(minutes) == 1:
-            duration+="0"
-        duration+= minutes + ":"
+        if len(minutes) == 1: duration+="0"
+        duration += minutes + ":"
+        duration_in_seconds += 60*int(minutes)
     else:
-            duration+= "00:"
-    if seconds == "":
-            duration+= "00"
-    else:
-        if len(seconds) == 1:
-            duration+="0"
+        duration += "00:"
+
+    if seconds != "":
+        if len(seconds) == 1: duration += "0"
         duration+= seconds
+        duration_in_seconds += int(seconds)
+    else:
+        duration += "00"
+
 
     music_info["title"] = response["items"][0]["snippet"]["title"]
     music_info["id"] = response["items"][0]["id"]
     music_info["url"] = "https://www.youtube.com/watch?v=" + music_info["id"]
     music_info["thumb"] = response["items"][0]["snippet"]["thumbnails"]["high"]["url"]
     music_info["duration"] = duration
-    # music_info["views"] = response["items"][0]["statistics"]["viewCount"]
-    # music_info["likes"] = response["items"][0]["statistics"]["likeCount"]
-    # music_info["dislikes"] = response["items"][0]["statistics"]["dislikeCount"]
+    music_info["duration_seconds"] = duration_in_seconds
     music_info["user"] = ctx.message.author.name
     music_info["userAvatar"]= ctx.message.author.avatar_url
 

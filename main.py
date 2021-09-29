@@ -25,7 +25,7 @@ async def on_ready():
 
 @client.event
 async def on_guild_join(guild):
-    print(" [!] Bot added to channel " + str(guild.name))
+    print("\n [!] Bot added to channel " + str(guild.name))
     queue[str(guild.id)] = Queue()
 
 

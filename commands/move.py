@@ -25,8 +25,12 @@ async def move_to(ctx, queue, pos1, pos2):
         print(" [!!] Error in \'move\' function\n      * Could not convert position!")
         return
 
-    if pos1 > (len(queue) + 1) or pos2 > (len(queue) + 1) and pos1 != 0 and pos2 != 0:
+    if pos1 >= len(queue) or pos2 > len(queue) or pos1 == 0 or pos2 == 0:
         await embedded_message(ctx, ":japanese_goblin: **Invalid Position**", "_To check the queue use_ `!queue`")
+        return
+
+    if pos1 == pos2:
+        await embedded_message(ctx, ":japanese_goblin: **Invalid Position**", "_Song is already in position_ `" + str(pos1) + "`")
         return
 
     title = queue[pos1]["title"]

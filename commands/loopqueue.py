@@ -1,9 +1,9 @@
-from .play import change_loop_queue
+from config import bot_info
 from utils import embedded_message
 
 # Loops a whole queue
 async def loopqueue(ctx):
-    loop_queue = await change_loop_queue()
+    loop_queue = bot_info.change_loop_queue()
     await show_message(ctx, loop_queue)
 
 async def show_message(ctx, loop_queue):

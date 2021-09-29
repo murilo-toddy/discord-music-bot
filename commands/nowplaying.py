@@ -17,14 +17,13 @@ async def nowplaying(client, ctx, queue):
     username_img_request = queue[0]["userAvatar"]
 
     music_duration = queue[0]["duration"]
+    music_duration_seconds = queue[0]["duration_seconds"]
     music_current_time_seconds = await counter.get_time()
-
-    music_duration_seconds = get_time_in_seconds(music_duration)
     music_current_time = format_time(music_current_time_seconds)
     progress_bar = ""
 
     total = 30
-    number_before = int((music_current_time_seconds/music_duration_seconds)*total)
+    number_before = int((music_current_time_seconds*total)//music_duration_seconds)
     number_after = total - number_before
 
     # Generates progress bar
@@ -53,14 +52,15 @@ async def nowplaying(client, ctx, queue):
 
 def format_time(time):
    
-    minutes = format_subtime(str(time // 60))
     seconds = format_subtime(str(time % 60))
     
     # Time is less than an hour
     if time < 3600:
+        minutes = format_subtime(str(time // 60))
         return minutes + ":" + seconds
     
-    minutes = format_subtime(str(int(minutes) % 60))
+    # Time is more than an hour
+    minutes = format_subtime(str(time // 60 % 60))
     hours = format_subtime(str(time % 3600))
     return hours + ":" + minutes + ":" + seconds
 
@@ -70,22 +70,3 @@ def format_subtime(subtime):
     elif len(subtime) == 1: return "0" + subtime
     else: return subtime
 
-
-def get_time_in_seconds(time):
-    time_size = len(time)
-    try:
-        seconds = int(time[time_size-2:])
-        minutes = int(time[time_size-5:time_size-3])
-        time_in_secs = 60 * minutes + seconds
-        
-        # mm:ss format
-        if time_size == 5:
-            return time_in_secs
-        
-        # hh:mm:ss format
-        hours = int(time[time_size-8:time_size-6])
-        return 60*60*hours + time_in_secs
-    
-    except:
-        print(" [!!] Error in \'nowplaying\'\n      * Could not convert number to seconds")
-        return 0
