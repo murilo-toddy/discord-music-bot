@@ -1,38 +1,44 @@
-import discord, asyncio, math
+import discord, asyncio,math
+from utils import embedded_message, format_time
+from config import counter
 
 async def queue(ctx, queue,client):
     
-    # Fila vazia
+    # Empty queue
     if(len(queue)) <= 1:
-        await ctx.channel.send("***Fila vazia***")
+        await embedded_message(ctx, "**Empty Queue**", "_The queue is currently empty_")
         return
 
     pages = []
     description = ""
-    num_pages = math.ceil(len(queue) / 10)
+    num_pages = math.ceil((len(queue) - 1) / 10)
+    total_time = await get_full_music_time(queue)
     
     for i in range(1, len(queue)):
         
-        # Adds information from music to description
-        description += str(i) +" - ["+str(queue[i]["title"] +"]("+str(queue[i]["url"])+")" + 
-                " `"+str(queue[i]["duration"])+"` ("+str(queue[i]["user"]))+")\n"
+        description += str(i) 
+        description += " - ["+str(queue[i]["title"]) + "]("+str(queue[i]["url"]) + ")"
+        description += " `" + str(queue[i]["duration"]) + "` ("+str(queue[i]["user"]) + ")\n"
 
         # Finished loading a page
         if i % 10 == 0 or i == (len(queue) - 1):
-
+            
+            description += "\n Time until complete `" + total_time
+            description += "`\n`" + str(math.ceil(i/10)) + "/" + str(num_pages)+ "`"
+            
             page = discord.Embed(
                 title = "**Queue Songs!  Total: `"+str(len(queue)-1)+"` **",
-                description = description+"\n`"+str(math.ceil(i/10))+"/"+str(num_pages)+"`",
+                description = description,
                 color = discord.Color.red()
             )
+
             description = ""
 
             page.set_footer(text = " Resquested by " + ctx.message.author.name, icon_url = ctx.message.author.avatar_url)
-            page.set_thumbnail(url = queue[0]["thumb"]) #Change to thumbnail
+            page.set_thumbnail(url = queue[0]["thumb"])
             pages.append(page)
     
     await print_pages(client, ctx, pages)
-
 
 
 async def print_pages(client, ctx, pages):
@@ -46,7 +52,7 @@ async def print_pages(client, ctx, pages):
         
     while True:
         try:
-            reaction, user = await client.wait_for("reaction_add", check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
+            reaction, user = await client.wait_for("reaction_add", check=lambda reaction, user: user and reaction.emoji in buttons, timeout=60.0)
 
         except asyncio.TimeoutError:
             embeded = client.help_pages[current]
@@ -69,7 +75,17 @@ async def print_pages(client, ctx, pages):
                 current = len(client.help_pages)-1
 
             for button in buttons:
-                await msg.remove_reaction(button, ctx.author)
+                if user != client.user:
+                    await msg.remove_reaction(button, user)
 
             if current != previous_page:
                 await msg.edit(embed=client.help_pages[current])
+                
+
+
+async def get_full_music_time(queue):
+    total_time = 0
+    for i in range(len(queue)):
+        total_time += queue[i]["duration_seconds"]
+
+    return format_time(total_time - await counter.get_time())

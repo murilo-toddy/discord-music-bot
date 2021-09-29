@@ -1,12 +1,18 @@
 import discord, asyncio
 import commands as cmd
 
-from data_structure import Queue
 from config import *
 from utils import *
 
-from verify_channel import verify_channel, verify_channel_play
+from data_structure import Queue
 from commands.log import log_function
+
+# TODO
+# - Criar classe mestre
+# - Refatorar play
+# - Refatorar buscas
+# - Buscar playlist inteira de uma vez spotify
+# - Implementar async
 
 
 @client.event
@@ -145,6 +151,5 @@ async def help(ctx, *args):
 if __name__ == '__main__':
     client.run(TOKEN)
 
-    
 
 

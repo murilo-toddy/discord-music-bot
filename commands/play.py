@@ -8,10 +8,8 @@ from .join import join
 from utils import *
 from config import counter, bot_info
 
-
 YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
-
 
 
 async def play(client, ctx, queue: Queue, *url):
@@ -55,20 +53,21 @@ async def youtube_play(client, ctx, queue: Queue):
         return
     else:
         await play_next(client, ctx, queue)
-    
+
 
 
 async def play_next(client, ctx, queue: Queue):
+
+    print("Entrei no playnext")
 
     if(len(queue)) <= 0:
         return
 
     guild = ctx.guild
-    seek = bot_info.get_seek()
+    voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
 
-    bot_voice = guild.voice_client
-
-    if not bot_voice:
+    if not voice_client:
+        print("aqui")
         await join(ctx)
 
     url_entrada = queue[0]["url"]
@@ -83,11 +82,11 @@ async def play_next(client, ctx, queue: Queue):
 
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
 
-    if seek:
+    if bot_info.get_seek():
         FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -ss ' + str(bot_info.get_seek_time())
         await counter.set_time(bot_info.get_seek_time())
 
-    if not voice_client.is_playing():
+    if voice_client and not voice_client.is_playing():
         print(" [!] Trying FFMPEG")
 
         try:
@@ -98,7 +97,7 @@ async def play_next(client, ctx, queue: Queue):
             await embedded_message(ctx, "**Error in Conversion**", "_Music could not be converted_\n" +
                                                                     "_Sorry for the inconvenience_")
 
-        if seek:
+        if bot_info.get_seek():
             FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         
         else:

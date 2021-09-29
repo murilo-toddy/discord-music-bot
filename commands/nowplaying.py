@@ -1,5 +1,5 @@
 import discord
-from utils import embedded_message
+from utils import embedded_message, format_time
 from config import counter
 
 async def nowplaying(client, ctx, queue):
@@ -49,24 +49,4 @@ async def nowplaying(client, ctx, queue):
     await ctx.channel.send(embed=embed_var)
 
  
-
-def format_time(time):
-   
-    seconds = format_subtime(str(time % 60))
-    
-    # Time is less than an hour
-    if time < 3600:
-        minutes = format_subtime(str(time // 60))
-        return minutes + ":" + seconds
-    
-    # Time is more than an hour
-    minutes = format_subtime(str(time // 60 % 60))
-    hours = format_subtime(str(time % 3600))
-    return hours + ":" + minutes + ":" + seconds
-
-
-def format_subtime(subtime):
-    if len(subtime) == 0: return "00"
-    elif len(subtime) == 1: return "0" + subtime
-    else: return subtime
 
