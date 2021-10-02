@@ -3,62 +3,60 @@ from youtube_dl.YoutubeDL import YoutubeDL
 from google_search import YoutubeGetVideosInfo
 from search import BuscaPorPesquisaYoutube
 from spotify import get_spotify_info
-from data_structure import Queue
 from .join import join
 from utils import *
-from config import counter, bot_info
 
 YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 
-async def play(client, ctx, queue: Queue, *url):
+async def play(client, ctx, queue, bot_info, counter, *args):
     connected = ctx.guild.voice_client
     if not connected:
         await join(ctx)
 
-    if len(url) == 0:
-        await ctx.channel.send("Você precisa fornecer uma chave de busca ou um URL do Youtube")
+    if len(args) == 0:
+        await embedded_message(ctx, "Hey, nerd!", "You need to provide a search key\nlike a query or a music URL")
         return
 
-    link = url[0]
-    if link.find("spotify",11,21) != -1: # Spotify URL
-        await get_spotify_info(url[0], ctx, queue)
-        await youtube_play(client, ctx, queue)
+    url = args[0]
+    if url.find("spotify",11,21) != -1: # Spotify URL
+        await get_spotify_info(url, ctx, queue)
+        await youtube_play(client, ctx, queue, bot_info, counter)
         return
 
-    elif link.find("youtube",11,21) != -1: # Youtube URL
-        await YoutubeGetVideosInfo(url[0], ctx, queue)
-        await youtube_play(client, ctx, queue)
+    elif url.find("youtube",11,21) != -1: # Youtube URL
+        await YoutubeGetVideosInfo(url, ctx, queue)
+        await youtube_play(client, ctx, queue, bot_info, counter)
         return
+        
     else: # Search query
-        urlPesquisa=""
-        for i in url:
-            urlPesquisa += (i+" ")
-        urlPesquisa = urlPesquisa[:-1] 
+        search_query = " ".join(args)
 
-        await ctx.channel.send(":musical_note: **Searching** :mag_right: `"+urlPesquisa+"`")
-        Info_Music = await BuscaPorPesquisaYoutube(urlPesquisa)
-        await YoutubeGetVideosInfo(Info_Music, ctx, queue)
-        await youtube_play(client, ctx, queue)
+        await ctx.channel.send(":musical_note: **Searching** :mag_right: `" + search_query + "`")
+        music_info = await BuscaPorPesquisaYoutube(search_query)
+        if music_info == False:
+            await embedded_message(ctx, "Not Found", "No results found for your query")
+            print(" [!!] Error in \'play\'\n      * No results found for query")
+            return 
+        await YoutubeGetVideosInfo(music_info, ctx, queue)
+        await youtube_play(client, ctx, queue, bot_info, counter)
         return
 
 
 
-async def youtube_play(client, ctx, queue: Queue):
+async def youtube_play(client, ctx, queue, bot_info, counter):
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
     
     if voice_client and voice_client.is_playing():
         return
     else:
-        await play_next(client, ctx, queue)
+        await play_next(client, ctx, queue, bot_info, counter)
 
 
 
-async def play_next(client, ctx, queue: Queue):
-
-    print("Entrei no playnext")
+async def play_next(client, ctx, queue, bot_info, counter):
 
     if(len(queue)) <= 0:
         return
@@ -67,15 +65,14 @@ async def play_next(client, ctx, queue: Queue):
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
 
     if not voice_client:
-        print("aqui")
         await join(ctx)
 
-    url_entrada = queue[0]["url"]
+    music_url = queue[0]["url"]
     
     with YoutubeDL(YDL_OPTIONS) as ydl:
         try:
             print(" [!] Extracting music info")
-            info = ydl.extract_info("ytsearch:%s" % url_entrada, download=False)['entries'][0]
+            info = ydl.extract_info("ytsearch:%s" % music_url, download=False)['entries'][0]
         except:
             return False
 
@@ -133,5 +130,5 @@ async def play_next(client, ctx, queue: Queue):
 
     if voice_client and not voice_client.is_paused() and len(queue) > 0:
         await counter.reset()
-        await play_next(client, ctx, queue)
+        await play_next(client, ctx, queue, bot_info, counter)
     

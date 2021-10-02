@@ -1,18 +1,16 @@
 import os, spotipy
-from data_structure import Counter, BotInfo
+from data_structure import Bot
 from dotenv import load_dotenv
 from discord.ext import commands
 from spotipy.oauth2 import SpotifyClientCredentials
 from random import randint
 
-YOUTUBE_API_KEYS = 3
-SPOTIFY_CREDENTIALS = {}
+YOUTUBE_API_KEYS = 4
 YOUTUBE_CREDENTIALS = []
+SPOTIFY_CREDENTIALS = {}
 
 client = commands.Bot(command_prefix="!", case_insensitive=True, help_command=None)
-queue = {}
-counter = Counter()
-bot_info = BotInfo()
+bot = Bot()
 
 
 if os.path.isfile("./.env"):

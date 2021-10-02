@@ -1,9 +1,7 @@
-from config import bot_info
 from utils import embedded_message
 
-
 # Loops a single song
-async def loop(ctx):
+async def loop(ctx, bot_info):
     loop = bot_info.change_loop()
     await show_message(ctx, loop)
 

@@ -1,8 +1,7 @@
 import discord
 from utils import embedded_message, format_time
-from config import counter
 
-async def nowplaying(client, ctx, queue):
+async def nowplaying(client, ctx, queue, counter):
 
     if len(queue) == 0:
         await embedded_message(ctx, "**Not Playing**", "_There's nothing playing at the moment_")

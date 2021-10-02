@@ -1,9 +1,8 @@
 from utils import embedded_message, get_time_in_seconds
-from config import bot_info
 import discord
 
 # Skips to specific part of the music
-async def seek(client, ctx, queue, *args):
+async def seek(client, ctx, queue, bot_info, *args):
     if len(args) == 0:
         await embedded_message(ctx, "**Invalid Syntax**", "You must specify a time!\nLike !seek `1:20` or !seek `80`")
         return

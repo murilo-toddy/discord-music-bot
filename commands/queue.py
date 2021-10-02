@@ -1,8 +1,7 @@
 import discord, asyncio,math
 from utils import embedded_message, format_time
-from config import counter
 
-async def queue(ctx, queue,client):
+async def queue(client, ctx, queue, counter):
     
     # Empty queue
     if(len(queue)) <= 1:
@@ -12,7 +11,7 @@ async def queue(ctx, queue,client):
     pages = []
     description = ""
     num_pages = math.ceil((len(queue) - 1) / 10)
-    total_time = await get_full_music_time(queue)
+    total_time = await get_full_music_time(queue, counter)
     
     for i in range(1, len(queue)):
         
@@ -83,7 +82,7 @@ async def print_pages(client, ctx, pages):
                 
 
 
-async def get_full_music_time(queue):
+async def get_full_music_time(queue, counter):
     total_time = 0
     for i in range(len(queue)):
         total_time += queue[i]["duration_seconds"]

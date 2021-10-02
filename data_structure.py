@@ -1,5 +1,25 @@
 import random, asyncio
 
+class Server:
+    def __init__(self):
+        self.queue = Queue()
+        self.counter = Counter()
+        self.bot_info = BotInfo()   
+        asyncio.get_event_loop().create_task(self.counter.start_timer())
+               
+
+class Bot:
+    def __init__(self): 
+        self.server = {}
+
+    def startup(self, guilds):
+        for guild in guilds: 
+            self.new_server(guild)
+
+    def new_server(self, guild):   
+        self.server[str(guild.id)] = Server()
+
+        
 class Queue:
     def __init__(self):
         self.music_list = []

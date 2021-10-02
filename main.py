@@ -4,11 +4,11 @@ import commands as cmd
 from config import *
 from utils import *
 
-from data_structure import Queue
+from data_structure import Bot
 from commands.log import log_function
 
 # TODO
-# - Criar classe mestre
+# - Criar classe mestre [OK]
 # - Refatorar play
 # - Refatorar buscas
 # - Buscar playlist inteira de uma vez spotify
@@ -21,20 +21,34 @@ async def on_ready():
     
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Bot Status updated successfully.")
-    
-    asyncio.get_event_loop().create_task(counter.start_timer())
-    for guild in client.guilds: 
-        queue[str(guild.id)] = Queue()
-
+    bot.startup(client.guilds)  
     print("\n [!] Finished startup process")
 
 
 @client.event
 async def on_guild_join(guild):
-    print("\n [!] Bot added to channel " + str(guild.name))
-    queue[str(guild.id)] = Queue()
+    print("\n [!] Bot added to server " + str(guild.name))
+    bot.new_server(guild)
+
+@client.command()
+async def help(ctx, *args):
+    log_function("help")
+    await cmd.help.help(client, ctx, *args)
 
 
+@client.command(aliases=["c","clean"])
+async def clear(ctx):
+    log_function("clear")
+    if not await verify_channel(ctx): return
+    queue = bot.server[str(ctx.guild.id)].queue
+    await cmd.clear.clear(ctx, queue)
+
+
+@client.command(aliases=["fs", "skip", "s", "skp"])
+async def forceskip(ctx):
+    log_function("forceskip")
+    if not await verify_channel(ctx): return
+    await cmd.forceskip.force_skip(client, ctx)
 
 @client.command(aliases=["j"])
 async def join(ctx):
@@ -43,39 +57,45 @@ async def join(ctx):
     await cmd.join.join(ctx)
 
 
-@client.command(aliases=["np"])
-async def nowplaying(ctx):
-    log_function("nowplaying")
-    if not await verify_channel(ctx): return
-    await cmd.nowplaying.nowplaying(client, ctx, queue[str(ctx.guild.id)])
-
-
-@client.command(aliases=["loopq", "lq","loop queue"])
-async def loopqueue(ctx):
-    log_function("loopqueue")
-    if not await verify_channel(ctx): return
-    await cmd.loopqueue.loopqueue(ctx)
+@client.command(aliases=["dc","disconnect"])
+async def leave(ctx):
+    log_function("leave")
+    if not await verify_channel(ctx): return 
+    queue = bot.server[str(ctx.guild.id)].queue
+    await cmd.leave.leave(ctx, queue)
 
 
 @client.command(aliases=["l"])
 async def loop(ctx):
     log_function("loop")
     if not await verify_channel(ctx): return
-    await cmd.loop.loop(ctx)
+    bot_info = bot.server[str(ctx.guild.id)].bot_info
+    await cmd.loop.loop(ctx, bot_info)
 
 
-@client.command(aliases=["dc","disconnect"])
-async def leave(ctx):
-    log_function("leave")
+@client.command(aliases=["loopq", "lq","loop queue"])
+async def loopqueue(ctx):
+    log_function("loopqueue")
     if not await verify_channel(ctx): return
-    await cmd.leave.leave(ctx, queue[str(ctx.guild.id)])
+    bot_info = bot.server[str(ctx.guild.id)].bot_info
+    await cmd.loopqueue.loopqueue(ctx, bot_info)
 
 
-@client.command(brief="", aliases=["p"])
-async def play(ctx, *url):
-    log_function("play")
-    if not await verify_channel_play(ctx): return
-    await cmd.play.play(client, ctx, queue[str(ctx.guild.id)], *url)
+@client.command(aliases=["m"])
+async def move(ctx, *args):
+    log_function("move")
+    if not await verify_channel(ctx): return
+    queue = bot.server[str(ctx.guild.id)].queue
+    await cmd.move.move(ctx, queue, *args)
+
+
+@client.command(aliases=["np"])
+async def nowplaying(ctx):
+    log_function("nowplaying")
+    if not await verify_channel(ctx): return
+    queue = bot.server[str(ctx.guild.id)].queue
+    counter = bot.server[str(ctx.guild.id)].counter
+    await cmd.nowplaying.nowplaying(client, ctx, queue, counter)
 
 
 @client.command()
@@ -83,6 +103,33 @@ async def pause(ctx):
     log_function("pause")
     if not await verify_channel(ctx): return
     await cmd.pause.pause(client, ctx)
+
+
+@client.command(brief="", aliases=["p"])
+async def play(ctx, *url):
+    log_function("play")
+    if not await verify_channel_play(ctx): return
+    queue = bot.server[str(ctx.guild.id)].queue
+    bot_info = bot.server[str(ctx.guild.id)].bot_info
+    counter = bot.server[str(ctx.guild.id)].counter
+    await cmd.play.play(client, ctx, queue, bot_info, counter,*url)
+
+
+@client.command(aliases=["queue", "q"])
+async def queue_(ctx):
+    log_function("queue")
+    if not await verify_channel(ctx): return
+    queue = bot.server[str(ctx.guild.id)].queue
+    counter = bot.server[str(ctx.guild.id)].counter
+    await cmd.queue.queue(client, ctx, queue, counter)
+
+
+@client.command(aliases=["r"])
+async def remove(ctx, *args):
+    log_function("remove")
+    if not await verify_channel(ctx): return
+    queue = bot.server[str(ctx.guild.id)].queue
+    await cmd.remove.remove(ctx, queue, *args)
 
 
 @client.command()
@@ -93,59 +140,20 @@ async def resume(ctx):
 
 
 @client.command()
-async def shuffle(ctx):
-    log_function("shuffle")
-    if not await verify_channel(ctx): return
-    await cmd.shuffle.shuffle(ctx, queue[str(ctx.guild.id)])
-
-
-@client.command(aliases=["m"])
-async def move(ctx, *args):
-    log_function("move")
-    if not await verify_channel(ctx): return
-    await cmd.move.move(ctx, queue[str(ctx.guild.id)], *args)
-
-
-@client.command(aliases=["queue", "q"])
-async def queue_(ctx):
-    log_function("queue")
-    if not await verify_channel(ctx): return
-    await cmd.queue.queue(ctx, queue[str(ctx.guild.id)], client)
-
-
-@client.command(aliases=["r"])
-async def remove(ctx, *args):
-    log_function("remove")
-    if not await verify_channel(ctx): return
-    await cmd.remove.remove(ctx, queue[str(ctx.guild.id)], *args)
-
-
-@client.command(aliases=["fs", "skip", "s", "skp"])
-async def forceskip(ctx):
-    log_function("forceskip")
-    if not await verify_channel(ctx): return
-    await cmd.forceskip.force_skip(client, ctx)
-
-
-@client.command(aliases=["c","clean"])
-async def clear(ctx):
-    log_function("clear")
-    if not await verify_channel(ctx): return
-    await cmd.clear.clear(ctx, queue[str(ctx.guild.id)])
-
-
-@client.command()
 async def seek(ctx, *args):
     log_function("seek")
     if not await verify_channel(ctx): return
-    await cmd.seek.seek(client, ctx, queue[str(ctx.guild.id)], *args)
-    
+    queue = bot.server[str(ctx.guild.id)].queue
+    bot_info = bot.server[str(ctx.guild.id)].bot_info
+    await cmd.seek.seek(client, ctx, queue, bot_info, *args)
+
 
 @client.command()
-async def help(ctx, *args):
-    log_function("help")
-    await cmd.help.help(client, ctx, *args)
-
+async def shuffle(ctx):
+    log_function("shuffle")
+    if not await verify_channel(ctx): return
+    queue = bot.server[str(ctx.guild.id)].queue
+    await cmd.shuffle.shuffle(ctx, queue)
 
 
 if __name__ == '__main__':
