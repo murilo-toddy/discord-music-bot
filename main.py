@@ -9,7 +9,7 @@ from commands.log import log_function
 
 # TODO
 # - Criar classe mestre [OK]
-# - Refatorar play
+# - Refatorar play [OK]
 # - Refatorar buscas
 # - Buscar playlist inteira de uma vez spotify
 # - Implementar async
