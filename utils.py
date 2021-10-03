@@ -107,3 +107,4 @@ async def verify_channel_play(ctx, queue):
     bot_channel = ctx.guild.voice_client
     bot_channel.stop()
     return True
+    

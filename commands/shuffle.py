@@ -11,3 +11,4 @@ async def shuffle(ctx, queue):
     
     else:
         await embedded_message(ctx, ":exclamation: **Empty Queue**", "_Nothing to shuffle_")
+        

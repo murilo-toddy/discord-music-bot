@@ -33,3 +33,4 @@ async def query_play(ctx, search_query, queue):
     await asyncio.sleep(0.1)
     await ShowMessageVideo(response["items"][0]["snippet"]["title"], ctx, queue)
     return
+    

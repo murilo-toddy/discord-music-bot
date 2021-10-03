@@ -13,3 +13,4 @@ async def pause(client, ctx):
     else:
         voice_client.pause()
         await embedded_message(ctx, "**Paused** :shushing_face:", "_Current music paused_")
+        

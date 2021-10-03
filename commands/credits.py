@@ -14,3 +14,4 @@ async def add_reactions(msg):
     await msg.add_reaction("🇹")
     await msg.add_reaction("🇴")
     await msg.add_reaction("🤠")
+    

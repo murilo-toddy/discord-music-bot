@@ -27,8 +27,7 @@ else:
     SPOTIFY_CREDENTIALS["id"] = os.environ["SPOTIFY_ID"]
     SPOTIFY_CREDENTIALS["secret"] = os.environ["SPOTIFY_SECRET"]
     for i in range(1, YOUTUBE_API_KEYS + 1):
-        YOUTUBE_CREDENTIALS.append(os.environ["YOUTUBE_API_KEY" + str(i)])
-        
+        YOUTUBE_CREDENTIALS.append(os.environ["YOUTUBE_API_KEY" + str(i)]) 
 
 
 spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
@@ -39,4 +38,3 @@ spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 
 def get_youtube_key(): 
     return YOUTUBE_CREDENTIALS[randint(0, YOUTUBE_API_KEYS - 1)]
-

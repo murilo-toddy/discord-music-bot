@@ -8,3 +8,4 @@ async def clear(ctx, queue):
         queue.clear()
         queue[0] = now_playing
     await embedded_message(ctx, "**Cleared :mechanical_arm:**", "_The queue is now empty_")
+    

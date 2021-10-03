@@ -28,3 +28,4 @@ async def seek(client, ctx, queue, bot_info, *args):
     bot_info.seek_set_true(time_seconds)
     discord.utils.get(client.voice_clients, guild=ctx.guild).stop()    
     await embedded_message(ctx, ":orangutan:  **Seeked!**", "_Music time set to_ `" + args[0] + "`")
+

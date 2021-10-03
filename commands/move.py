@@ -37,3 +37,4 @@ async def move_to(ctx, queue, pos1, pos2):
     queue.move(pos1, pos2)
 
     await embedded_message(ctx, title, "Changed `"+str(title)+"` position from `"+str(pos1)+"` to `"+str(pos2)+"`")
+

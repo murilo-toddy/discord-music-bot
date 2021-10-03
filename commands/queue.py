@@ -66,15 +66,18 @@ async def print_pages(client, ctx, pages):
                 current = 0
                 
             elif reaction.emoji == u"\u2B05":
-                if current > 0:
-                    current -= 1
+                if user != client.user:
+                    if current > 0:
+                        current -= 1
                     
             elif reaction.emoji == u"\u27A1":
-                if current < len(client.help_pages)-1:
-                    current += 1
+                if user != client.user:
+                    if current < len(client.help_pages)-1:
+                        current += 1
 
             elif reaction.emoji == u"\u23E9":
-                current = len(client.help_pages)-1
+                if user != client.user:
+                    current = len(client.help_pages)-1
 
             for button in buttons:
                 if user != client.user:
@@ -91,3 +94,4 @@ async def get_full_music_time(queue, counter):
         total_time += queue[i]["duration_seconds"]
 
     return format_time(total_time - await counter.get_time())
+    

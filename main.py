@@ -14,6 +14,7 @@ async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Bot Status updated successfully.")
     bot.startup(client.guilds)
+    periodic_refresh.start()
     print("\n [!] Finished startup process")
 
 
@@ -26,7 +27,6 @@ async def on_guild_join(guild):
 @tasks.loop(minutes=15)
 async def periodic_refresh():
     print("\n [!] Refreshing server variables")
-    
 
 
 @client.command()
@@ -166,6 +166,3 @@ async def shuffle(ctx):
 
 if __name__ == '__main__':
     client.run(TOKEN)
-
-
-

@@ -15,3 +15,4 @@ async def resume(client, ctx):
         voice_client.resume()
         await embedded_message(ctx, "**Resumed** :face_in_clouds:", "_Music resumed_")
         
+        

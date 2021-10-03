@@ -12,3 +12,4 @@ async def leave(ctx, queue):
 
     else:
         await embedded_message(ctx, "**Not Connected**", ":exclamation: _I'm currently not connected_")
+

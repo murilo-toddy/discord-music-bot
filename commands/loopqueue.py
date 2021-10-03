@@ -10,3 +10,4 @@ async def show_message(ctx, loop_queue):
         await embedded_message(ctx, ":repeat_one: **Enabled**", "_Loop Queue is now enabled!_")
     else:
         await embedded_message(ctx, ":repeat_one: **Disabled**", "_Loop Queue is now disabled!_")
+        

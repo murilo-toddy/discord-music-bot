@@ -64,4 +64,4 @@ async def spotify_to_queue(search_spotify,youtube,ctx,queue):
     SetVideoInfo(ctx, response, queue)
     await asyncio.sleep(0.1)
 
-    return response["items"][0]["snippet"]["title"],
+    return response["items"][0]["snippet"]["title"]

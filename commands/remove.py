@@ -21,4 +21,3 @@ async def remove(ctx, queue, *args):
     
     else:
         await embedded_message(ctx, ":exclamation: **Invalid Syntax**", "Function only takes two arguments")
-

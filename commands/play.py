@@ -132,8 +132,3 @@ async def query(args, ctx, queue):
     search_query = " ".join(args)
     await ctx.channel.send(":musical_note: **Searching** :mag_right: `" + search_query + "`")
     await search.query.query_play(ctx, search_query, queue)
-
-  
-
-
-
