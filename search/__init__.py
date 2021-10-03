@@ -1,4 +1,4 @@
-import search.QUERY_MAIN
-import search.SPOTIFY_MAIN
-import search.YOUTUBE_MAIN
+import search.query
+import search.spotify
+import search.youtube
 import search.search_utils
