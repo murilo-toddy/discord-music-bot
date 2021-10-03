@@ -35,6 +35,12 @@ async def help(ctx, *args):
     await cmd.help.help(client, ctx, *args)
 
 
+@client.command(aliases=["creditos", "créditos", "autores"])
+async def credits(ctx):
+    log_function("credits")
+    await cmd.credits.credits(ctx)
+
+
 @client.command(aliases=["c","clean"])
 async def clear(ctx):
     log_function("clear")
