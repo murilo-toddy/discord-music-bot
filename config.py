@@ -1,11 +1,11 @@
 import os, spotipy
 from data_structure import Bot
 from dotenv import load_dotenv
-from discord.ext import commands
+from discord.ext import commands, tasks
 from spotipy.oauth2 import SpotifyClientCredentials
 from random import randint
 
-YOUTUBE_API_KEYS = 4
+YOUTUBE_API_KEYS = 3
 YOUTUBE_CREDENTIALS = []
 SPOTIFY_CREDENTIALS = {}
 

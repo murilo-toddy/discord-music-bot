@@ -18,43 +18,47 @@ async def play(client, ctx, queue, bot_info, counter, *args):
         return
     
     url = args[0]
+    loop = asyncio.get_event_loop()
     
+    if check_play_next(client, ctx):
+        loop.create_task(play_next(client, ctx, queue, bot_info, counter))
+
     # Spotify URL
     if url.find("spotify",11,21) != -1:
-        await spotify(url, client, ctx, queue, bot_info, counter)
+        loop.create_task(search.spotify.spotify_play(url, client, ctx, queue))
 
     # Youtube URL
     elif url.find("youtube",11,21) != -1:
-        await youtube(url, client, ctx, queue, bot_info, counter)
-        
+        loop.create_task(search.youtube.youtube_play(url, client, ctx, queue))
+
     # Search query
     else:
-        await query(args, client, ctx, queue, bot_info, counter)
+       loop.create_task(query(args, ctx, queue))
 
 
 
-async def check_play_next(client, ctx, queue, bot_info, counter):
+def check_play_next(client, ctx):
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
     
     if voice_client and voice_client.is_playing():
-        return
+        return False
     else:
-        await play_next(client, ctx, queue, bot_info, counter)
+        return True
 
 
 
 async def play_next(client, ctx, queue, bot_info, counter):
 
-    if(len(queue)) <= 0:
-        return
+    while len(queue) <= 0:
+        await asyncio.sleep(1)
 
     music_url = queue[0]["url"]
     guild = ctx.guild
     voice_client = discord.utils.get(client.voice_clients, guild=guild)
 
     if not voice_client:
-        await join(ctx)
+        await join(ctx, queue)
         voice_client = discord.utils.get(client.voice_clients, guild=guild)
 
     
@@ -123,21 +127,12 @@ async def check_bot_playing(bot_info, queue):
             queue.append(next_song)
 
 
-async def spotify(url,client, ctx, queue, bot_info, counter):
-    await search.spotify.spotify_play(url, ctx, queue)
-    await check_play_next(client, ctx, queue, bot_info, counter)
 
-
-async def youtube(url,client, ctx, queue, bot_info, counter):
-    await search.youtube.youtube_play(url, ctx, queue)
-    await check_play_next(client, ctx, queue, bot_info, counter)
-
-
-async def query(args, client, ctx, queue, bot_info, counter):
+async def query(args, ctx, queue):
     search_query = " ".join(args)
     await ctx.channel.send(":musical_note: **Searching** :mag_right: `" + search_query + "`")
     await search.query.query_play(ctx, search_query, queue)
-    await check_play_next(client, ctx, queue, bot_info, counter)
+
   
 
 

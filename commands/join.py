@@ -1,7 +1,9 @@
 from utils import embedded_message
 
 # Connects the bot to a voice channel
-async def join(ctx):
+async def join(ctx, queue):
+
+    queue.clear()
 
     if ctx.guild.voice_client:
         await embedded_message(ctx, "**Already Connected**", "_I am already connected to a voice channel_")

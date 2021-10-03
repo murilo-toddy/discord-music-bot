@@ -1,10 +1,10 @@
-from pyasn1.type.univ import Null
+import asyncio, discord
 from config import *
 from utils import embedded_message
 from .search_utils import *
 import googleapiclient.discovery
 
-async def spotify_play(url, ctx, queue):
+async def spotify_play(url, client, ctx, queue):
 
     API_KEY = get_youtube_key()
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
@@ -14,7 +14,11 @@ async def spotify_play(url, ctx, queue):
         playlist_items = spotify.playlist_tracks(url, offset=0, fields="items.track.name,items.track.artists.name", 
                                                     additional_types=["track"])
 
+        await embedded_message(ctx, "Adding Playlist to Queue", "May take a while")
+
         for i in range(len(playlist_items["items"])):
+
+            if not discord.utils.get(client.voice_clients, guild=ctx.guild): return
             track = playlist_items["items"][i]["track"]
             name = track["name"]
             artist = track["artists"][0]["name"]
@@ -22,6 +26,7 @@ async def spotify_play(url, ctx, queue):
             await spotify_to_queue(search_spotify,youtube,ctx,queue)
         
         await ShowMessagePlaylist(len(playlist_items["items"]), "", ctx)
+
 
     # Track
     elif url.find("track", 25, 35) != -1:
@@ -57,4 +62,6 @@ async def spotify_to_queue(search_spotify,youtube,ctx,queue):
     ).execute()
 
     SetVideoInfo(ctx, response, queue)
+    await asyncio.sleep(0.1)
+
     return response["items"][0]["snippet"]["title"],

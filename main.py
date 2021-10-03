@@ -1,18 +1,10 @@
-import discord, asyncio
+import discord
 import commands as cmd
 
 from config import *
 from utils import *
 
-from data_structure import Bot
 from commands.log import log_function
-
-# TODO
-# - Criar classe mestre [OK]
-# - Refatorar play [OK]
-# - Refatorar buscas
-# - Buscar playlist inteira de uma vez spotify
-# - Implementar async
 
 
 @client.event
@@ -21,7 +13,7 @@ async def on_ready():
     
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Bot Status updated successfully.")
-    bot.startup(client.guilds)  
+    bot.startup(client.guilds)
     print("\n [!] Finished startup process")
 
 
@@ -29,6 +21,13 @@ async def on_ready():
 async def on_guild_join(guild):
     print("\n [!] Bot added to server " + str(guild.name))
     bot.new_server(guild)
+
+
+@tasks.loop(minutes=15)
+async def periodic_refresh():
+    print("\n [!] Refreshing server variables")
+    
+
 
 @client.command()
 async def help(ctx, *args):
@@ -54,7 +53,8 @@ async def forceskip(ctx):
 async def join(ctx):
     log_function("join")
     if not await verify_channel(ctx, False): return
-    await cmd.join.join(ctx)
+    queue = bot.server[str(ctx.guild.id)].queue
+    await cmd.join.join(ctx, queue)
 
 
 @client.command(aliases=["dc","disconnect"])
@@ -108,8 +108,8 @@ async def pause(ctx):
 @client.command(brief="", aliases=["p"])
 async def play(ctx, *url):
     log_function("play")
-    if not await verify_channel_play(ctx): return
     queue = bot.server[str(ctx.guild.id)].queue
+    if not await verify_channel_play(ctx, queue): return
     bot_info = bot.server[str(ctx.guild.id)].bot_info
     counter = bot.server[str(ctx.guild.id)].counter
     await cmd.play.play(client, ctx, queue, bot_info, counter,*url)
@@ -154,6 +154,8 @@ async def shuffle(ctx):
     if not await verify_channel(ctx): return
     queue = bot.server[str(ctx.guild.id)].queue
     await cmd.shuffle.shuffle(ctx, queue)
+
+
 
 
 if __name__ == '__main__':

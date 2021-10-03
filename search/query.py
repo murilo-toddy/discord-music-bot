@@ -1,3 +1,4 @@
+import asyncio
 import googleapiclient.discovery, config
 from utils import embedded_message
 from .search_utils import *
@@ -29,5 +30,6 @@ async def query_play(ctx, search_query, queue):
     ).execute()
 
     SetVideoInfo(ctx, response, queue)
+    await asyncio.sleep(0.1)
     await ShowMessageVideo(response["items"][0]["snippet"]["title"], ctx, queue)
     return

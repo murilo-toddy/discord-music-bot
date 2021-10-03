@@ -84,7 +84,7 @@ async def verify_channel(ctx, sender_equals_bot: bool = True):
 
 
 
-async def verify_channel_play(ctx):
+async def verify_channel_play(ctx, queue):
     Sender = ctx.author.voice
     if not Sender:
         await embedded_message(ctx, "**Not Connected**", ":exclamation: _You must be connected to a voice channel_")  
@@ -102,6 +102,7 @@ async def verify_channel_play(ctx):
             return True
 
     await ctx.author.voice.channel.connect()
+    queue.clear()
     await embedded_message(ctx, "**:wave: Hello Hello**", "_Connected successfully_")
     bot_channel = ctx.guild.voice_client
     bot_channel.stop()
