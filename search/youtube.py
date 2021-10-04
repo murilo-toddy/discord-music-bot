@@ -32,9 +32,9 @@ async def youtube_video(search_youtube,youtube,ctx,queue):
         regionCode = "BR",
     ).execute()
 
-    SetVideoInfo(ctx,response,queue)
+    set_video_info(ctx,response,queue)
     await asyncio.sleep(0.1)
-    await ShowMessageVideo( response["items"][0]["snippet"]["title"],ctx,queue)
+    await show_message_video( response["items"][0]["snippet"]["title"],ctx,queue)
     return
 
 
@@ -61,7 +61,7 @@ async def youtube_playlist(playlist_id, youtube, client, ctx, queue):
         	part= 'contentDetails,snippet',
         	id = response["items"][i]["contentDetails"]["videoId"]
             ).execute()
-            if SetVideoInfo(ctx, responsePlaylist, queue):
+            if set_video_info(ctx, responsePlaylist, queue):
                 musics += 1
 
             if musics == 1 or musics % 5 == 0:
@@ -69,4 +69,4 @@ async def youtube_playlist(playlist_id, youtube, client, ctx, queue):
 
         request = youtube.playlistItems().list_next(request, response)
 
-    await ShowMessagePlaylist(musics, playlist_name, ctx)
+    await show_message_playlist(musics, playlist_name, ctx)
