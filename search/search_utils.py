@@ -1,6 +1,6 @@
 import discord
 
-def SetVideoInfo(ctx, response,queue):
+def set_video_info(ctx, response,queue):
     music_info = {}
 
     hours = ""
@@ -54,18 +54,18 @@ def SetVideoInfo(ctx, response,queue):
     return True
 
 
-async def ShowMessagePlaylist(NumeroMusicas,NomePlaylist,ctx):
-    embedVar = discord.Embed(
+async def show_message_playlist(NumeroMusicas,NomePlaylist,ctx):
+    embed = discord.Embed(
         title = '**Playlist Enqueued! '+NomePlaylist+"**",
         description = "Total `"+str(NumeroMusicas)+"` musics were enqueued",
         color = discord.Color.red()
     )
 
-    embedVar.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
-    await ctx.channel.send(embed = embedVar)
+    embed.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
+    await ctx.channel.send(embed = embed)
 
 
-async def ShowMessageVideo(VideoTittle,ctx,queue):
+async def show_message_video(VideoTittle,ctx,queue):
 
     if len(queue)==1:
         desc="["+str(VideoTittle)+"]("+str(queue[len(queue)-1]["url"])+") was enqueued\n\nPlaying Now!"

@@ -79,7 +79,7 @@ async def loop(ctx):
     await cmd.loop.loop(ctx, bot_info)
 
 
-@client.command(aliases=["loopq", "lq","loop queue"])
+@client.command(aliases=["loopq", "lq"])
 async def loopqueue(ctx):
     log_function("loopqueue")
     if not await verify_channel(ctx): return
@@ -111,7 +111,7 @@ async def pause(ctx):
     await cmd.pause.pause(client, ctx)
 
 
-@client.command(brief="", aliases=["p"])
+@client.command(aliases=["p"])
 async def play(ctx, *url):
     log_function("play")
     queue = bot.server[str(ctx.guild.id)].queue
