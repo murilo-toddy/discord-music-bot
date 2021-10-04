@@ -80,7 +80,14 @@ async def play_next(client, ctx, queue, bot_info, counter):
 
     await check_bot_playing(bot_info, queue)
 
-    if voice_client and not voice_client.is_paused() and len(queue) > 0:
+    if len(queue) == 0:
+        return
+
+    if voice_client:
+        await counter.reset()
+        await play_next(client, ctx, queue, bot_info, counter)
+    else:
+        await join(ctx, queue)
         await counter.reset()
         await play_next(client, ctx, queue, bot_info, counter)
     
