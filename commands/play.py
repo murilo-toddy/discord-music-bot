@@ -4,7 +4,7 @@ from search import *
 from .join import join
 from utils import *
 
-YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,'forceip':'0.0.0.0'}
+YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,'forceip':'-4'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 
