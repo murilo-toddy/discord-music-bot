@@ -4,7 +4,7 @@ from search import *
 from .join import join
 from utils import *
 
-YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,}
+YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,'forceip':'0.0.0.0'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 
@@ -67,6 +67,9 @@ async def play_next(client, ctx, queue, bot_info, counter):
             print(" [!] Extracting music info")
             info = ydl.extract_info("ytsearch:%s" % music_url, download=False)['entries'][0]
         except:
+            print(" [!!] Error in \'play\' function\n      * Error in youtube.dl extraction")
+            await embedded_message(ctx, "**Error in extraction**", "_Music could not be extracted_\n" +
+                                                                    "_Sorry for the inconvenience_")
             return False
 
     await play_song(ctx, info, voice_client, bot_info, counter)
