@@ -4,7 +4,7 @@ from search import *
 from .join import join
 from utils import *
 
-YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,'forceip':'-4'}
+YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,'source_address':'0.0.0.0'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 
@@ -70,7 +70,8 @@ async def play_next(client, ctx, queue, bot_info, counter):
             print(" [!!] Error in \'play\' function\n      * Error in youtube.dl extraction")
             await embedded_message(ctx, "**Error in extraction**", "`"+queue[0]["title"]+"`\n" +
                                                                     "_was removed from the queue_\n"
-                                                                    +"_check if song is +18 only_")
+                                                                    +"_check if song is +18 only_\n"
+                                                                    +"_ou é culpa do Eduardo")
             queue.remove(0)
             await counter.reset()
             await play_next(client, ctx, queue, bot_info, counter)
