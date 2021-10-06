@@ -51,7 +51,7 @@ def check_play_next(client, ctx):
 async def play_next(client, ctx, queue, bot_info, counter):
 
     while len(queue) <= 0:
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.01)
 
     music_url = queue[0]["url"]
     guild = ctx.guild
@@ -70,6 +70,9 @@ async def play_next(client, ctx, queue, bot_info, counter):
             print(" [!!] Error in \'play\' function\n      * Error in youtube.dl extraction")
             await embedded_message(ctx, "**Error in extraction**", "_Music could not be extracted_\n" +
                                                                     "_Sorry for the inconvenience_")
+            queue.remove(0)
+            await counter.reset()
+            await play_next(client, ctx, queue, bot_info, counter)
             return False
 
     await play_song(ctx, info, voice_client, bot_info, counter)
