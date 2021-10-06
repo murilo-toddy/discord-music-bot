@@ -7,7 +7,7 @@ async def remove(ctx, queue, *args):
 
     elif len(args) == 1:
         try:
-            pos = int(*args[0])
+            pos = int(args[0])
         except:
             await embedded_message(ctx, ":exclamation: **Invalid Syntax**", "Position has to be a valid number")
             return

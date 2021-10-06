@@ -8,6 +8,7 @@ from random import randint
 YOUTUBE_API_KEYS = 9
 YOUTUBE_CREDENTIALS = []
 SPOTIFY_CREDENTIALS = {}
+CURRENT_KEY_INDEX = -1
 
 client = commands.Bot(command_prefix="!", case_insensitive=True, help_command=None)
 bot = Bot()
@@ -37,4 +38,10 @@ spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 
 
 def get_youtube_key(): 
-    return YOUTUBE_CREDENTIALS[randint(0, YOUTUBE_API_KEYS - 1)]
+    global CURRENT_KEY_INDEX
+    CURRENT_KEY_INDEX = (CURRENT_KEY_INDEX + 1) % YOUTUBE_API_KEYS
+    if CURRENT_KEY_INDEX == 4 or CURRENT_KEY_INDEX==6:
+        CURRENT_KEY_INDEX = (CURRENT_KEY_INDEX + 1) % YOUTUBE_API_KEYS
+
+    print(CURRENT_KEY_INDEX)
+    return YOUTUBE_CREDENTIALS[CURRENT_KEY_INDEX]

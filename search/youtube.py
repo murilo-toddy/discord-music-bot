@@ -33,8 +33,8 @@ async def youtube_video(search_youtube,youtube,ctx,queue):
     ).execute()
 
     set_video_info(ctx,response,queue)
-    await asyncio.sleep(0.1)
     await show_message_video( response["items"][0]["snippet"]["title"],ctx,queue)
+    await asyncio.sleep(0.1)
     return
 
 

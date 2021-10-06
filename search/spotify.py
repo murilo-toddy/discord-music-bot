@@ -24,6 +24,7 @@ async def spotify_play(url, client, ctx, queue):
             artist = track["artists"][0]["name"]
             search_spotify = str(name) + " - " + str(artist)
             await spotify_to_queue(search_spotify,youtube,ctx,queue)
+            await asyncio.sleep(0.1)
         
         await show_message_playlist(len(playlist_items["items"]), "", ctx)
 
@@ -34,6 +35,7 @@ async def spotify_play(url, client, ctx, queue):
         search_spotify = music_info["name"] + " - " + music_info["album"]["artists"][0]["name"]
         title = await spotify_to_queue(search_spotify,youtube,ctx,queue)
         await show_message_video(title, ctx, queue)
+        await asyncio.sleep(0.1)
 
     else:
         await ctx.channel.send("Forneça um link para uma Musica / Playist válida")
@@ -62,6 +64,4 @@ async def spotify_to_queue(search_spotify,youtube,ctx,queue):
     ).execute()
 
     set_video_info(ctx, response, queue)
-    await asyncio.sleep(0.1)
-
     return response["items"][0]["snippet"]["title"]

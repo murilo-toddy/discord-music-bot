@@ -68,8 +68,9 @@ async def play_next(client, ctx, queue, bot_info, counter):
             info = ydl.extract_info("ytsearch:%s" % music_url, download=False)['entries'][0]
         except:
             print(" [!!] Error in \'play\' function\n      * Error in youtube.dl extraction")
-            await embedded_message(ctx, "**Error in extraction**", "_Music could not be extracted_\n" +
-                                                                    "_Sorry for the inconvenience_")
+            await embedded_message(ctx, "**Error in extraction**", "`"+queue[0]["title"]+"`\n" +
+                                                                    "_was removed from the queue_\n"
+                                                                    +"_check if song is +18 only_")
             queue.remove(0)
             await counter.reset()
             await play_next(client, ctx, queue, bot_info, counter)
