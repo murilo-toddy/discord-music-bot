@@ -97,11 +97,11 @@ async def loopqueue(ctx):
 
 
 @client.command(aliases=["ly"])
-async def lyrics(ctx):
+async def lyrics(ctx,*music_name):
     log_function("lyrics")
     if not await verify_channel(ctx): return
     queue = bot.server[str(ctx.guild.id)].queue
-    await cmd.lyrics.lyrics(ctx, queue)
+    await cmd.lyrics.lyrics(ctx, queue,*music_name)
 
 
 @client.command(aliases=["m","mv"])
