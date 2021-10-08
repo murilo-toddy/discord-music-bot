@@ -75,7 +75,9 @@ async def play_next(client, ctx, queue, bot_info, counter, dc_counter):
                                                                     +"_ou é culpa do Eduardo")
             queue.remove(0)
             await counter.reset()
-            await play_next(client, ctx, queue, bot_info, counter)
+            await dc_counter.reset()
+            if len(queue) != 0:
+                await play_next(client, ctx, queue, bot_info, counter,dc_counter)
             return False
 
     await play_song(ctx, info, voice_client, bot_info, counter)
@@ -97,11 +99,11 @@ async def play_next(client, ctx, queue, bot_info, counter, dc_counter):
 
     if voice_client:
         await counter.reset()
-        await play_next(client, ctx, queue, bot_info, counter)
+        await play_next(client, ctx, queue, bot_info, counter,dc_counter)
     else:
         await join(ctx, queue)
         await counter.reset()
-        await play_next(client, ctx, queue, bot_info, counter)
+        await play_next(client, ctx, queue, bot_info, counter,dc_counter)
     
 
 
