@@ -91,9 +91,18 @@ def get_description(*args):
 
             return help_str + "LoopQueue", description
 
-        move = { "move", "m" }
+        loopqueue = { "lyrics", "ly" }
+        if arg.lower() in loopqueue:
+            description = "_Aliases:_ `ly`"
+            description += "\n\n*lyrics*\n"
+            description += "Shows the lyrics for\n"
+            description += "currently playing song"
+
+            return help_str + "Lyrics", description
+
+        move = { "move", "m", "mv" }
         if arg.lower() in move:
-            description = "_Aliases:_ `m`"
+            description = "_Aliases:_ `m`, `mv`"
             description += "\n\n**move** `position`\n"
             description += "Moves song from `position` to\n"
             description += "the top of the queue"

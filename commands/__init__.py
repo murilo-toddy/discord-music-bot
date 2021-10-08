@@ -15,3 +15,4 @@ import commands.move
 import commands.remove
 import commands.help
 import commands.credits
+import commands.lyrics

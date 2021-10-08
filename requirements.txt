@@ -12,3 +12,4 @@ youtube_dl
 ffmpeg
 youtube-search-python
 spotipy
+aiohttp

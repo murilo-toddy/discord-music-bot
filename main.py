@@ -87,7 +87,15 @@ async def loopqueue(ctx):
     await cmd.loopqueue.loopqueue(ctx, bot_info)
 
 
-@client.command(aliases=["m"])
+@client.command(aliases=["ly"])
+async def lyrics(ctx):
+    log_function("lyrics")
+    if not await verify_channel(ctx): return
+    queue = bot.server[str(ctx.guild.id)].queue
+    await cmd.lyrics.lyrics(ctx, queue)
+
+
+@client.command(aliases=["m","mv"])
 async def move(ctx, *args):
     log_function("move")
     if not await verify_channel(ctx): return
