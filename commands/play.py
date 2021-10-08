@@ -8,7 +8,7 @@ YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,'source
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 
-async def play(client, ctx, queue, bot_info, counter, *args):
+async def play(client, ctx, queue, bot_info, counter, dc_counter, *args):
     connected = ctx.guild.voice_client
     if not connected:
         await join(ctx)
@@ -21,7 +21,7 @@ async def play(client, ctx, queue, bot_info, counter, *args):
     loop = asyncio.get_event_loop()
     
     if check_play_next(client, ctx):
-        loop.create_task(play_next(client, ctx, queue, bot_info, counter))
+        loop.create_task(play_next(client, ctx, queue, bot_info, counter, dc_counter))
 
     # Spotify URL
     if url.find("spotify",11,21) != -1:
@@ -48,11 +48,12 @@ def check_play_next(client, ctx):
 
 
 
-async def play_next(client, ctx, queue, bot_info, counter):
+async def play_next(client, ctx, queue, bot_info, counter, dc_counter):
 
     while len(queue) <= 0:
         await asyncio.sleep(0.01)
 
+    await dc_counter.reset()
     music_url = queue[0]["url"]
     guild = ctx.guild
     voice_client = discord.utils.get(client.voice_clients, guild=guild)
@@ -80,9 +81,12 @@ async def play_next(client, ctx, queue, bot_info, counter):
     await play_song(ctx, info, voice_client, bot_info, counter)
 
     while voice_client.is_playing():
+        await dc_counter.reset()
         await asyncio.sleep(1)
         while voice_client.is_paused():
+            await dc_counter.reset()
             await asyncio.sleep(1)
+            
 
     voice_client = discord.utils.get(client.voice_clients, guild=guild)
 

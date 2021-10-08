@@ -10,7 +10,7 @@ from commands.log import log_function
 @client.event
 async def on_ready():
     print("\n [!] Bot started.")
-    
+
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Bot Status updated successfully.")
     bot.startup(client.guilds)
@@ -24,9 +24,17 @@ async def on_guild_join(guild):
     bot.new_server(guild)
 
 
-@tasks.loop(minutes=15)
+
+@tasks.loop(minutes=1)
 async def periodic_refresh():
-    print("\n [!] Refreshing server variables")
+    for guild in client.guilds:
+        dc_counter = bot.server[str(guild.id)].dc_counter
+        if await dc_counter.get_time() > 180:
+            try:
+                await guild.voice_client.disconnect()
+                await dc_counter.reset()
+            except:
+                await dc_counter.reset()  
 
 
 @client.command()
@@ -60,7 +68,8 @@ async def join(ctx):
     log_function("join")
     if not await verify_channel(ctx, False): return
     queue = bot.server[str(ctx.guild.id)].queue
-    await cmd.join.join(ctx, queue)
+    dc_counter = bot.server[str(ctx.guild.id)].dc_counter
+    await cmd.join.join(ctx, queue, dc_counter)
 
 
 @client.command(aliases=["dc","disconnect"])
@@ -123,10 +132,11 @@ async def pause(ctx):
 async def play(ctx, *url):
     log_function("play")
     queue = bot.server[str(ctx.guild.id)].queue
-    if not await verify_channel_play(ctx, queue): return
+    dc_counter = bot.server[str(ctx.guild.id)].dc_counter
+    if not await verify_channel_play(ctx, queue, dc_counter): return
     bot_info = bot.server[str(ctx.guild.id)].bot_info
     counter = bot.server[str(ctx.guild.id)].counter
-    await cmd.play.play(client, ctx, queue, bot_info, counter,*url)
+    await cmd.play.play(client, ctx, queue, bot_info, counter, dc_counter, *url)
 
 
 @client.command(aliases=["queue", "q"])
