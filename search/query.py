@@ -1,9 +1,13 @@
 import asyncio
+from re import T
 import googleapiclient.discovery, config
 from utils import embedded_message
 from .search_utils import *
+import time
 
 async def query_play(ctx, search_query, queue):
+
+    TempoInicial = time.time()
 
     API_KEY = config.get_youtube_key()
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
@@ -28,6 +32,12 @@ async def query_play(ctx, search_query, queue):
         id = video_id,
         regionCode = "BR",
     ).execute()
+
+    TempoFinal = time.time()
+    
+    print("\n\n"+str(TempoFinal - TempoInicial)+"\n")
+
+    
 
     set_video_info(ctx, response, queue)
     await show_message_video(response["items"][0]["snippet"]["title"], ctx, queue)

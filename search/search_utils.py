@@ -40,11 +40,10 @@ def set_video_info(ctx, response,queue):
     else:
         duration += "00"
 
-
     music_info["title"] = response["items"][0]["snippet"]["title"]
     music_info["id"] = response["items"][0]["id"]
     music_info["url"] = "https://www.youtube.com/watch?v=" + music_info["id"]
-    music_info["thumb"] = response["items"][0]["snippet"]["thumbnails"]["high"]["url"]
+    music_info["thumb"] = response["items"][0]["snippet"]["thumbnails"]["medium"]["url"]
     music_info["duration"] = duration
     music_info["duration_seconds"] = duration_in_seconds
     music_info["user"] = ctx.message.author.name

@@ -6,9 +6,6 @@ import googleapiclient.discovery
 
 async def spotify_play(url, client, ctx, queue):
 
-    API_KEY = get_youtube_key()
-    youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
-
     # Playlist
     if url.find("playlist", 25, 35) != -1:
         playlist_items = spotify.playlist_tracks(url, offset=0, fields="items.track.name,items.track.artists.name", 
@@ -23,24 +20,27 @@ async def spotify_play(url, client, ctx, queue):
             name = track["name"]
             artist = track["artists"][0]["name"]
             search_spotify = str(name) + " - " + str(artist)
-            await spotify_to_queue(search_spotify,youtube,ctx,queue)
+            await spotify_to_queue(search_spotify, ctx, queue)
             await asyncio.sleep(0.1)
         
         await show_message_playlist(len(playlist_items["items"]), "", ctx)
-
 
     # Track
     elif url.find("track", 25, 35) != -1:
         music_info = spotify.track(url)
         search_spotify = music_info["name"] + " - " + music_info["album"]["artists"][0]["name"]
-        title = await spotify_to_queue(search_spotify,youtube,ctx,queue)
+        title = await spotify_to_queue(search_spotify, ctx, queue)
         await show_message_video(title, ctx, queue)
         await asyncio.sleep(0.1)
 
     else:
         await ctx.channel.send("Forneça um link para uma Musica / Playist válida")
 
-async def spotify_to_queue(search_spotify,youtube,ctx,queue):
+
+async def spotify_to_queue(search_spotify, ctx, queue):
+
+    API_KEY = get_youtube_key()
+    youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
 
     search_response = youtube.search().list(
         q = search_spotify,

@@ -40,5 +40,4 @@ spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 def get_youtube_key(): 
     global CURRENT_KEY_INDEX
     CURRENT_KEY_INDEX = (CURRENT_KEY_INDEX + 1) % YOUTUBE_API_KEYS
-    print(CURRENT_KEY_INDEX)
     return YOUTUBE_CREDENTIALS[CURRENT_KEY_INDEX]
