@@ -1,10 +1,10 @@
-import discord
-import commands as cmd
+import discord, commands as cmd
+import asyncio
+
+from commands.log import log_function
 
 from config import *
 from utils import *
-
-from commands.log import log_function
 
 
 @client.event
@@ -24,17 +24,40 @@ async def on_guild_join(guild):
     bot.new_server(guild)
 
 
+@client.event
+async def on_voice_state_update(member, before, after):
+    if member.id != client.user.id:
+        return
 
-@tasks.loop(minutes=1)
+    if after.channel == None:
+        queue = bot.server[str(before.channel.guild.id)].queue
+        queue.clear()
+
+    if before.channel == None:     
+        voice = after.channel.guild.voice_client
+        time = 0
+        while True:
+            await asyncio.sleep(1)
+            time = time + 1
+            if voice.is_playing() or voice.is_paused():
+                time = 0
+            if time == 180:
+                await voice.disconnect()
+            if not voice.is_connected():
+                break
+    
+    if before.channel != None and after.channel != None:
+        counter = bot.server[str(after.channel.guild.id)].counter
+        bot_info = bot.server[str(after.channel.guild.id)].bot_info
+
+        bot_info.seek_set_true(await counter.get_time())
+        discord.utils.get(client.voice_clients, guild=after.channel.guild).stop()
+
+
+@tasks.loop(minutes=20)
 async def periodic_refresh():
-    for guild in client.guilds:
-        dc_counter = bot.server[str(guild.id)].dc_counter
-        if await dc_counter.get_time() > 180:
-            try:
-                await guild.voice_client.disconnect()
-                await dc_counter.reset()
-            except:
-                await dc_counter.reset()  
+    print(" [!] Refreshing server variables")
+
 
 
 @client.command()
@@ -63,15 +86,14 @@ async def forceskip(ctx):
     if not await verify_channel(ctx): return
     queue = bot.server[str(ctx.guild.id)].queue
     bot_info = bot.server[str(ctx.guild.id)].bot_info
-    await cmd.forceskip.force_skip(client, ctx,queue,bot_info)
+    await cmd.forceskip.force_skip(client, ctx, queue, bot_info)
 
 @client.command(aliases=["j"])
 async def join(ctx):
     log_function("join")
     if not await verify_channel(ctx, False): return
     queue = bot.server[str(ctx.guild.id)].queue
-    dc_counter = bot.server[str(ctx.guild.id)].dc_counter
-    await cmd.join.join(ctx, queue, dc_counter)
+    await cmd.join.join(ctx, queue)
 
 
 @client.command(aliases=["dc","disconnect"])
@@ -134,11 +156,10 @@ async def pause(ctx):
 async def play(ctx, *url):
     log_function("play")
     queue = bot.server[str(ctx.guild.id)].queue
-    dc_counter = bot.server[str(ctx.guild.id)].dc_counter
-    if not await verify_channel_play(ctx, queue, dc_counter): return
+    if not await verify_channel_play(ctx, queue): return
     bot_info = bot.server[str(ctx.guild.id)].bot_info
     counter = bot.server[str(ctx.guild.id)].counter
-    await cmd.play.play(client, ctx, queue, bot_info, counter, dc_counter, *url)
+    await cmd.play.play(client, ctx, queue, bot_info, counter, *url)
 
 
 @client.command(aliases=["queue", "q"])
@@ -184,6 +205,6 @@ async def shuffle(ctx):
 
 
 
-
 if __name__ == '__main__':
     client.run(TOKEN)
+

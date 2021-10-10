@@ -1,18 +1,17 @@
 import utils
 
 # Connects the bot to a voice channel
-async def join(ctx, queue, dc_counter):
+async def join(ctx, queue):
 
     if ctx.guild.voice_client:
         await utils.embedded_message(ctx, "**Already Connected**", "_I am already connected to a voice channel_")
     
     else:
-        await join_channel(ctx, queue, dc_counter)
+        await join_channel(ctx, queue)
         
         
-async def join_channel(ctx, queue, dc_counter):
+async def join_channel(ctx, queue):
     queue.clear()
-    await dc_counter.reset()
 
     await ctx.author.voice.channel.connect()
     ctx.guild.voice_client.stop()

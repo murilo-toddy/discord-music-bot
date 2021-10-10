@@ -84,7 +84,7 @@ async def verify_channel(ctx, sender_equals_bot: bool = True):
 
 
 
-async def verify_channel_play(ctx, queue, dc_counter):
+async def verify_channel_play(ctx, queue):
     sender = ctx.author.voice
     if not sender:
         await embedded_message(ctx, ":exclamation: **Not Connected**", "_You must be connected to a voice channel_")  
@@ -101,6 +101,6 @@ async def verify_channel_play(ctx, queue, dc_counter):
                                                                         "_as the bot to issue this command_")
             return False
 
-    await join.join_channel(ctx, queue, dc_counter)
+    await join.join_channel(ctx, queue)
     return True
     

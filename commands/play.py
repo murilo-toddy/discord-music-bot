@@ -8,10 +8,10 @@ YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,'source
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 
-async def play(client, ctx, queue, bot_info, counter, dc_counter, *args):
+async def play(client, ctx, queue, bot_info, counter, *args):
     connected = ctx.guild.voice_client
     if not connected:
-        await join(ctx, queue,dc_counter)
+        await join(ctx, queue)
 
     if len(args) == 0:
         await embedded_message(ctx, "Hey, nerd!", "You need to provide a search key\nlike a query or a music URL")
@@ -21,7 +21,7 @@ async def play(client, ctx, queue, bot_info, counter, dc_counter, *args):
     loop = asyncio.get_event_loop()
     
     if check_play_next(client, ctx):
-        loop.create_task(play_next(client, ctx, queue, bot_info, counter, dc_counter))
+        loop.create_task(play_next(client, ctx, queue, bot_info, counter))
 
     # Spotify URL
     if url.find("spotify",11,21) != -1:
@@ -48,45 +48,45 @@ def check_play_next(client, ctx):
 
 
 
-async def play_next(client, ctx, queue, bot_info, counter, dc_counter):
+async def play_next(client, ctx, queue, bot_info, counter):
 
     while len(queue) <= 0:
         await asyncio.sleep(0.01)
 
-    await dc_counter.reset()
+   
     music_url = queue[0]["url"]
     guild = ctx.guild
     voice_client = discord.utils.get(client.voice_clients, guild=guild)
 
     if not voice_client:
-        await join(ctx, queue, dc_counter)
+        await join(ctx, queue)
         voice_client = discord.utils.get(client.voice_clients, guild=guild)
 
     
     with YoutubeDL(YDL_OPTIONS) as ydl:
         try:
             print(" [!] Extracting music info")
-            info = ydl.extract_info("ytsearch:%s" % music_url, download=False)['entries'][0]
+            info = ydl.extract_info("ytsearch:" + str(music_url), download=False)['entries'][0]
+            if info == None:
+                print("\n\n INFO DEU NONE \n\n")
+                raise Exception            
         except:
             print(" [!!] Error in \'play\' function\n      * Error in youtube.dl extraction")
             await embedded_message(ctx, "**Error in extraction**", "`" + queue[0]["title"] + "`\n" +
                                                                     "_was removed from the queue_\n"
-                                                                    +"_check if song is +18 only_\n"
-                                                                    +"_ou é culpa do Eduardo_")
+                                                                    +"_maybe song is +18 only_\n"
+                                                                    +"_ou its just Eduardo mistake, Sorry_")
             queue.remove(0)
             await counter.reset()
-            await dc_counter.reset()
             if len(queue) != 0:
-                await play_next(client, ctx, queue, bot_info, counter,dc_counter)
+                await play_next(client, ctx, queue, bot_info, counter)
             return False
 
     await play_song(ctx, info, voice_client, bot_info, counter)
 
     while voice_client.is_playing():
-        await dc_counter.reset()
         await asyncio.sleep(1)
         while voice_client.is_paused():
-            await dc_counter.reset()
             await asyncio.sleep(1)
             
 
@@ -99,11 +99,11 @@ async def play_next(client, ctx, queue, bot_info, counter, dc_counter):
 
     if voice_client:
         await counter.reset()
-        await play_next(client, ctx, queue, bot_info, counter,dc_counter)
+        await play_next(client, ctx, queue, bot_info, counter)
     else:
-        await join(ctx, queue, dc_counter)
+        await join(ctx, queue)
         await counter.reset()
-        await play_next(client, ctx, queue, bot_info, counter,dc_counter)
+        await play_next(client, ctx, queue, bot_info, counter)
     
 
 

@@ -4,10 +4,8 @@ class Server:
     def __init__(self):
         self.queue = Queue()
         self.counter = Counter()
-        self.dc_counter = DisconnectCounter()
         self.bot_info = BotInfo()   
         asyncio.get_event_loop().create_task(self.counter.start_timer())
-        asyncio.get_event_loop().create_task(self.dc_counter.start_timer())
                
 
 class Bot:
@@ -71,22 +69,6 @@ class Counter:
 
     async def set_time(self, time):
         self.counter = time
-
-
-class DisconnectCounter:
-    def __init__(self):
-        self.counter = 0
-
-    async def start_timer(self):
-        while True:
-            await asyncio.sleep(1)
-            self.counter += 1
-    
-    async def reset(self):
-        self.counter = 0
-
-    async def get_time(self):
-        return self.counter
 
 
 class BotInfo:
