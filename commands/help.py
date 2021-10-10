@@ -23,9 +23,9 @@ def get_description(*args):
 
         description += "**Avaliable Commands:**\n"
         description += "`help`, `clear`, `credits`, `forceskip`, `join`,\n"
-        description += "`leave`, `loop`, `loopqueue`, `move`, `nowplaying`\n"
-        description += "`pause`, `play`, `queue`, `remove`, `resume`\n"
-        description += "`seek`, `shuffle`\n"
+        description += "`leave`, `loop`, `loopqueue`, `lyrics`, `move`,\n"
+        description += "`nowplaying`, `pause`, `play`, `queue`, `remove`,\n"
+        description += "`resume`, `seek`, `shuffle`\n"
 
         return "Help Command", description
 
@@ -94,9 +94,12 @@ def get_description(*args):
         loopqueue = { "lyrics", "ly" }
         if arg.lower() in loopqueue:
             description = "_Aliases:_ `ly`"
-            description += "\n\n*lyrics*\n"
+            description += "\n\n**lyrics**\n"
             description += "Shows the lyrics for\n"
             description += "currently playing song"
+            description += "\n\n**lyrics** `query`\n"
+            description += "Shows the lyrics for\n"
+            description += "searched song"
 
             return help_str + "Lyrics", description
 

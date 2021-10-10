@@ -1,12 +1,15 @@
 import discord, asyncio,math
 from utils import embedded_message, format_time
 
-async def queue(client, ctx, queue, counter):
+async def queue(client, ctx, queue, bot_info, counter):
     
     # Empty queue
     if(len(queue)) <= 1:
         await embedded_message(ctx, "**Empty Queue**", "_The queue is currently empty_")
         return
+
+    loop = bot_info.get_loop()
+    loop_queue = bot_info.get_loop_queue()
 
     pages = []
     description = ""
@@ -21,7 +24,15 @@ async def queue(client, ctx, queue, counter):
 
         # Finished loading a page
         if i % 10 == 0 or i == (len(queue) - 1):
-            
+   
+            if loop:
+                description += "\n :repeat_one: **Loop** _enabled_"
+            if loop_queue:
+                description += "\n :repeat: **Loop Queue** _enabled_"
+
+            if loop or loop_queue:
+                description += "\n"
+
             description += "\n Time until complete `" + total_time
             description += "`\n`" + str(math.ceil(i/10)) + "/" + str(num_pages)+ "`"
             
@@ -32,7 +43,7 @@ async def queue(client, ctx, queue, counter):
             )
 
             description = ""
-
+            
             page.set_footer(text = " Resquested by " + ctx.message.author.name, icon_url = ctx.message.author.avatar_url)
             page.set_thumbnail(url = queue[0]["thumb"])
             pages.append(page)

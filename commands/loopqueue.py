@@ -7,7 +7,7 @@ async def loopqueue(ctx, bot_info):
 
 async def show_message(ctx, loop_queue):
     if loop_queue:
-        await embedded_message(ctx, ":repeat_one: **Enabled**", "_Loop Queue is now enabled!_")
+        await embedded_message(ctx, ":repeat: **Enabled**", "_Loop Queue is now enabled!_")
     else:
-        await embedded_message(ctx, ":repeat_one: **Disabled**", "_Loop Queue is now disabled!_")
+        await embedded_message(ctx, ":repeat: **Disabled**", "_Loop Queue is now disabled!_")
         

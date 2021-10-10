@@ -11,7 +11,7 @@ FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 async def play(client, ctx, queue, bot_info, counter, dc_counter, *args):
     connected = ctx.guild.voice_client
     if not connected:
-        await join(ctx)
+        await join(ctx, queue,dc_counter)
 
     if len(args) == 0:
         await embedded_message(ctx, "Hey, nerd!", "You need to provide a search key\nlike a query or a music URL")
@@ -59,7 +59,7 @@ async def play_next(client, ctx, queue, bot_info, counter, dc_counter):
     voice_client = discord.utils.get(client.voice_clients, guild=guild)
 
     if not voice_client:
-        await join(ctx, queue)
+        await join(ctx, queue, dc_counter)
         voice_client = discord.utils.get(client.voice_clients, guild=guild)
 
     
@@ -69,10 +69,10 @@ async def play_next(client, ctx, queue, bot_info, counter, dc_counter):
             info = ydl.extract_info("ytsearch:%s" % music_url, download=False)['entries'][0]
         except:
             print(" [!!] Error in \'play\' function\n      * Error in youtube.dl extraction")
-            await embedded_message(ctx, "**Error in extraction**", "`"+queue[0]["title"]+"`\n" +
+            await embedded_message(ctx, "**Error in extraction**", "`" + queue[0]["title"] + "`\n" +
                                                                     "_was removed from the queue_\n"
                                                                     +"_check if song is +18 only_\n"
-                                                                    +"_ou é culpa do Eduardo")
+                                                                    +"_ou é culpa do Eduardo_")
             queue.remove(0)
             await counter.reset()
             await dc_counter.reset()
@@ -101,7 +101,7 @@ async def play_next(client, ctx, queue, bot_info, counter, dc_counter):
         await counter.reset()
         await play_next(client, ctx, queue, bot_info, counter,dc_counter)
     else:
-        await join(ctx, queue)
+        await join(ctx, queue, dc_counter)
         await counter.reset()
         await play_next(client, ctx, queue, bot_info, counter,dc_counter)
     
@@ -141,11 +141,11 @@ async def check_bot_playing(bot_info, queue):
             if len(queue) > 0:
                 queue.remove(0)
         
-    else:
-        if len(queue) > 0:
-            next_song = queue[0]
-            queue.remove(0)
-            queue.append(next_song)
+        else:
+            if len(queue) > 0:
+                next_song = queue[0]
+                queue.remove(0)
+                queue.append(next_song)
 
 
 

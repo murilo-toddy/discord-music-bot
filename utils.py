@@ -1,4 +1,4 @@
-import discord
+import discord, commands.join as join
 
 async def embedded_message(ctx, title, description):
     embed = discord.Embed(
@@ -66,7 +66,7 @@ def format_subtime(subtime):
 async def verify_channel(ctx, sender_equals_bot: bool = True):
     sender = ctx.author.voice
     if not sender:
-        await embedded_message(ctx, "**Not Connected**", ":exclamation: _You must be connected to a voice channel_")
+        await embedded_message(ctx, ":exclamation: **Not Connected**", "_You must be connected to a voice channel_")
         return False
 
     sender_channel = sender.channel
@@ -74,38 +74,33 @@ async def verify_channel(ctx, sender_equals_bot: bool = True):
         if ctx.guild.voice_client:
             bot_channel = ctx.guild.voice_client.channel
             if bot_channel != sender_channel:
-                await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel\n_" + 
+                await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" + 
                                                                             "_as the bot to issue this command_")
                 return False
         else:
-            await embedded_message(ctx, "**Not Connected**", ":exclamation: _I'm currently not connected_")
+            await embedded_message(ctx, ":exclamation: **Not Connected**", "_I'm currently not connected_")
             return False
     return True
 
 
 
 async def verify_channel_play(ctx, queue, dc_counter):
-    Sender = ctx.author.voice
-    if not Sender:
-        await embedded_message(ctx, "**Not Connected**", ":exclamation: _You must be connected to a voice channel_")  
+    sender = ctx.author.voice
+    if not sender:
+        await embedded_message(ctx, ":exclamation: **Not Connected**", "_You must be connected to a voice channel_")  
         return False
 
-    sender_channel = Sender.channel
+    sender_channel = sender.channel
     bot_channel = ctx.guild.voice_client
     if bot_channel:
-        if not bot_channel.channel == sender_channel:
-            await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel\n_" + 
+        if bot_channel.channel == sender_channel:
+            return True
+    
+        else:
+            await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" + 
                                                                         "_as the bot to issue this command_")
             return False
-        
-        else:
-            return True
 
-    await dc_counter.reset()
-    await ctx.author.voice.channel.connect()
-    queue.clear()
-    await embedded_message(ctx, "**:wave: Hello Hello**", "_Connected successfully_")
-    bot_channel = ctx.guild.voice_client
-    bot_channel.stop()
+    await join.join_channel(ctx, queue, dc_counter)
     return True
     

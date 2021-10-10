@@ -61,7 +61,9 @@ async def clear(ctx):
 async def forceskip(ctx):
     log_function("forceskip")
     if not await verify_channel(ctx): return
-    await cmd.forceskip.force_skip(client, ctx)
+    queue = bot.server[str(ctx.guild.id)].queue
+    bot_info = bot.server[str(ctx.guild.id)].bot_info
+    await cmd.forceskip.force_skip(client, ctx,queue,bot_info)
 
 @client.command(aliases=["j"])
 async def join(ctx):
@@ -145,7 +147,8 @@ async def queue_(ctx):
     if not await verify_channel(ctx): return
     queue = bot.server[str(ctx.guild.id)].queue
     counter = bot.server[str(ctx.guild.id)].counter
-    await cmd.queue.queue(client, ctx, queue, counter)
+    bot_info = bot.server[str(ctx.guild.id)].bot_info
+    await cmd.queue.queue(client, ctx, queue,bot_info, counter)
 
 
 @client.command(aliases=["r"])
