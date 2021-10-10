@@ -1,5 +1,4 @@
-import discord, commands as cmd
-import asyncio
+import discord, asyncio, commands as cmd
 
 from commands.log import log_function
 
