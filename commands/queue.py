@@ -16,12 +16,20 @@ async def queue(client, ctx, queue, bot_info, counter):
     num_pages = math.ceil((len(queue) - 1) / 10)
     total_time = await get_full_music_time(queue, counter)
     
-    i = 1
+    i = 0
     while(i<len(queue)):
         
-        description += str(i) 
-        description += " - ["+str(queue[i]["title"]) + "]("+str(queue[i]["url"]) + ")"
-        description += " `" + str(queue[i]["duration"]) + "` ("+str(queue[i]["user"]) + ")\n"
+        if  i==0:
+            description += "\nCurrent playing"
+            description += " - ["+str(queue[i]["title"]) + "]("+str(queue[i]["url"]) + ")"
+            description += " `" + str(queue[i]["duration"]) + "` ("+str(queue[i]["user"]) + ")\n\n"
+            i+=1
+            continue
+
+        else:
+            description += str(i) 
+            description += " - ["+str(queue[i]["title"]) + "]("+str(queue[i]["url"]) + ")"
+            description += " `" + str(queue[i]["duration"]) + "` ("+str(queue[i]["user"]) + ")\n"
 
         # Finished loading a page
         if i % 10 == 0 or i == (len(queue) - 1):
