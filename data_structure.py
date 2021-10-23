@@ -6,6 +6,11 @@ class Server:
         self.counter = Counter()
         self.bot_info = BotInfo()   
         asyncio.get_event_loop().create_task(self.counter.start_timer())
+
+    async def reset(self):
+        self.queue.clear()
+        await self.counter.reset()
+        self.bot_info.reset()
                
 
 class Bot:
@@ -73,11 +78,14 @@ class Counter:
 
 class BotInfo:
     def __init__(self):
+        self.reset()
+    
+    def reset(self):
         self.loop = False
         self.loop_queue = False
         self.seek = False
         self.seek_time = 0
-    
+
     def change_loop(self):
         self.loop = not self.loop
         return self.loop

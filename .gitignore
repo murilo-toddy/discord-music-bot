@@ -4,3 +4,4 @@ client-secret.json
 *.mp3
 *.mp4
 .cache
+cookies.txt

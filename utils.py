@@ -100,7 +100,8 @@ async def verify_channel_play(ctx, queue):
             await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" + 
                                                                         "_as the bot to issue this command_")
             return False
-
+            
     await join.join_channel(ctx, queue)
     return True
-    
+
+

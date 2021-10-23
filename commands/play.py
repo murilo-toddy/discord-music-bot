@@ -3,8 +3,10 @@ from youtube_dl.YoutubeDL import YoutubeDL
 from search import *
 from .join import join
 from utils import *
+from urllib.error import HTTPError
+from youtube_dl.utils import DownloadError
 
-YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,'source_address':'0.0.0.0'}
+YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'quiet': True,'source_address':'0.0.0.0', 'cookiefile': 'cookies.txt'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 
@@ -67,20 +69,37 @@ async def play_next(client, ctx, queue, bot_info, counter):
         try:
             print(" [!] Extracting music info")
             info = ydl.extract_info("ytsearch:" + str(music_url), download=False)['entries'][0]
-            if info == None:
-                print("\n\n INFO DEU NONE \n\n")
-                raise Exception            
-        except:
-            print(" [!!] Error in \'play\' function\n      * Error in youtube.dl extraction")
+            
+        except HTTPError as e:
+            if e.code == 403: #Erro random, tocar dnv
+                print(" [!!] Error in \'play\' function\n      * Random error in ydl extraction, retrying")
+
+            elif  e.code == 429: #Limit of videos exceeded, chama os donos do bot
+                print(" [!!] Error in \'play\' function\n      * Ydl limit exceeded")
+                await embedded_message(ctx, "**Something broke** :cry:", "Bot will probably be out for a while\n" +
+                                                                        "Contact the devs asap!")
+            else:
+                queue.remove(0)
+                print(" [!!] Error in \'play\' function\n      * Unknown error")
+
+            await counter.reset()
+            if len(queue) != 0:
+                await play_next(client, ctx, queue, bot_info, counter)
+            return False
+
+        except DownloadError as e:
+            print(" [!!] Error in \'play\' function\n      * {}".format(e))
             await embedded_message(ctx, "**Error in extraction**", "`" + queue[0]["title"] + "`\n" +
-                                                                    "_was removed from the queue_\n"
-                                                                    +"_maybe song is +18 only_\n"
-                                                                    +"_ou its just Eduardo mistake, Sorry_")
+                                                                "_was removed from the queue_\n" +
+                                                                "_for being age restricted_\n")
             queue.remove(0)
             await counter.reset()
             if len(queue) != 0:
                 await play_next(client, ctx, queue, bot_info, counter)
             return False
+
+                
+
 
     await play_song(ctx, info, voice_client, bot_info, counter)
 

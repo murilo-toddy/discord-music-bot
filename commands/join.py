@@ -11,8 +11,6 @@ async def join(ctx, queue):
         
         
 async def join_channel(ctx, queue):
-    queue.clear()
-
     await ctx.author.voice.channel.connect()
     ctx.guild.voice_client.stop()
     await utils.embedded_message(ctx, "**:wave: Hello Hello**", "_Connected successfully_") 

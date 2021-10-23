@@ -29,10 +29,10 @@ async def on_voice_state_update(member, before, after):
         return
 
     if after.channel == None:
-        queue = bot.server[str(before.channel.guild.id)].queue
-        queue.clear()
+        await bot.server[str(before.channel.guild.id)].reset()
 
-    if before.channel == None:     
+    if before.channel == None:
+        await bot.server[str(after.channel.guild.id)].reset()     
         voice = after.channel.guild.voice_client
         time = 0
         while True:
