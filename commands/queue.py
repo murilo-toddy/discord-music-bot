@@ -16,7 +16,8 @@ async def queue(client, ctx, queue, bot_info, counter):
     num_pages = math.ceil((len(queue) - 1) / 10)
     total_time = await get_full_music_time(queue, counter)
     
-    for i in range(1, len(queue)):
+    i = 1
+    while(i<len(queue)):
         
         description += str(i) 
         description += " - ["+str(queue[i]["title"]) + "]("+str(queue[i]["url"]) + ")"
@@ -50,6 +51,8 @@ async def queue(client, ctx, queue, bot_info, counter):
 
         if i % 10 == 0:
             await asyncio.sleep(0.05)
+
+        i+=1
     
     await print_pages(client, ctx, pages)
 

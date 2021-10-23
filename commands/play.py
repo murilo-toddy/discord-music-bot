@@ -85,6 +85,10 @@ async def play_next(client, ctx, queue, bot_info, counter):
     await play_song(ctx, info, voice_client, bot_info, counter)
 
     while voice_client.is_playing():
+        if  await counter.get_time() > queue[0]["duration_seconds"]:
+            voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
+            voice_client.stop()
+            print("\n Timer excedeu o tempo da musica\n") 
         await asyncio.sleep(1)
         while voice_client.is_paused():
             await asyncio.sleep(1)

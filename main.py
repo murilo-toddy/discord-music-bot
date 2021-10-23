@@ -71,7 +71,7 @@ async def credits(ctx):
     await cmd.credits.credits(ctx)
 
 
-@client.command(aliases=["c","clean"])
+@client.command(aliases=["c","clean","clr"])
 async def clear(ctx):
     log_function("clear")
     if not await verify_channel(ctx): return
@@ -79,7 +79,7 @@ async def clear(ctx):
     await cmd.clear.clear(ctx, queue)
 
 
-@client.command(aliases=["fs", "skip", "s", "skp"])
+@client.command(aliases=["fs", "skip", "s", "skp","next"])
 async def forceskip(ctx):
     log_function("forceskip")
     if not await verify_channel(ctx): return
@@ -179,7 +179,7 @@ async def remove(ctx, *args):
     await cmd.remove.remove(ctx, queue, *args)
 
 
-@client.command()
+@client.command(aliases=["continue"])
 async def resume(ctx):
     log_function("resume")
     if not await verify_channel(ctx): return
