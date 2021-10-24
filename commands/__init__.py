@@ -16,3 +16,4 @@ import commands.remove
 import commands.help
 import commands.credits
 import commands.lyrics
+import commands.search

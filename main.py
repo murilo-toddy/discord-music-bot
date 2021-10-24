@@ -91,8 +91,7 @@ async def forceskip(ctx):
 async def join(ctx):
     log_function("join")
     if not await verify_channel(ctx, False): return
-    queue = bot.server[str(ctx.guild.id)].queue
-    await cmd.join.join(ctx, queue)
+    await cmd.join.join(ctx)
 
 
 @client.command(aliases=["dc","disconnect"])
@@ -100,7 +99,7 @@ async def leave(ctx):
     log_function("leave")
     if not await verify_channel(ctx): return 
     queue = bot.server[str(ctx.guild.id)].queue
-    await cmd.leave.leave(ctx, queue)
+    await cmd.leave.leave(ctx)
 
 
 @client.command(aliases=["l"])
@@ -155,7 +154,7 @@ async def pause(ctx):
 async def play(ctx, *url):
     log_function("play")
     queue = bot.server[str(ctx.guild.id)].queue
-    if not await verify_channel_play(ctx, queue): return
+    if not await verify_channel_play(ctx): return
     bot_info = bot.server[str(ctx.guild.id)].bot_info
     counter = bot.server[str(ctx.guild.id)].counter
     await cmd.play.play(client, ctx, queue, bot_info, counter, *url)
@@ -184,6 +183,15 @@ async def resume(ctx):
     log_function("resume")
     if not await verify_channel(ctx): return
     await cmd.resume.resume(client, ctx)
+
+@client.command(aliases=["srch","busca","choose"])
+async def search(ctx,*url):
+    log_function("search")
+    if not await verify_channel_play(ctx): return
+    queue = bot.server[str(ctx.guild.id)].queue
+    bot_info = bot.server[str(ctx.guild.id)].bot_info
+    counter = bot.server[str(ctx.guild.id)].counter
+    await cmd.search.search(client, ctx, queue, bot_info,counter, *url)
 
 
 @client.command()

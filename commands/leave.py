@@ -1,7 +1,7 @@
 from utils import embedded_message
 
 # Disconnects bot from voice channel
-async def leave(ctx, queue):
+async def leave(ctx):
     
     if ctx.guild.voice_client:
         await ctx.voice_client.disconnect()

@@ -1,5 +1,22 @@
 import discord, commands.join as join
 
+NumberToEmoji = []
+NumberToEmoji.append ("1️⃣")
+NumberToEmoji.append ("2️⃣")
+NumberToEmoji.append ("3️⃣")
+NumberToEmoji.append ("4️⃣")
+NumberToEmoji.append ("5️⃣")
+NumberToEmoji.append ("6️⃣")
+NumberToEmoji.append ("7️⃣")
+NumberToEmoji.append ("8️⃣")
+NumberToEmoji.append ("9️⃣")
+NumberToEmoji.append ("🔟")
+
+
+async def returnNumberToEmoji():
+    global NumberToEmoji
+    return NumberToEmoji
+
 async def embedded_message(ctx, title, description):
     embed = discord.Embed(
         title = title,
@@ -84,7 +101,7 @@ async def verify_channel(ctx, sender_equals_bot: bool = True):
 
 
 
-async def verify_channel_play(ctx, queue):
+async def verify_channel_play(ctx):
     sender = ctx.author.voice
     if not sender:
         await embedded_message(ctx, ":exclamation: **Not Connected**", "_You must be connected to a voice channel_")  
@@ -101,7 +118,7 @@ async def verify_channel_play(ctx, queue):
                                                                         "_as the bot to issue this command_")
             return False
             
-    await join.join_channel(ctx, queue)
+    await join.join_channel(ctx)
     return True
 
 

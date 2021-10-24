@@ -20,6 +20,7 @@ async def play(client, ctx, queue, bot_info, counter, *args):
         return
     
     url = args[0]
+
     loop = asyncio.get_event_loop()
     
     if check_play_next(client, ctx):

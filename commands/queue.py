@@ -56,8 +56,7 @@ async def queue(client, ctx, queue, bot_info, counter):
             page.set_footer(text = " Resquested by " + ctx.message.author.name, icon_url = ctx.message.author.avatar_url)
             page.set_thumbnail(url = queue[0]["thumb"])
             pages.append(page)
-
-        if i % 10 == 0:
+            
             await asyncio.sleep(0.05)
 
         i+=1
