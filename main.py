@@ -184,7 +184,7 @@ async def resume(ctx):
     if not await verify_channel(ctx): return
     await cmd.resume.resume(client, ctx)
 
-@client.command(aliases=["srch","busca","choose"])
+@client.command(aliases=["se","srch","busca","choose"])
 async def search(ctx,*url):
     log_function("search")
     if not await verify_channel_play(ctx): return
