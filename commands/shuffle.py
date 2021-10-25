@@ -2,7 +2,7 @@ from utils import embedded_message
 
 # Shuffles queue
 async def shuffle(ctx, queue):
-    if len(queue) > 0:
+    if queue:
         now_playing = queue[0]
         queue.remove(0)
         queue.shuffle()

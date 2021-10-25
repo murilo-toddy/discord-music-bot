@@ -17,7 +17,7 @@ async def remove(ctx, queue, *args):
             return
 
         music = queue.remove(pos)
-        await embedded_message(ctx, "**Removed**", "`" + music["title"] + "` _was successfully removed_")
+        await embedded_message(ctx, "**Removed**", f"`{music['title']}` _was successfully removed_")
     
     else:
         await embedded_message(ctx, ":exclamation: **Invalid Syntax**", "Function only takes two arguments")

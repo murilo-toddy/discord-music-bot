@@ -3,8 +3,6 @@ import googleapiclient.discovery, config
 from urllib.parse import parse_qs, urlparse
 from .search_utils import *
 from utils import embedded_message
-import time
-
 
 # Extract video or playlist info from URL
 async def youtube_play(search_youtube, client, ctx, queue):
@@ -26,16 +24,15 @@ async def youtube_video(search_youtube,ctx,queue):
     API_KEY = config.get_youtube_key()
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
 
-
-    IdMusic = search_youtube.split("watch?v=")[1][0:11]
+    music_id = search_youtube.split("watch?v=")[1][0:11]
     response = youtube.videos().list(
         part='contentDetails,snippet',
-        id = IdMusic,
+        id = music_id,
         regionCode = "BR",
     ).execute()
 
     set_video_info(ctx,response,queue)
-    await show_message_video( response["items"][0]["snippet"]["title"],ctx,queue)
+    await show_message_video( response["items"][0]["snippet"]["title"], ctx, queue)
     await asyncio.sleep(0.1)
     return
 

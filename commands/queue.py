@@ -12,7 +12,7 @@ async def queue(client, ctx, queue, bot_info, counter):
     loop_queue = bot_info.get_loop_queue()
 
     pages = []
-    description = ""
+    description = f""
     num_pages = math.ceil((len(queue) - 1) / 10)
     total_time = await get_full_music_time(queue, counter)
     
@@ -20,33 +20,33 @@ async def queue(client, ctx, queue, bot_info, counter):
     while(i<len(queue)):
         
         if  i == 0:
-            description += "\nCurrent playing"
-            description += " - [" + str(queue[i]["title"]) + "](" + str(queue[i]["url"]) + ")"
-            description += " `" + str(queue[i]["duration"]) + "` (" + str(queue[i]["user"]) + ")\n\n"
+            description += f"\nCurrent playing"
+            description += f" - [" + str(queue[i]["title"]) + "](" + str(queue[i]["url"]) + ")"
+            description += f" `" + str(queue[i]["duration"]) + "` (" + str(queue[i]["user"]) + ")\n\n"
             i += 1
             continue
 
         else:
-            description += str(i)
-            description += " - ["+str(queue[i]["title"]) + "]("+str(queue[i]["url"]) + ")"
-            description += " `" + str(queue[i]["duration"]) + "` ("+str(queue[i]["user"]) + ")\n"
+            description += f"{i}"
+            description += f" - [{queue[i]['title']}]({queue[i]['url']})"
+            description += f" `{queue[i]['duration']}` ({queue[i]['user']})\n"
 
         # Finished loading a page
         if i % 10 == 0 or i == (len(queue) - 1):
    
             if loop:
-                description += "\n :repeat_one: **Loop** _enabled_"
+                description += f"\n :repeat_one: **Loop** _enabled_"
             if loop_queue:
-                description += "\n :repeat: **Loop Queue** _enabled_"
+                description += f"\n :repeat: **Loop Queue** _enabled_"
 
             if loop or loop_queue:
-                description += "\n"
+                description += f"\n"
 
-            description += "\n Time until complete `" + total_time
-            description += "`\n`" + str(math.ceil(i/10)) + "/" + str(num_pages)+ "`"
+            description += f"\n Time until complete `" + total_time
+            description += f"`\n`{math.ceil(i/10)}/{num_pages}`"
             
             page = discord.Embed(
-                title = "**Queue Songs!  Total: `"+str(len(queue)-1)+"` **",
+                title = f"**Queue Songs!  Total: `{len(queue)-1}` **",
                 description = description,
                 color = discord.Color.red()
             )

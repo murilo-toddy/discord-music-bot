@@ -69,13 +69,12 @@ async def search(client, ctx, queue,bot_info,counter, *args):
 async def search_message(client,ctx,search_vector):
 
         global MUSICS_NUMBER
-
         buttons = await returnNumberToEmoji()
 
-        description="\n"
+        description = f"\n"
         for i in range (MUSICS_NUMBER):
-            description += str(buttons[i]) 
-            description += " - ["+str(search_vector[i]["title"]) + "]("+str(search_vector[i]["url"]) + ")\n\n"  #Com Link
+            description += f"{i}" 
+            description += f" - [{search_vector[i]['title']}]({search_vector[i]['url']})\n\n"  #Com Link
             #description += " - "+str(search_vector[i]["title"]) + "\n\n" #Sem Link
 
         message_embed = discord.Embed(

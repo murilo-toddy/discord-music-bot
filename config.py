@@ -3,7 +3,6 @@ from data_structure import Bot
 from dotenv import load_dotenv
 from discord.ext import commands, tasks
 from spotipy.oauth2 import SpotifyClientCredentials
-from random import randint
 
 YOUTUBE_API_KEYS = 9
 YOUTUBE_CREDENTIALS = []
@@ -22,7 +21,6 @@ if os.path.isfile("./.env"):
     for i in range(1, YOUTUBE_API_KEYS + 1):
         YOUTUBE_CREDENTIALS.append(os.getenv("YOUTUBE_API_KEY" + str(i)))
     
-
 else:
     TOKEN = os.environ["DISCORD_TOKEN"]
     SPOTIFY_CREDENTIALS["id"] = os.environ["SPOTIFY_ID"]
