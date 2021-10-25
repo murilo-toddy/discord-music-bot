@@ -1,9 +1,7 @@
-import asyncio, googleapiclient.discovery, config
+import asyncio, googleapiclient.discovery, config, discord
 from utils import returnNumberToEmoji, embedded_message
 from search.search_utils import *
-import discord
-import asyncio
-from .play import play_next,check_play_next
+from .play import play_next, check_play_next
 from .join import join
 
 
@@ -41,6 +39,9 @@ async def search(client, ctx, queue,bot_info,counter, *args):
         search_vector.append(search_info)
 
     choosen = await search_message(client,ctx,search_vector)
+
+    if choosen == -1:
+        return
 
     video_id = search_response["items"][choosen]["id"]["videoId"]
 
@@ -95,6 +96,7 @@ async def search_message(client,ctx,search_vector):
                 reaction, user = await client.wait_for("reaction_add", check=lambda reaction, user: user and reaction.emoji in buttons, timeout=40.0)
             except asyncio.TimeoutError:
                 await msg.clear_reactions()
+                return -1
 
             else:
                 for i in range(MUSICS_NUMBER):

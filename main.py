@@ -126,7 +126,7 @@ async def lyrics(ctx,*music_name):
     await cmd.lyrics.lyrics(ctx, queue,*music_name)
 
 
-@client.command(aliases=["m","mv"])
+@client.command(aliases=["m", "mv"])
 async def move(ctx, *args):
     log_function("move")
     if not await verify_channel(ctx): return
@@ -160,6 +160,24 @@ async def play(ctx, *url):
     await cmd.play.play(client, ctx, queue, bot_info, counter, *url)
 
 
+@client.command(aliases=["pn"])
+async def playnow(ctx, *url):
+    log_function("playnow")
+    queue = bot.server[str(ctx.guild.id)].queue
+    if not await verify_channel_play(ctx): return
+    bot_info = bot.server[str(ctx.guild.id)].bot_info
+    counter = bot.server[str(ctx.guild.id)].counter
+    await cmd.playnow.play_now(client,ctx,queue,bot_info,counter,*url)
+
+@client.command(aliases=["ps"])
+async def playskip(ctx, *url):
+    log_function("playskip")
+    queue = bot.server[str(ctx.guild.id)].queue
+    if not await verify_channel_play(ctx): return
+    bot_info = bot.server[str(ctx.guild.id)].bot_info
+    counter = bot.server[str(ctx.guild.id)].counter
+    await cmd.playskip.play_skip(client,ctx,queue,bot_info,counter,*url)
+
 @client.command(aliases=["queue", "q"])
 async def queue_(ctx):
     log_function("queue")
@@ -183,6 +201,7 @@ async def resume(ctx):
     log_function("resume")
     if not await verify_channel(ctx): return
     await cmd.resume.resume(client, ctx)
+
 
 @client.command(aliases=["se","srch","busca","choose"])
 async def search(ctx,*url):

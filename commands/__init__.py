@@ -17,3 +17,5 @@ import commands.help
 import commands.credits
 import commands.lyrics
 import commands.search
+import commands.playnow
+import commands.playskip

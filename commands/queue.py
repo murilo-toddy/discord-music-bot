@@ -19,15 +19,15 @@ async def queue(client, ctx, queue, bot_info, counter):
     i = 0
     while(i<len(queue)):
         
-        if  i==0:
+        if  i == 0:
             description += "\nCurrent playing"
-            description += " - ["+str(queue[i]["title"]) + "]("+str(queue[i]["url"]) + ")"
-            description += " `" + str(queue[i]["duration"]) + "` ("+str(queue[i]["user"]) + ")\n\n"
-            i+=1
+            description += " - [" + str(queue[i]["title"]) + "](" + str(queue[i]["url"]) + ")"
+            description += " `" + str(queue[i]["duration"]) + "` (" + str(queue[i]["user"]) + ")\n\n"
+            i += 1
             continue
 
         else:
-            description += str(i) 
+            description += str(i)
             description += " - ["+str(queue[i]["title"]) + "]("+str(queue[i]["url"]) + ")"
             description += " `" + str(queue[i]["duration"]) + "` ("+str(queue[i]["user"]) + ")\n"
 
@@ -59,7 +59,7 @@ async def queue(client, ctx, queue, bot_info, counter):
             
             await asyncio.sleep(0.05)
 
-        i+=1
+        i += 1
     
     await print_pages(client, ctx, pages)
 

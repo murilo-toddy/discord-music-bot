@@ -13,7 +13,7 @@ FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 async def play(client, ctx, queue, bot_info, counter, *args):
     connected = ctx.guild.voice_client
     if not connected:
-        await join(ctx, queue)
+        await join(ctx)
 
     if len(args) == 0:
         await embedded_message(ctx, "Hey, nerd!", "You need to provide a search key\nlike a query or a music URL")
@@ -53,24 +53,20 @@ def check_play_next(client, ctx):
 
 async def play_next(client, ctx, queue, bot_info, counter):
 
-    while len(queue) <= 0:
-        await asyncio.sleep(0.01)
+    while not queue: await asyncio.sleep(0.01)
 
     guild = ctx.guild
     voice_client = discord.utils.get(client.voice_clients, guild=guild)
 
     if not voice_client:
-        await join(ctx, queue)
+        await join(ctx)
         voice_client = discord.utils.get(client.voice_clients, guild=guild)
 
     info = await youtube_extraction(client, ctx, queue, bot_info, counter)
 
-    await play_song(client,ctx,queue, info, voice_client, bot_info, counter)
-            
+    await play_song(client, ctx, queue, info, voice_client, bot_info, counter)
     await play_loop(client, ctx, queue, counter)
-
     await check_bot_playing(bot_info, queue)
-
     await call_next_song(client, ctx, queue, bot_info, counter)
     
 
@@ -85,28 +81,31 @@ async def youtube_extraction(client, ctx, queue, bot_info, counter):
             info = ydl.extract_info("ytsearch:" + str(music_url), download=False)['entries'][0]
             
         except HTTPError as e:
-
             if  e.code == 429: #Limit of videos exceeded, chama os donos do bot
                 print(" [!!] Error in \'play\' function\n      * Ydl limit exceeded")
                 await embedded_message(ctx, "**Something broke** :cry:", "Bot will probably be out for a while\n" +
-                                                                        "Contact the devs asap!")
-            else:
-                queue.remove(0)
-                print(" [!!] Error in \'play\' function\n      * Unknown error")
-
+                                                                        "Contact the devs asap!")             
             await call_next_song(client, ctx, queue, bot_info, counter)
             return False
 
         except DownloadError as e:
             print(" [!!] Error in \'play\' function\n      * {}".format(e))
-            await embedded_message(ctx, "**Error in extraction**", "`" + queue[0]["title"] + "`\n" +
+            await embedded_message(ctx, "**Error in extraction**", "`" + str(queue[0]["title"]) + "`\n" +
                                                                 "_was removed from the queue_\n" +
                                                                 "_for being age restricted_\n")
             queue.remove(0)
             await call_next_song(client, ctx, queue, bot_info, counter)
             return False
-        
+            
+        except:
+            queue.remove(0)
+            print(" [!!] Error in \'play\' function\n      * Unknown error")
+            await call_next_song(client, ctx, queue, bot_info, counter)
+            await embedded_message(ctx, "**Error in extraction**  :cry:", "Sorry, I am unable to play this song")
+            return False
+
     return info
+
 
 async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
 
@@ -120,11 +119,15 @@ async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
         try:
             voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
 
-        except HTTPError as e:
-            if e.code == 403: #Erro random, tocar dnv
-                print(" [!!] Error in \'play\' function\n      * Random error in ydl extraction, retrying")
-                await play_next(client, ctx, queue, bot_info, counter)
-                return
+        except discord.HTTPException:
+            print(" [!!] Error in \'play\' function\n      * ERRO HTTP!!!!!!!!!!, retrying")
+            await play_next(client, ctx, queue, bot_info, counter)
+            return
+
+        except discord.ClientException:
+            print(" [!!] Error in \'play\' function\n      * ClientException error CLIENTE!!!!!! extraction, retrying")
+            await play_next(client, ctx, queue, bot_info, counter)
+            return
 
         except:
             print(" [!!] Error in \'play\' function\n      * Error in FFMPEG conversion")
@@ -157,8 +160,8 @@ async def check_bot_playing(bot_info, queue):
 
 async def play_loop(client, ctx, queue, counter):
 
-     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
-     while voice_client.is_playing():
+    voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    while voice_client.is_playing():
         if  await counter.get_time() > queue[0]["duration_seconds"]:
             voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             voice_client.stop()
@@ -170,9 +173,7 @@ async def play_loop(client, ctx, queue, counter):
 
 async def call_next_song(client, ctx, queue, bot_info, counter):
 
-    if len(queue) == 0:
-        return
-
+    if not queue: return
     guild = ctx.guild
     voice_client = discord.utils.get(client.voice_clients, guild=guild)
 
@@ -180,7 +181,7 @@ async def call_next_song(client, ctx, queue, bot_info, counter):
         await counter.reset()
         await play_next(client, ctx, queue, bot_info, counter)
     else:
-        await join(ctx, queue)
+        await join(ctx)
         await counter.reset()
         await play_next(client, ctx, queue, bot_info, counter)
 

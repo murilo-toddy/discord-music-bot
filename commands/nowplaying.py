@@ -37,12 +37,11 @@ async def nowplaying(client, ctx, queue, counter):
 
     embed_var = discord.Embed(
         title = '',
-        description = "\n["+music_title +"]("+ music_url+") \n\n**"+progress_bar+"**\n\n"+"`"+music_current_time
-                        +"/"+music_duration+"`",
+        description = f"\n[{music_title}]({music_url}) \n\n**{progress_bar}**\n\n`{music_current_time}/{music_duration}`",
         color = discord.Color.red()
     )
 
     embed_var.set_footer(text=" Resquested by " + username_request, icon_url=username_img_request)
-    embed_var.set_author(name='Now Playing 🎵',icon_url=client.user.avatar_url)
+    embed_var.set_author(name='Now Playing 🎵', icon_url=client.user.avatar_url)
     embed_var.set_thumbnail(url=music_thumb)
     await ctx.channel.send(embed=embed_var)

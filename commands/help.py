@@ -17,18 +17,18 @@ async def help(client, ctx, *args):
 
 def get_description(*args):
     
-    if len(args) == 0 or len(args) > 1 or args[0].lower() == "help":
+    if not args or len(args) > 1 or args[0].lower() == "help":
 
         description = "_Use _`!help <command>` _to get help_\n_for a specific command_\n\n"
-
+        
         description += "**Avaliable Commands:**\n"
         description += "`help`, `clear`, `credits`, `forceskip`, `join`,\n"
         description += "`leave`, `loop`, `loopqueue`, `lyrics`, `move`,\n"
-        description += "`nowplaying`, `pause`, `play`, `queue`, `remove`,\n"
-        description += "`resume`, `seek`, `shuffle`\n"
+        description += "`nowplaying`, `pause`, `play`, `playnow`, `playskip`,\n"
+        description += "`queue`, `remove`, `resume`, `search`, `seek`,\n"
+        description += "`shuffle`"
 
         return "Help Command", description
-
 
     else:
         arg = args[0]
@@ -185,6 +185,36 @@ def get_description(*args):
             description += "Performs a random shuffle in the queue"
 
             return help_str + "Shuffle", description
+
+        search = { "search", "se", "srch", "busca", "choose" }
+        if arg.lower() in search:
+            description = "_Aliases:_ `se`, `srch`, `busca`, `choose`"
+            description += "\n\n**search**\n"
+            description += "Shows first 5 results from Youtube to the user\n"
+            description += "A song can be selected by reacting to the bot's\n"
+            description += "message"
+
+            return help_str + "Search", description
+
+        playnow = { "playnow", "pn" }
+        if arg.lower() in playnow:
+            description = "_Aliases:_ `pn`"
+            description += "\n\n**playnow**\n"
+            description += "Inserts a new song on the top of\n"
+            description += "the queue or plays it if the queue\n"
+            description += "is empty"
+
+            return help_str + "Playnow", description
+
+        playskip = { "playskip", "ps" }
+        if arg.lower() in playskip:
+            description = "_Aliases:_ `ps`"
+            description += "\n\n**playskip**\n"
+            description += "Inserts a new song on the top of\n"
+            description += "the queue and skips currently playing\n"
+            description += "if there's any"
+
+            return help_str + "Playskip", description
 
 
         description = "_Command not Found_\nUse `!help` to see available commands"

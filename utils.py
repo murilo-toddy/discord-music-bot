@@ -1,17 +1,6 @@
 import discord, commands.join as join
 
-NumberToEmoji = []
-NumberToEmoji.append ("1️⃣")
-NumberToEmoji.append ("2️⃣")
-NumberToEmoji.append ("3️⃣")
-NumberToEmoji.append ("4️⃣")
-NumberToEmoji.append ("5️⃣")
-NumberToEmoji.append ("6️⃣")
-NumberToEmoji.append ("7️⃣")
-NumberToEmoji.append ("8️⃣")
-NumberToEmoji.append ("9️⃣")
-NumberToEmoji.append ("🔟")
-
+NumberToEmoji = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"]
 
 async def returnNumberToEmoji():
     global NumberToEmoji
