@@ -77,7 +77,7 @@ async def youtube_extraction(client, ctx, queue, bot_info, counter):
 
     with YoutubeDL(YDL_OPTIONS) as ydl:
         try:
-            print(" [!] Extracting music info")
+            print(" [!] Extracting music info in "+ ctx.guild.name)
             info = ydl.extract_info("ytsearch:" + str(music_url), download=False)['entries'][0]
             
         except HTTPError as e:
@@ -114,7 +114,7 @@ async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
         await counter.set_time(bot_info.get_seek_time())
 
     if voice_client and not voice_client.is_playing():
-        print(" [!] Trying FFMPEG")
+        print(" [!] Trying FFMPEG in "+ ctx.guild.name)
 
         try:
             voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
@@ -161,8 +161,11 @@ async def check_bot_playing(bot_info, queue):
 async def play_loop(client, ctx, queue, counter):
 
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
+
+    playing_now = queue[0]
+
     while voice_client.is_playing():
-        if  await counter.get_time() > queue[0]["duration_seconds"]:
+        if  await counter.get_time() >playing_now["duration_seconds"]:
             voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             voice_client.stop()
             print("\n Timer excedeu o tempo da musica\n") 
