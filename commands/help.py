@@ -1,15 +1,8 @@
 import discord
 
 async def help(client, ctx, *args):
-
     title, description = get_description(*args)
-
-    embed = discord.Embed(
-        title = '',
-        description = description,
-        color = discord.Color.red()
-    )
-
+    embed = discord.Embed(title = '', description = description, color = discord.Color.red())
     embed.set_author(name=title,icon_url=client.user.avatar_url)
     await ctx.channel.send(embed=embed)
 

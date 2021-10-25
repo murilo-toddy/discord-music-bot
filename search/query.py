@@ -1,6 +1,7 @@
-import asyncio, googleapiclient.discovery, config
+import googleapiclient.discovery, config, asyncio
 from utils import embedded_message
 from .search_utils import *
+from commands.log import log_error
 
 async def query_play(ctx, search_query, queue):
 
@@ -18,7 +19,7 @@ async def query_play(ctx, search_query, queue):
     try:
         video_id = search_response["items"][0]["id"]["videoId"]
     except:
-        print(" [!!] Error in \'query\'\n      * Could not get video info")
+        log_error("query", "Could not get video info")
         await embedded_message(ctx, "Not Found", "No results found for your query")
         return
 
@@ -29,7 +30,7 @@ async def query_play(ctx, search_query, queue):
     ).execute()
 
     set_video_info(ctx, response, queue)
-    await show_message_video(response["items"][0]["snippet"]["title"], ctx, queue)
     await asyncio.sleep(0.1)
+    await show_message_video(response["items"][0]["snippet"]["title"], ctx, queue)
     return
     

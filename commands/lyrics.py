@@ -5,8 +5,7 @@ async def lyrics(ctx, queue,*music_name):
 
     url_busca = "https://some-random-api.ml/lyrics?title="
 
-    if len(music_name) != 0:
-        url_busca += " ".join(music_name)
+    if music_name: url_busca += " ".join(music_name)
     
     elif len(queue) == 0:
         await embedded_message(ctx, "Not Playing", "No song currently playing")
@@ -22,4 +21,4 @@ async def lyrics(ctx, queue,*music_name):
 
         data = await response.json()
 
-    await embedded_message(ctx, "**Lyrics - " + data["title"] + "**", data["lyrics"])
+    await embedded_message(ctx, f"**Lyrics - {data['title']}**", data["lyrics"])

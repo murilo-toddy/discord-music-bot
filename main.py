@@ -1,5 +1,4 @@
 import discord, asyncio, commands as cmd
-
 from commands.log import log_function
 
 from config import *
@@ -9,7 +8,6 @@ from utils import *
 @client.event
 async def on_ready():
     print("\n [!] Bot started.")
-
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("\n [!] Bot Status updated successfully.")
     bot.startup(client.guilds)

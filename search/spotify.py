@@ -1,8 +1,8 @@
-import asyncio, discord
+import asyncio, discord, googleapiclient.discovery
 from config import *
-from utils import embedded_message
 from .search_utils import *
-import googleapiclient.discovery
+from utils import embedded_message
+from commands.log import log_error
 
 async def spotify_play(url, client, ctx, queue):
 
@@ -13,10 +13,9 @@ async def spotify_play(url, client, ctx, queue):
 
         await embedded_message(ctx, "Adding Playlist to Queue", "May take a while")
 
-        for i in range(len(playlist_items["items"])):
-
+        for index in range(len(playlist_items["items"])):
             if not discord.utils.get(client.voice_clients, guild=ctx.guild): return
-            track = playlist_items["items"][i]["track"]
+            track = playlist_items["items"][index]["track"]
             name = track["name"]
             artist = track["artists"][0]["name"]
             search_spotify = str(name) + " - " + str(artist)
@@ -25,7 +24,7 @@ async def spotify_play(url, client, ctx, queue):
         
         await show_message_playlist(len(playlist_items["items"]), "", ctx)
 
-    # Track
+    # Single Track
     elif url.find("track", 25, 35) != -1:
         music_info = spotify.track(url)
         search_spotify = music_info["name"] + " - " + music_info["album"]["artists"][0]["name"]
@@ -34,6 +33,7 @@ async def spotify_play(url, client, ctx, queue):
         await asyncio.sleep(0.1)
 
     else:
+        # TODO mudar para embedded
         await ctx.channel.send("Forneça um link para uma Musica / Playist válida")
 
 
@@ -53,7 +53,7 @@ async def spotify_to_queue(search_spotify, ctx, queue):
     try:
         video_id = search_response["items"][0]["id"]["videoId"]
     except:
-        print(" [!!] Error in \'query\'\n      * Could not get video info")
+        log_error("query", "Could not get video info")
         await embedded_message(ctx, "Not Found", "No results found for your query")
         return
 

@@ -3,10 +3,10 @@ import discord
 def set_video_info(ctx, response,queue):
     music_info = {}
 
-    hours = ""
-    minutes = ""
-    seconds = ""
-    duration = ""
+    hours = minutes = seconds = duration = ""
+    # minutes = ""
+    # seconds = ""
+    # duration = ""
     duration_in_seconds = 0
     
     try:
@@ -15,12 +15,9 @@ def set_video_info(ctx, response,queue):
         print("\n\n [!] Video unavailable\n\n")
         return False
 
-    if duration.find("H") != -1:
-        [hours,duration] = duration.split("H")
-    if duration.find("M") != -1:
-        [minutes,duration] = duration.split("M")
-    if duration.find("S") != -1:
-        [seconds,duration] = duration.split("S")
+    if duration.find("H") != -1: [hours,duration] = duration.split("H")
+    if duration.find("M") != -1: [minutes,duration] = duration.split("M")
+    if duration.find("S") != -1: [seconds,duration] = duration.split("S")
 
     if hours != "":
         duration += hours + ":"
@@ -53,10 +50,10 @@ def set_video_info(ctx, response,queue):
     return True
 
 
-async def show_message_playlist(NumeroMusicas,NomePlaylist,ctx):
+async def show_message_playlist(musics, playlist_name, ctx):
     embed = discord.Embed(
-        title = '**Playlist Enqueued! '+NomePlaylist+"**",
-        description = "Total `"+str(NumeroMusicas)+"` musics were enqueued",
+        title = '**Playlist Enqueued! '+playlist_name+"**",
+        description = f"Total `{musics}` musics were enqueued",
         color = discord.Color.red()
     )
 
@@ -64,12 +61,12 @@ async def show_message_playlist(NumeroMusicas,NomePlaylist,ctx):
     await ctx.channel.send(embed = embed)
 
 
-async def show_message_video(VideoTittle,ctx,queue):
+async def show_message_video(video_title, ctx, queue):
 
     if len(queue)==1:
-        desc="["+str(VideoTittle)+"]("+str(queue[len(queue)-1]["url"])+") was enqueued\n\nPlaying Now!"
+        desc = f"[{video_title}]({queue[len(queue)-1]['url']}) was enqueued\n\nPlaying Now!"
     else:
-        desc="["+str(VideoTittle)+"]("+str(queue[len(queue)-1]["url"])+") was enqueued\n\nPosition in queue `"+str(len(queue)-1)+"`"
+        desc = f"[{video_title}]({queue[len(queue)-1]['url']}) was enqueued\n\nPosition in queue `{len(queue)-1}`"
 
     embedVar = discord.Embed(
         title = "**Video Enqueued!**",

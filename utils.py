@@ -1,24 +1,19 @@
 import discord, commands.join as join
+from commands.log import log_error
 
-NumberToEmoji = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"]
+numbers_emoji = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"]
 
 async def returnNumberToEmoji():
-    global NumberToEmoji
-    return NumberToEmoji
+    global numbers_emoji
+    return numbers_emoji
 
 async def embedded_message(ctx, title, description):
-    embed = discord.Embed(
-        title = title,
-        description = description,
-        color = discord.Color.red()
-    )
-
+    embed = discord.Embed(title = title, description = description, color = discord.Color.red())
     embed.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
     await ctx.channel.send(embed = embed)
 
 
-
-def get_time_in_seconds(time):
+def get_time_in_seconds(time: str) -> str:
     # Only seconds
     try:
         time = int(time)
@@ -43,7 +38,7 @@ def get_time_in_seconds(time):
             return 60*60*hours + time_in_secs
         
         except:
-            print(" [!!] Error in \'seek\'\n      * Could not convert number to seconds")
+            log_error("seek", "Unable to convert number to seconds")
             return None
 
 
