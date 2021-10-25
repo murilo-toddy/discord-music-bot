@@ -162,7 +162,9 @@ async def play_loop(client, ctx, queue, counter):
 
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
 
-    playing_now_duration = queue[0]
+    if not queue: return
+
+    playing_now_duration = queue[0]["duration_seconds"]
 
     while voice_client.is_playing():
         if  await counter.get_time() >playing_now_duration:
