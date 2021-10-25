@@ -170,6 +170,7 @@ async def play_loop(client, ctx, queue, counter):
             voice_client.stop()
             print("\n Timer excedeu o tempo da musica\n") 
         await asyncio.sleep(1)
+        #add 1 to timer
         while voice_client.is_paused():
             await asyncio.sleep(1)
 
