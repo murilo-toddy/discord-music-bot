@@ -43,7 +43,7 @@ async def play(client, ctx, queue, bot_info, counter, *args):
 def check_play_next(client, ctx):
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
-    return not (voice_client and voice_client.is_playing())
+    return voice_client and not voice_client.is_playing()
 
 
 async def play_next(client, ctx, queue, bot_info, counter):
