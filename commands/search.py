@@ -73,7 +73,7 @@ async def search_message(client,ctx,search_vector):
 
         description = f"\n"
         for i in range (MUSICS_NUMBER):
-            description += f"{i}" 
+            description += f"{i+1}" 
             description += f" - [{search_vector[i]['title']}]({search_vector[i]['url']})\n\n"  #Com Link
             #description += " - "+str(search_vector[i]["title"]) + "\n\n" #Sem Link
 
