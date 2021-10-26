@@ -24,6 +24,7 @@ async def play(client, ctx, queue, bot_info, counter, *args):
     loop = asyncio.get_event_loop()
     
     if check_play_next(client, ctx):
+        print("Entrie next")
         loop.create_task(play_next(client, ctx, queue, bot_info, counter))
 
     # Spotify URL
@@ -43,7 +44,7 @@ async def play(client, ctx, queue, bot_info, counter, *args):
 def check_play_next(client, ctx):
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
-    return voice_client and voice_client.is_playing()
+    return not voice_client and voice_client.is_playing()
 
 
 async def play_next(client, ctx, queue, bot_info, counter):
@@ -103,7 +104,7 @@ async def youtube_extraction(client, ctx, queue, bot_info, counter):
 
 
 async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
-
+    
     if bot_info.get_seek():
         FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -ss ' + str(bot_info.get_seek_time())
         await counter.set_time(bot_info.get_seek_time())
@@ -159,7 +160,7 @@ async def play_loop(client, ctx, queue, counter):
     playing_now_duration = queue[0]["duration_seconds"]
 
     while voice_client.is_playing():
-        if  await counter.get_time() >playing_now_duration:
+        if  await counter.get_time() > playing_now_duration:
             voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             voice_client.stop()
             print("\n Timer excedeu o tempo da musica\n") 
