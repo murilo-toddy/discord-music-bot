@@ -123,7 +123,6 @@ async def pause(ctx):
 async def play(ctx, *url):
     server = await function_check_play(ctx, "play")
     if server is not None:
-        print("wdwdw")
         await cmd.play.play(client, ctx, server.queue, server.bot_info, server.counter, *url)
 
 
