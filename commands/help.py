@@ -102,6 +102,8 @@ def get_default_desc(commands):
     for i in range(lines+1):
         description += ", ".join(f"`{cmd}`" for cmd in commands[i*inline_commands:(i+1)*inline_commands])
         if i != lines: description += ",\n"
+    
+    return description
 
 
 def get_command_desc(cmd: str):
