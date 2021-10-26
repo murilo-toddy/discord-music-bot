@@ -11,13 +11,13 @@ FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 
 
 async def play(client, ctx, queue, bot_info, counter, *args):
-    connected = ctx.guild.voice_client
-    if not connected:
-        await join(ctx)
 
-    if len(args) == 0:
+    if not args:
         await embedded_message(ctx, "Hey, nerd!", "You need to provide a search key\nlike a query or a music URL")
         return
+
+    if not ctx.guild.voice_client:
+        await join(ctx)
     
     url = args[0]
 
@@ -143,22 +143,19 @@ async def check_bot_playing(bot_info, queue):
 
     if not bot_info.get_loop() and not bot_info.get_seek():
         if not bot_info.get_loop_queue():
-            if len(queue) > 0:
+            if queue:
                 queue.remove(0)
         
-        else:
-            if len(queue) > 0:
-                next_song = queue[0]
-                queue.remove(0)
-                queue.append(next_song)
+        elif queue:
+            next_song = queue[0]
+            queue.remove(0)
+            queue.append(next_song)
 
 
 async def play_loop(client, ctx, queue, counter):
 
-    voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
-
     if not queue: return
-
+    voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
     playing_now_duration = queue[0]["duration_seconds"]
 
     while voice_client.is_playing():

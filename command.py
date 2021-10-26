@@ -5,7 +5,7 @@ from commands.log import log_function
 
 available_commands = {
     "help": [],
-    "clear": ["c"],
+    "clear": ["c", "clean"],
     "credits": ["creditos", "créditos", "autores"],
     "forceskip": ["fs", "skip", "s", "skp", "next"],
     "join": ["j"],

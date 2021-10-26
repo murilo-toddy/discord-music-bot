@@ -8,10 +8,7 @@ async def credits(ctx):
     
 
 async def add_reactions(msg):
-    await msg.add_reaction("🇵")
-    await msg.add_reaction("🇮")
-    await msg.add_reaction("🇳")
-    await msg.add_reaction("🇹")
-    await msg.add_reaction("🇴")
-    await msg.add_reaction("🤓")
+    emojis = ["🇵", "🇮", "🇳", "🇹", "🇴", "🤓"]
+    for emoji in emojis:
+        await msg.add_reaction(emoji)
     
