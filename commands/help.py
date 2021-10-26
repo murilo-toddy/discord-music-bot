@@ -1,15 +1,16 @@
 import discord
 
-async def help(client, ctx, *args):
+async def help(client, ctx, *args): await ctx.channel.send(embed=get_embed(client, *args))
+
+def get_embed(client, *args):
     title, description = get_description(*args)
     embed = discord.Embed(title = '', description = description, color = discord.Color.red())
     embed.set_author(name=title,icon_url=client.user.avatar_url)
-    await ctx.channel.send(embed=embed)
-
+    return embed
 
 
 def get_description(*args):
-    
+
     if not args or len(args) > 1 or args[0].lower() == "help":
 
         description = "_Use _`!help <command>` _to get help_\n_for a specific command_\n\n"

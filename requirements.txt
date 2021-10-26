@@ -13,3 +13,4 @@ ffmpeg
 youtube-search-python
 spotipy
 aiohttp
+discord-py-slash-command

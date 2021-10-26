@@ -26,13 +26,14 @@ async def nowplaying(client, ctx, queue, counter):
     number_after = total - number_before
 
     # Generates progress bar
-    for i in range(number_before):
-        progress_bar += "-"
+    # for i in range(number_before):
+    progress_bar += number_before * "-"
+        # progress_bar += "-"
 
     progress_bar +='🔘'
-
-    for i in range(number_after):
-        progress_bar += "-"
+    progress_bar += number_after * "-"
+    # for i in range(number_after):
+        # progress_bar += "-"
 
 
     embed_var = discord.Embed(

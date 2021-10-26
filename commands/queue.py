@@ -12,17 +12,17 @@ async def queue(client, ctx, queue, bot_info, counter):
     loop_queue = bot_info.get_loop_queue()
 
     pages = []
-    description = f""
+    description = ""
     num_pages = math.ceil((len(queue) - 1) / 10)
     total_time = await get_full_music_time(queue, counter)
     
-    i = 0
-    while(i<len(queue)):
+    # i = 0
+    for i in range(len(queue)):
         
         if  i == 0:
-            description += f"\nCurrent playing"
-            description += f" - [" + str(queue[i]["title"]) + "](" + str(queue[i]["url"]) + ")"
-            description += f" `" + str(queue[i]["duration"]) + "` (" + str(queue[i]["user"]) + ")\n\n"
+            description += "\nCurrently playing"
+            description += f" - [{queue[i]['title']}]({queue[i]['url']})"
+            description += f" `{queue[i]['duration']}` ({queue[i]['user']})\n\n"
             i += 1
             continue
 
@@ -35,14 +35,14 @@ async def queue(client, ctx, queue, bot_info, counter):
         if i % 10 == 0 or i == (len(queue) - 1):
    
             if loop:
-                description += f"\n :repeat_one: **Loop** _enabled_"
+                description += "\n :repeat_one: **Loop** _enabled_"
             if loop_queue:
-                description += f"\n :repeat: **Loop Queue** _enabled_"
+                description += "\n :repeat: **Loop Queue** _enabled_"
 
             if loop or loop_queue:
-                description += f"\n"
+                description += "\n"
 
-            description += f"\n Time until complete `" + total_time
+            description += f"\n Time until complete `{total_time}"
             description += f"`\n`{math.ceil(i/10)}/{num_pages}`"
             
             page = discord.Embed(
@@ -59,7 +59,7 @@ async def queue(client, ctx, queue, bot_info, counter):
             
             await asyncio.sleep(0.05)
 
-        i += 1
+        # i += 1
     
     await print_pages(client, ctx, pages)
 
@@ -108,11 +108,7 @@ async def print_pages(client, ctx, pages):
                 await msg.edit(embed=client.help_pages[current])
                 
 
-
 async def get_full_music_time(queue, counter):
-    total_time = 0
-    for i in range(len(queue)):
-        total_time += queue[i]["duration_seconds"]
-
+    total_time = sum(song["duration_seconds"] for song in queue)
     return format_time(total_time - await counter.get_time())
     

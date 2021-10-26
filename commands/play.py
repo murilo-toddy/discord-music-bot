@@ -43,12 +43,7 @@ async def play(client, ctx, queue, bot_info, counter, *args):
 def check_play_next(client, ctx):
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
-    
-    if voice_client and voice_client.is_playing():
-        return False
-    else:
-        return True
-
+    return voice_client and voice_client.is_playing()
 
 
 async def play_next(client, ctx, queue, bot_info, counter):
@@ -182,15 +177,11 @@ async def call_next_song(client, ctx, queue, bot_info, counter):
     if not queue: return
     guild = ctx.guild
     voice_client = discord.utils.get(client.voice_clients, guild=guild)
-
-    if voice_client:
-        await counter.reset()
-        await play_next(client, ctx, queue, bot_info, counter)
-    else:
-        await join(ctx)
-        await counter.reset()
-        await play_next(client, ctx, queue, bot_info, counter)
-
+    
+    if not voice_client: await join(ctx)
+    await counter.reset()
+    await play_next(client, ctx, queue, bot_info, counter)
+    
 
 async def query(args, ctx, queue):
     search_query = " ".join(args)
