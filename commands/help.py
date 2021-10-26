@@ -59,6 +59,7 @@ command_descriptions = {
     "shuffle": "Performs a random shuffle in the queue"
 }
 
+
 async def help(client, ctx, *args): 
     await ctx.channel.send(embed=get_embed(client, *args))
 
@@ -72,7 +73,6 @@ def get_embed(client, *args):
 def get_description(*args):
 
     commands = list(available_commands.keys())
-
     if not args or len(args) > 1 or args[0].lower() == "help":
         return "Help Command", get_default_desc(commands)
 
@@ -98,7 +98,7 @@ def get_default_desc(commands):
 
     lines = 5
     inline_commands = (len(commands) // lines)
-
+    
     for i in range(lines+1):
         description += ", ".join(f"`{cmd}`" for cmd in commands[i*inline_commands:(i+1)*inline_commands])
         if i != lines: description += ",\n"
