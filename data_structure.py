@@ -61,10 +61,6 @@ class Counter:
     def __init__(self):
         self.counter = 0
 
-    # async def start_timer(self):
-    #     while True:
-    #         await asyncio.sleep(1)
-    #         self.counter += 1
     async def add_timer(self):
         self.counter += 1
     

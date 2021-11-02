@@ -63,6 +63,7 @@ async def play_next(client, ctx, queue, bot_info, counter):
 
     if not await play_song(client, ctx, queue, info, voice_client, bot_info, counter): return
     await play_loop(client, ctx, queue, bot_info,counter)
+
     await check_bot_playing(bot_info, queue)
     await call_next_song(client, ctx, queue, bot_info, counter)
     
@@ -133,6 +134,8 @@ async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
     if bot_info.get_seek():
         bot_info.seek_set_false()
 
+    return True
+
 
 async def check_bot_playing(bot_info, queue):
 
@@ -154,13 +157,12 @@ async def play_loop(client, ctx, queue,bot_info ,counter):
     playing_now_duration = queue[0]["duration_seconds"]
 
     while voice_client.is_playing():
-        await asyncio.sleep(1)
-        await counter.add_timer()
+        await counter.add_timer() 
         if  await counter.get_time() > playing_now_duration:
             voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             voice_client.stop()
-            print("\n Timer excedeu o tempo da musica\n") 
-
+            print("\n Timer excedeu o tempo da musica\n")      
+        await asyncio.sleep(1)
         while voice_client.is_paused():
             await asyncio.sleep(1)
     
