@@ -60,7 +60,7 @@ async def play_next(client, ctx, queue, bot_info, counter):
     info = await youtube_extraction(client, ctx, queue, bot_info, counter)
 
     await play_song(client, ctx, queue, info, voice_client, bot_info, counter)
-    await play_loop(client, ctx, queue, counter)
+    await play_loop(client, ctx, queue, bot_info,counter)
     await check_bot_playing(bot_info, queue)
     await call_next_song(client, ctx, queue, bot_info, counter)
     
@@ -116,12 +116,12 @@ async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
 
         except discord.HTTPException:
             print(" [!!] Error in \'play\' function\n      * ERRO HTTP!!!!!!!!!!, retrying")
-            await play_next(client, ctx, queue, bot_info, counter)
+            await call_next_song(client, ctx, queue, bot_info, counter)
             return
 
         except discord.ClientException:
             print(" [!!] Error in \'play\' function\n      * ClientException error CLIENTE!!!!!! extraction, retrying")
-            await play_next(client, ctx, queue, bot_info, counter)
+            await call_next_song(client, ctx, queue, bot_info, counter)
             return
 
         except:
@@ -152,21 +152,26 @@ async def check_bot_playing(bot_info, queue):
             queue.append(next_song)
 
 
-async def play_loop(client, ctx, queue, counter):
+async def play_loop(client, ctx, queue,bot_info ,counter):
 
     if not queue: return
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
     playing_now_duration = queue[0]["duration_seconds"]
 
     while voice_client.is_playing():
+        await asyncio.sleep(1)
+        await counter.add_timer()
         if  await counter.get_time() > playing_now_duration:
             voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             voice_client.stop()
             print("\n Timer excedeu o tempo da musica\n") 
-        await asyncio.sleep(1)
-        #add 1 to timer
+
         while voice_client.is_paused():
             await asyncio.sleep(1)
+    
+    if await counter.get_time() == 0: #Erro de forbideen ?
+        print("\n ERRO FORBIDEN TIMER\n") 
+        await call_next_song(client, ctx, queue, bot_info, counter)
 
 
 async def call_next_song(client, ctx, queue, bot_info, counter):
