@@ -59,7 +59,9 @@ async def play_next(client, ctx, queue, bot_info, counter):
 
     info = await youtube_extraction(client, ctx, queue, bot_info, counter)
 
-    await play_song(client, ctx, queue, info, voice_client, bot_info, counter)
+    if info == False: return
+
+    if not await play_song(client, ctx, queue, info, voice_client, bot_info, counter): return
     await play_loop(client, ctx, queue, bot_info,counter)
     await check_bot_playing(bot_info, queue)
     await call_next_song(client, ctx, queue, bot_info, counter)
@@ -114,20 +116,13 @@ async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
         try:
             voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
 
-        except discord.HTTPException:
-            print(" [!!] Error in \'play\' function\n      * ERRO HTTP!!!!!!!!!!, retrying")
-            await call_next_song(client, ctx, queue, bot_info, counter)
-            return
-
-        except discord.ClientException:
-            print(" [!!] Error in \'play\' function\n      * ClientException error CLIENTE!!!!!! extraction, retrying")
-            await call_next_song(client, ctx, queue, bot_info, counter)
-            return
-
         except:
             print(" [!!] Error in \'play\' function\n      * Error in FFMPEG conversion")
             await embedded_message(ctx, "**Error in Conversion**", "_Music could not be converted_\n" +
                                                                     "_Sorry for the inconvenience_")
+            queue.remove(0)
+            await call_next_song(client, ctx, queue, bot_info, counter)
+            return False
 
         if bot_info.get_seek():
             FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
