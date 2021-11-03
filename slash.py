@@ -3,8 +3,9 @@ from config import *
 from commands.log import log_function
 from discord_slash.utils.manage_commands import create_choice, create_option
 
+
 @slash.slash(
-name="help",
+    name="help",
     description="Shows help for specific commands",
     options=[
         create_option(

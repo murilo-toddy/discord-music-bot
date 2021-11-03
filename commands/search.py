@@ -68,40 +68,39 @@ async def search(client, ctx, queue,bot_info,counter, *args):
 
 async def search_message(client,ctx,search_vector):
 
-        global MUSICS_NUMBER
-        buttons = await returnNumberToEmoji()
+    global MUSICS_NUMBER
+    buttons = await returnNumberToEmoji()
 
-        description = f"\n"
-        for i in range (MUSICS_NUMBER):
-            description += f"{i+1}" 
-            description += f" - [{search_vector[i]['title']}]({search_vector[i]['url']})\n\n"  #Com Link
-            #description += " - "+str(search_vector[i]["title"]) + "\n\n" #Sem Link
+    description = "\n"
+    for i in range (MUSICS_NUMBER):
+        description += f"{i+1}" 
+        description += f" - [{search_vector[i]['title']}]({search_vector[i]['url']})\n\n"  #Com Link
+        #description += " - "+str(search_vector[i]["title"]) + "\n\n" #Sem Link
 
-        message_embed = discord.Embed(
-                title = "**Select your song!** :face_with_monocle: ",
-                description = description,
-                color = discord.Color.red()
-            )
+    message_embed = discord.Embed(
+            title = "**Select your song!** :face_with_monocle: ",
+            description = description,
+            color = discord.Color.red()
+        )
 
-        message_embed.set_footer(text = " Resquested by " + ctx.message.author.name, icon_url = ctx.message.author.avatar_url)
+    message_embed.set_footer(text = " Resquested by " + ctx.message.author.name, icon_url = ctx.message.author.avatar_url)
 
-        msg = await ctx.send(embed=message_embed)
+    msg = await ctx.send(embed=message_embed)
+
+    for i in range(MUSICS_NUMBER):
+        await msg.add_reaction(buttons[i])
     
-        for i in range(MUSICS_NUMBER):
-            await msg.add_reaction(buttons[i])
-        
-        while True:
-            try:
-                reaction, user = await client.wait_for("reaction_add", check=lambda reaction, user: user and reaction.emoji in buttons, timeout=40.0)
-            except asyncio.TimeoutError:
-                await msg.clear_reactions()
-                return -1
+    while True:
+        try:
+            reaction, user = await client.wait_for("reaction_add", check=lambda reaction, user: user and reaction.emoji in buttons, timeout=40.0)
+        except asyncio.TimeoutError:
+            await msg.clear_reactions()
+            return -1
 
-            else:
-                for i in range(MUSICS_NUMBER):
-                    if reaction.emoji == buttons[i]:
-                        if user != client.user:
-                            return i
+        else:
+            for i in range(MUSICS_NUMBER):
+                if reaction.emoji == buttons[i] and user != client.user:
+                    return i
                 
 
             

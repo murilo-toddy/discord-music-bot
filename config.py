@@ -17,7 +17,7 @@ bot = Bot()
 
 if os.path.isfile("./.env"):
     load_dotenv()
-    TOKEN = os.getenv("DISCORD_TOKEN")
+    TOKEN = os.getenv("DISCORD_TOKEN_TODBOT")
     SPOTIFY_CREDENTIALS["id"] = os.getenv("SPOTIFY_ID")
     SPOTIFY_CREDENTIALS["secret"] = os.getenv("SPOTIFY_SECRET")
     for i in range(1, YOUTUBE_API_KEYS + 1):
@@ -32,8 +32,8 @@ else:
 
 
 spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
-    client_id = SPOTIFY_CREDENTIALS["id"],
-    client_secret = SPOTIFY_CREDENTIALS["secret"]
+    client_id=SPOTIFY_CREDENTIALS["id"],
+    client_secret=SPOTIFY_CREDENTIALS["secret"]
 ))
 
 

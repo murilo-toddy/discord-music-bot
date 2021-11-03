@@ -1,4 +1,4 @@
-import discord, asyncio, commands
+import asyncio, commands
 from command import *
 from config import *
 from utils import *
@@ -35,7 +35,7 @@ async def on_voice_state_update(member, before, after):
         await bot.server[str(before.channel.guild.id)].reset()
 
     if before.channel is None:
-        await bot.server[str(after.channel.guild.id)].reset()     
+        await bot.server[str(after.channel.guild.id)].reset()
         voice = after.channel.guild.voice_client
         time = 0
         while True:
@@ -47,8 +47,8 @@ async def on_voice_state_update(member, before, after):
                 await voice.disconnect()
             if not voice.is_connected():
                 break
-    
-    if before.channel != None and after.channel != None:
+
+    if before.channel is not None and after.channel is not None:
         counter = bot.server[str(after.channel.guild.id)].counter
         bot_info = bot.server[str(after.channel.guild.id)].bot_info
 
@@ -56,7 +56,5 @@ async def on_voice_state_update(member, before, after):
         discord.utils.get(client.voice_clients, guild=after.channel.guild).stop()
 
 
-
 if __name__ == '__main__':
     client.run(TOKEN)
-

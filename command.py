@@ -27,16 +27,17 @@ available_commands = {
     "shuffle": []
 }
 
+
 async def function_check(ctx, function: str, check=True):
     log_function(function, ctx)
     if not await verify_channel(ctx, check): return None
     return bot.server[str(ctx.guild.id)]
 
+
 async def function_check_play(ctx, function: str):
     log_function(function, ctx)
     if not await verify_channel_play(ctx): return None
     return bot.server[str(ctx.guild.id)]
-
 
 
 @client.command(aliases=available_commands["help"])
@@ -137,7 +138,7 @@ async def playnow(ctx, *url):
 async def playskip(ctx, *url):
     server = await function_check_play(ctx, "playskip")
     if server is not None:
-        await cmd.playskip.play_skip(client, ctx, server.queue, server.bot_info, server.counter,*url)
+        await cmd.playskip.play_skip(client, ctx, server.queue, server.bot_info, server.counter, *url)
 
 
 @client.command(aliases=available_commands["queue"])
@@ -162,7 +163,7 @@ async def resume(ctx):
 
 
 @client.command(aliases=available_commands["search"])
-async def search(ctx,*url):
+async def search(ctx, *url):
     server = await function_check_play(ctx, "search")
     if server is not None:
         await cmd.search.search(client, ctx, server.queue, server.bot_info, server.counter, *url)

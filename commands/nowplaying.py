@@ -19,21 +19,11 @@ async def nowplaying(client, ctx, queue, counter):
     music_duration_seconds = queue[0]["duration_seconds"]
     music_current_time_seconds = await counter.get_time()
     music_current_time = format_time(music_current_time_seconds)
-    progress_bar = ""
 
     total = 30
     number_before = int((music_current_time_seconds*total)//music_duration_seconds)
     number_after = total - number_before
-
-    # Generates progress bar
-    # for i in range(number_before):
-    progress_bar += number_before * "-"
-        # progress_bar += "-"
-
-    progress_bar +='🔘'
-    progress_bar += number_after * "-"
-    # for i in range(number_after):
-        # progress_bar += "-"
+    progress_bar = number_before * "-" + '🔘' + number_after * "-"
 
 
     embed_var = discord.Embed(

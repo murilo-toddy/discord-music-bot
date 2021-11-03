@@ -1,5 +1,6 @@
 import random, asyncio
 
+
 class Server:
     def __init__(self):
         self.queue = Queue()
@@ -36,9 +37,9 @@ class Queue:
         return self.music_list[index]
     
     def __setitem__(self, index, url):
-        self.music_list.insert(index,url)
+        self.music_list.insert(index, url)
 
-    def append(self,url):
+    def append(self, url):
         self.music_list.append(url)
 
     def remove(self, index):
@@ -78,7 +79,10 @@ class Counter:
 
 class BotInfo:
     def __init__(self):
-        self.reset()
+        self.loop = False
+        self.loop_queue = False
+        self.seek = False
+        self.seek_time = 0
     
     def reset(self):
         self.loop = False

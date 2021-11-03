@@ -4,9 +4,6 @@ def set_video_info(ctx, response,queue):
     music_info = {}
 
     hours = minutes = seconds = duration = ""
-    # minutes = ""
-    # seconds = ""
-    # duration = ""
     duration_in_seconds = 0
     
     try:

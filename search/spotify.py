@@ -8,7 +8,7 @@ async def spotify_play(url, client, ctx, queue):
 
     # Playlist
     if url.find("playlist", 25, 35) != -1:
-        playlist_items = spotify.playlist_tracks(url, offset=0, fields="items.track.name,items.track.artists.name", 
+        playlist_items = spotify.playlist_tracks(url, offset=0, fields="items.track.name,items.track.artists.name",
                                                     additional_types=["track"])
 
         await embedded_message(ctx, "Adding Playlist to Queue", "May take a while")
@@ -21,7 +21,7 @@ async def spotify_play(url, client, ctx, queue):
             search_spotify = str(name) + " - " + str(artist)
             await spotify_to_queue(search_spotify, ctx, queue)
             await asyncio.sleep(0.1)
-        
+
         await show_message_playlist(len(playlist_items["items"]), "", ctx)
 
     # Single Track
@@ -52,6 +52,7 @@ async def spotify_to_queue(search_spotify, ctx, queue):
 
     try:
         video_id = search_response["items"][0]["id"]["videoId"]
+
     except:
         log_error("query", "Could not get video info")
         await embedded_message(ctx, "Not Found", "No results found for your query")

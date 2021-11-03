@@ -1,46 +1,51 @@
 import discord, commands.join as join
 from commands.log import log_error
 
-numbers_emoji = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"]
+numbers_emoji = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
 
-async def returnNumberToEmoji():
-    global numbers_emoji
-    return numbers_emoji
+
+# async def returnNumberToEmoji():
+#     global numbers_emoji
+#     return numbers_emoji
+
 
 async def embedded_message(ctx, title, description):
-    embed = discord.Embed(title = title, description = description, color = discord.Color.red())
-    embed.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
-    await ctx.channel.send(embed = embed)
+    embed = discord.Embed(title=title, description=description, color=discord.Color.red())
+    embed.set_footer(text=" Resquested by " + ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+    await ctx.channel.send(embed=embed)
 
 
-def get_time_in_seconds(time: str) -> str:
+def get_time_in_seconds(time: str) -> int:
     # Only seconds
     try:
         time = int(time)
         return time
-    
+
     # hh:mm:ss format
     except:
         time_size = len(time)
         try:
-            seconds = int(time[time_size-2:])
-            if time_size == 4: minutes = int(time[time_size-4])
-            else: minutes = int(time[time_size-5:time_size-3])
+            seconds = int(time[time_size - 2:])
+            if time_size == 4:
+                minutes = int(time[time_size - 4])
+            else:
+                minutes = int(time[time_size - 5:time_size - 3])
             time_in_secs = 60 * minutes + seconds
-            
+
             # mm:ss format
             if time_size < 6:
                 return time_in_secs
-            
+
             # hh:mm:ss format
-            if time_size == 7: hours = int(time[time_size-7])
-            else: hours = int(time[time_size-8:time_size-6])
-            return 60*60*hours + time_in_secs
-        
+            if time_size == 7:
+                hours = int(time[time_size - 7])
+            else:
+                hours = int(time[time_size - 8:time_size - 6])
+            return 60 * 60 * hours + time_in_secs
+
         except:
             log_error("seek", "Unable to convert number to seconds")
             return None
-
 
 
 def format_time(time):
@@ -58,10 +63,12 @@ def format_time(time):
 
 
 def format_subtime(subtime):
-    if len(subtime) == 0: return "00"
-    elif len(subtime) == 1: return "0" + subtime
-    else: return subtime
-
+    if len(subtime) == 0:
+        return "00"
+    elif len(subtime) == 1:
+        return "0" + subtime
+    else:
+        return subtime
 
 
 async def verify_channel(ctx, sender_equals_bot: bool = True):
@@ -75,8 +82,8 @@ async def verify_channel(ctx, sender_equals_bot: bool = True):
         if ctx.guild.voice_client:
             bot_channel = ctx.guild.voice_client.channel
             if bot_channel != sender_channel:
-                await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" + 
-                                                                            "_as the bot to issue this command_")
+                await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" +
+                                       "_as the bot to issue this command_")
                 return False
         else:
             await embedded_message(ctx, ":exclamation: **Not Connected**", "_I'm currently not connected_")
@@ -84,11 +91,10 @@ async def verify_channel(ctx, sender_equals_bot: bool = True):
     return True
 
 
-
 async def verify_channel_play(ctx):
     sender = ctx.author.voice
     if not sender:
-        await embedded_message(ctx, ":exclamation: **Not Connected**", "_You must be connected to a voice channel_")  
+        await embedded_message(ctx, ":exclamation: **Not Connected**", "_You must be connected to a voice channel_")
         return False
 
     sender_channel = sender.channel
@@ -96,13 +102,11 @@ async def verify_channel_play(ctx):
     if bot_channel:
         if bot_channel.channel == sender_channel:
             return True
-    
+
         else:
-            await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" + 
-                                                                        "_as the bot to issue this command_")
+            await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" +
+                                   "_as the bot to issue this command_")
             return False
-            
+
     await join.join_channel(ctx)
     return True
-
-
