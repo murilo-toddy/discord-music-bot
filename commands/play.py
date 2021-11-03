@@ -62,8 +62,7 @@ async def play_next(client, ctx, queue, bot_info, counter):
     if info == False: return
 
     if not await play_song(client, ctx, queue, info, voice_client, bot_info, counter): return
-    await play_loop(client, ctx, queue, bot_info,counter)
-
+    if not await play_loop(client, ctx, queue, bot_info,counter): return
     await check_bot_playing(bot_info, queue)
     await call_next_song(client, ctx, queue, bot_info, counter)
     
@@ -152,9 +151,14 @@ async def check_bot_playing(bot_info, queue):
 
 async def play_loop(client, ctx, queue,bot_info ,counter):
 
+
+    print("Entrou loop\n")
+
     if not queue: return
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
     playing_now_duration = queue[0]["duration_seconds"]
+
+    await counter.reset()
 
     while voice_client.is_playing():
         await counter.add_timer() 
@@ -169,6 +173,11 @@ async def play_loop(client, ctx, queue,bot_info ,counter):
     if await counter.get_time() == 0: #Erro de forbideen ?
         print("\n ERRO FORBIDEN TIMER\n") 
         await call_next_song(client, ctx, queue, bot_info, counter)
+        return False
+
+    print("Saiu loop\n")
+
+    return True
 
 
 async def call_next_song(client, ctx, queue, bot_info, counter):
