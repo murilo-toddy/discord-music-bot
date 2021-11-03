@@ -43,7 +43,7 @@ async def play(client, ctx, queue, bot_info, counter, *args):
 def check_play_next(client, ctx):
     guild = ctx.guild
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
-    return voice_client and voice_client.is_playing()
+    return voice_client and not voice_client.is_playing()
 
 
 async def play_next(client, ctx, queue, bot_info, counter):
@@ -59,8 +59,10 @@ async def play_next(client, ctx, queue, bot_info, counter):
 
     info = await youtube_extraction(client, ctx, queue, bot_info, counter)
 
-    await play_song(client, ctx, queue, info, voice_client, bot_info, counter)
-    await play_loop(client, ctx, queue, counter)
+    if info == False: return
+
+    if not await play_song(client, ctx, queue, info, voice_client, bot_info, counter): return
+    if not await play_loop(client, ctx, queue, bot_info,counter): return
     await check_bot_playing(bot_info, queue)
     await call_next_song(client, ctx, queue, bot_info, counter)
     
@@ -103,7 +105,7 @@ async def youtube_extraction(client, ctx, queue, bot_info, counter):
 
 
 async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
-
+    
     if bot_info.get_seek():
         FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -ss ' + str(bot_info.get_seek_time())
         await counter.set_time(bot_info.get_seek_time())
@@ -114,20 +116,13 @@ async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
         try:
             voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
 
-        except discord.HTTPException:
-            print(" [!!] Error in \'play\' function\n      * ERRO HTTP!!!!!!!!!!, retrying")
-            await play_next(client, ctx, queue, bot_info, counter)
-            return
-
-        except discord.ClientException:
-            print(" [!!] Error in \'play\' function\n      * ClientException error CLIENTE!!!!!! extraction, retrying")
-            await play_next(client, ctx, queue, bot_info, counter)
-            return
-
         except:
             print(" [!!] Error in \'play\' function\n      * Error in FFMPEG conversion")
             await embedded_message(ctx, "**Error in Conversion**", "_Music could not be converted_\n" +
                                                                     "_Sorry for the inconvenience_")
+            queue.remove(0)
+            await call_next_song(client, ctx, queue, bot_info, counter)
+            return False
 
         if bot_info.get_seek():
             FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
@@ -137,6 +132,8 @@ async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
 
     if bot_info.get_seek():
         bot_info.seek_set_false()
+
+    return True
 
 
 async def check_bot_playing(bot_info, queue):
@@ -152,26 +149,40 @@ async def check_bot_playing(bot_info, queue):
             queue.append(next_song)
 
 
-async def play_loop(client, ctx, queue, counter):
+async def play_loop(client, ctx, queue,bot_info ,counter):
 
-    if not queue: return
+
+    print("Entrou loop\n")
+
+    if not queue: return False
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
     playing_now_duration = queue[0]["duration_seconds"]
 
+    await counter.reset()
+
     while voice_client.is_playing():
-        if  await counter.get_time() >playing_now_duration:
+        await counter.add_timer() 
+        if  await counter.get_time() > playing_now_duration:
             voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             voice_client.stop()
-            print("\n Timer excedeu o tempo da musica\n") 
+            print("\n Timer excedeu o tempo da musica\n")      
         await asyncio.sleep(1)
-        #add 1 to timer
         while voice_client.is_paused():
             await asyncio.sleep(1)
+    
+    if await counter.get_time() == 0: #Erro de forbideen ?
+        print("\n ERRO FORBIDEN TIMER\n") 
+        await call_next_song(client, ctx, queue, bot_info, counter)
+        return False
+
+    print("Saiu loop\n")
+
+    return True
 
 
 async def call_next_song(client, ctx, queue, bot_info, counter):
 
-    if not queue: return
+    if not queue: return False
     guild = ctx.guild
     voice_client = discord.utils.get(client.voice_clients, guild=guild)
     

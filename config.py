@@ -10,7 +10,7 @@ YOUTUBE_CREDENTIALS = []
 SPOTIFY_CREDENTIALS = {}
 CURRENT_KEY_INDEX = -1
 
-client = commands.Bot(command_prefix=">", case_insensitive=True, help_command=None)
+client = commands.Bot(command_prefix="!", case_insensitive=True, help_command=None)
 slash = SlashCommand(client, sync_commands=True)
 bot = Bot()
 

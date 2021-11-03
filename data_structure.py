@@ -6,7 +6,7 @@ class Server:
         self.queue = Queue()
         self.counter = Counter()
         self.bot_info = BotInfo()   
-        asyncio.get_event_loop().create_task(self.counter.start_timer())
+        # asyncio.get_event_loop().create_task(self.counter.start_timer())
 
     async def reset(self):
         self.queue.clear()
@@ -62,10 +62,8 @@ class Counter:
     def __init__(self):
         self.counter = 0
 
-    async def start_timer(self):
-        while True:
-            await asyncio.sleep(1)
-            self.counter += 1
+    async def add_timer(self):
+        self.counter += 1
     
     async def reset(self):
         self.counter = 0
