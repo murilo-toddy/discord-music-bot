@@ -13,10 +13,10 @@ from discord_slash.utils.manage_commands import create_choice, create_option
             description="Select a command",
             required=False,
             option_type=3,
-            # choices=[
-            #     create_choice(name="clear", value="clear"),
-            #     create_choice(name="play", value="play")
-            # ]
+            choices=[
+                create_choice(name="clear", value="clear"),
+                create_choice(name="play", value="play")
+            ]
         )
     ]
 )

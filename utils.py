@@ -4,9 +4,9 @@ from commands.log import log_error
 numbers_emoji = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
 
 
-# async def returnNumberToEmoji():
-#     global numbers_emoji
-#     return numbers_emoji
+async def returnNumberToEmoji():
+    global numbers_emoji
+    return numbers_emoji
 
 
 async def embedded_message(ctx, title, description):
@@ -45,7 +45,7 @@ def get_time_in_seconds(time: str) -> int:
 
         except:
             log_error("seek", "Unable to convert number to seconds")
-            return None
+            return None    
 
 
 def format_time(time):
@@ -102,11 +102,10 @@ async def verify_channel_play(ctx):
     if bot_channel:
         if bot_channel.channel == sender_channel:
             return True
-
-        else:
-            await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" +
-                                   "_as the bot to issue this command_")
-            return False
+        
+        await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" +
+                                "_as the bot to issue this command_")
+        return False
 
     await join.join_channel(ctx)
     return True

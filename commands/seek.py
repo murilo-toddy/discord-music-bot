@@ -13,7 +13,7 @@ async def seek(client, ctx, queue, bot_info, *args):
                                                           "like !seek `1:20` or !seek `80`")
         return
 
-    time_seconds = get_time_in_seconds(str(args[0]))
+    time_seconds = get_time_in_seconds(f"{args[0]}")
     
     if not time_seconds and time_seconds != 0:
         print(" [!!] Error in \'seek\'\n      * Could not convert time")

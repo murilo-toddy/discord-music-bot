@@ -71,6 +71,6 @@ async def show_message_video(video_title, ctx, queue):
         color = discord.Color.red()
     )
 
-    embedVar.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url= ctx.message.author.avatar_url)
+    embedVar.set_footer(text= " Resquested by " + ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
     await ctx.channel.send(embed = embedVar)
     

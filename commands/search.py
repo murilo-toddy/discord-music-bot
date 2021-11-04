@@ -32,11 +32,17 @@ async def search(client, ctx, queue,bot_info,counter, *args):
     search_vector = []
 
     for i in range (MUSICS_NUMBER):
-        search_info = {}
-        search_info["id"] = search_response["items"][i]["id"]["videoId"]
-        search_info["url"] = "https://www.youtube.com/watch?v=" +  search_info["id"]
-        search_info["title"] = search_response["items"][i]["snippet"]["title"]
-        search_vector.append(search_info)
+        # search_info = {
+        #     "id": search_response["items"][i]["id"]["videoId"],
+        #     "url": "https://www.youtube.com/watch?v=" + search_info["id"],
+        #     "title": search_response["items"][i]["snippet"]["title"]
+        # }
+        video_id = search_response["items"][i]["id"]["videoId"]
+        search_vector.append({
+            "id": video_id,
+            "url": "https://www.youtube.com/watch?v=" + video_id,
+            "title": search_response["items"][i]["snippet"]["title"]
+        })
 
     choosen = await search_message(client,ctx,search_vector)
 
@@ -62,8 +68,6 @@ async def search(client, ctx, queue,bot_info,counter, *args):
     if check_play_next(client, ctx):
         loop.create_task(play_next(client, ctx, queue, bot_info, counter))
     return
-
-
 
 
 async def search_message(client,ctx,search_vector):

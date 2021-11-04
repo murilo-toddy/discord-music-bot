@@ -17,7 +17,7 @@ bot = Bot()
 
 if os.path.isfile("./.env"):
     load_dotenv()
-    TOKEN = os.getenv("DISCORD_TOKEN_TODBOT")
+    TOKEN = os.getenv("DISCORD_TOKEN")
     SPOTIFY_CREDENTIALS["id"] = os.getenv("SPOTIFY_ID")
     SPOTIFY_CREDENTIALS["secret"] = os.getenv("SPOTIFY_SECRET")
     for i in range(1, YOUTUBE_API_KEYS + 1):
