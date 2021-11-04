@@ -63,12 +63,14 @@ async def play_next(client, ctx, queue, bot_info, counter):
 
     if not await play_song(client, ctx, queue, info, voice_client, bot_info, counter): return
     if not await play_loop(client, ctx, queue, bot_info,counter): return
-    await check_bot_playing(bot_info, queue)
+    if not await check_bot_playing(bot_info, queue): return
     await call_next_song(client, ctx, queue, bot_info, counter)
     
 
 
 async def youtube_extraction(client, ctx, queue, bot_info, counter):
+
+    if not queue: return False
 
     music_url = queue[0]["url"]
 
@@ -106,12 +108,14 @@ async def youtube_extraction(client, ctx, queue, bot_info, counter):
 
 async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
     
+    if not queue: return False
+
     if bot_info.get_seek():
         FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -ss ' + str(bot_info.get_seek_time())
         await counter.set_time(bot_info.get_seek_time())
 
     if voice_client and not voice_client.is_playing():
-        print(" [!] Trying FFMPEG in "+ ctx.guild.name)
+        print(" [!] Playing "+str(queue[0]["title"])+" in "+ ctx.guild.name)
 
         try:
             voice_client.play(discord.FFmpegPCMAudio(info['formats'][0]['url'], **FFMPEG_OPTIONS), after=None)
@@ -137,6 +141,8 @@ async def play_song(client,ctx,queue, info, voice_client, bot_info, counter):
 
 
 async def check_bot_playing(bot_info, queue):
+
+    if not queue: return False
 
     if not bot_info.get_loop() and not bot_info.get_seek():
         if not bot_info.get_loop_queue():
@@ -170,11 +176,12 @@ async def play_loop(client, ctx, queue,bot_info ,counter):
         while voice_client.is_paused():
             await asyncio.sleep(1)
     
-    if await counter.get_time() == 0: #Erro de forbideen ?
-        print("\n ERRO FORBIDEN TIMER\n") 
+    if await counter.get_time() == 1: #Erro de forbideen ?
+        print("\n ERRO FORBIDEN TIMER, musica "+queue[0]["title"]+"\n") 
         await call_next_song(client, ctx, queue, bot_info, counter)
         return False
 
+    print(str(await counter.get_time()))
     print("Saiu loop\n")
 
     return True
