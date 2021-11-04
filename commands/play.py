@@ -154,6 +154,8 @@ async def check_bot_playing(bot_info, queue):
             queue.remove(0)
             queue.append(next_song)
 
+    return True
+
 
 async def play_loop(client, ctx, queue,bot_info ,counter):
 
@@ -196,6 +198,8 @@ async def call_next_song(client, ctx, queue, bot_info, counter):
     if not voice_client: await join(ctx)
     await counter.reset()
     await play_next(client, ctx, queue, bot_info, counter)
+
+    return True
     
 
 async def query(args, ctx, queue):
