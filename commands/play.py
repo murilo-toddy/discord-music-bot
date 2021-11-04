@@ -175,7 +175,7 @@ async def play_loop(client, ctx, queue,bot_info ,counter):
         await call_next_song(client, ctx, queue, bot_info, counter)
         return False
 
-    print(counter.get_time())
+    print(str(await counter.get_time()))
     print("Saiu loop\n")
 
     return True
