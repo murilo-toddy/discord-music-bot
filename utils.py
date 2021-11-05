@@ -45,7 +45,7 @@ def get_time_in_seconds(time: str) -> int:
 
         except:
             log_error("seek", "Unable to convert number to seconds")
-            return None    
+            return None
 
 
 def format_time(time):
@@ -102,9 +102,9 @@ async def verify_channel_play(ctx):
     if bot_channel:
         if bot_channel.channel == sender_channel:
             return True
-        
+
         await embedded_message(ctx, "**Foreign detected :ghost:**", "_You must be in the same channel_\n" +
-                                "_as the bot to issue this command_")
+                               "_as the bot to issue this command_")
         return False
 
     await join.join_channel(ctx)
