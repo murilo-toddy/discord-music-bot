@@ -8,10 +8,10 @@ async def play_skip(client, ctx, queue, bot_info, counter, *url):
         await asyncio.sleep(1)
         if size < len(queue):
             await cmd.move.move_to(ctx, queue, size, 1)
-            await force_skip(client,ctx,queue,bot_info)
+            await force_skip(client, ctx, queue, bot_info)
     if len(queue) == 1:
         await asyncio.sleep(1)
-        await force_skip(client,ctx,queue,bot_info)
+        await force_skip(client, ctx, queue, bot_info)
     
         
         

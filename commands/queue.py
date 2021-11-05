@@ -4,7 +4,7 @@ from utils import embedded_message, format_time
 async def queue(client, ctx, queue, bot_info, counter):
     
     # Empty queue
-    if(len(queue)) <= 1:
+    if len(queue) <= 1:
         await embedded_message(ctx, "**Empty Queue**", "_The queue is currently empty_")
         return
 
@@ -19,7 +19,7 @@ async def queue(client, ctx, queue, bot_info, counter):
     # i = 0
     for i in range(len(queue)):
         
-        if  i == 0:
+        if i == 0:
             description += "\nCurrently playing"
             description += f" - [{queue[i]['title']}]({queue[i]['url']})"
             description += f" `{queue[i]['duration']}` ({queue[i]['user']})\n\n"
@@ -65,7 +65,7 @@ async def queue(client, ctx, queue, bot_info, counter):
 
 
 async def print_pages(client, ctx, pages):
-    buttons = [u"\u23EA", u"\u2B05", u"\u27A1", u"\u23E9"] # skip to start, left, right, skip to end
+    buttons = [u"\u23EA", u"\u2B05", u"\u27A1", u"\u23E9"]  # skip to start, left, right, skip to end
     current = 0
     client.help_pages = pages
     msg = await ctx.send(embed=client.help_pages[current])

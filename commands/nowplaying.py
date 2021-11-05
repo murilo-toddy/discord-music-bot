@@ -25,7 +25,6 @@ async def nowplaying(client, ctx, queue, counter):
     number_after = total - number_before
     progress_bar = number_before * "-" + '🔘' + number_after * "-"
 
-
     embed_var = discord.Embed(
         title = '',
         description = f"\n[{music_title}]({music_url}) \n\n**{progress_bar}**\n\n`{music_current_time}/{music_duration}`",

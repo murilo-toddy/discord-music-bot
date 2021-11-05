@@ -4,9 +4,10 @@ from search.search_utils import *
 from .play import play_next, check_play_next
 from .join import join
 
-MUSICS_NUMBER = 5 #1 to 10
+MUSICS_NUMBER = 5  # 1 to 10
 
-async def search(client, ctx, queue,bot_info,counter, *args):
+
+async def search(client, ctx, queue, bot_info, counter, *args):
 
     global MUSICS_NUMBER
 
@@ -27,8 +28,6 @@ async def search(client, ctx, queue,bot_info,counter, *args):
     ).execute()
 
     search_vector = []
-    
-
     for i in range(MUSICS_NUMBER):
         # search_info = {
         #     "id": search_response["items"][i]["id"]["videoId"],
@@ -72,8 +71,8 @@ async def search_message(client,ctx,search_vector):
     global MUSICS_NUMBER
     description = "\n"
 
-    for i in range (MUSICS_NUMBER):
-        description += f"{i+1}" 
+    for i in range(MUSICS_NUMBER):
+        description += f"{i+1}"
         description += f" - [{search_vector[i]['title']}]({search_vector[i]['url']})\n\n"  #Com Link
         # description += " - "+str(search_vector[i]["title"]) + "\n\n" #Sem Link
 
@@ -90,11 +89,12 @@ async def search_message(client,ctx,search_vector):
 
     for i in range(MUSICS_NUMBER):
         await msg.add_reaction(numbers_emoji[i])
-    
+
     while True:
         try:
-            reaction, user = await client.wait_for("reaction_add", check=lambda reaction, user: user and reaction.emoji in numbers_emoji, timeout=40.0)
-        
+            reaction, user = await client.wait_for("reaction_add", check=lambda r, u: u and r.emoji in numbers_emoji,
+                                                   timeout=40.0)
+
         except asyncio.TimeoutError:
             await msg.clear_reactions()
             return -1
@@ -103,8 +103,3 @@ async def search_message(client,ctx,search_vector):
             for i in range(MUSICS_NUMBER):
                 if reaction.emoji == numbers_emoji[i] and user != client.user:
                     return i
-                
-
-            
-
-

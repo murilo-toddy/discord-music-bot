@@ -2,7 +2,7 @@ from utils import embedded_message
 
 # Removes song from queue
 async def remove(ctx, queue, *args):
-    if len(args) == 0:
+    if not args:
         await embedded_message(ctx, ":exclamation: **Invalid Syntax**", "You must specify a position")
 
     elif len(args) == 1:

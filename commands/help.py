@@ -7,54 +7,54 @@ command_descriptions = {
     "forceskip": "Skips currently playing song",
     "join": "Connects the bot to user's voice channel",
     "leave": 
-        "Disconnects the bot from currently\n" \
+        "Disconnects the bot from currently\n"
         "connected voice channel",
     "loop": 
-        "Puts currently playing song in loop\n" \
+        "Puts currently playing song in loop\n"
         "Song will repeat until skipped or loop is turned off",
     "loopqueue":  
-        "Puts queue in loop\n" \
-        "Queue will repeat when all songs\n" \
+        "Puts queue in loop\n"
+        "Queue will repeat when all songs\n"
         "have ended",
     "lyrics": 
-        "Shows the lyrics for\n" \
-        "currently playing song" \
-        "\n\n**lyrics** `query`\n" \
-        "Shows the lyrics for\n" \
+        "Shows the lyrics for\n"
+        "currently playing song"
+        "\n\n**lyrics** `query`\n"
+        "Shows the lyrics for\n"
         "searched song",
     "move": 
-        "Moves song from first argument to\n" \
-        "second argument. If second argument\n" \
-        "is none, the song will be moved\n" \
+        "Moves song from first argument to\n"
+        "second argument. If second argument\n"
+        "is none, the song will be moved\n"
         "to the top of the queue",
     "nowplaying": 
-        "Shows information about currently\n" \
+        "Shows information about currently\n"
         "playing song",
     "pause": "Pauses currently playing song",
     "play": 
-        "Enqueues song based on a search\n" \
+        "Enqueues song based on a search\n"
         "query or provided youtube / spotify url",
     "playnow":             
-        "Inserts a new song on the top of\n" \
-        "the queue or plays it if the queue\n" \
+        "Inserts a new song on the top of\n"
+        "the queue or plays it if the queue\n"
         "is empty",
     "playskip": 
-        "Inserts a new song on the top of\n" \
-        "the queue and skips currently playing\n" \
+        "Inserts a new song on the top of\n"
+        "the queue and skips currently playing\n"
         "if there's any",
     "queue": "Lists all enqueued songs",
     "remove": 
-        "Removes song in specified position\n" \
+        "Removes song in specified position\n"
         "from the queue",
     "resume": "Resumes paused song",
     "search": 
-        "Shows first 5 results from Youtube to the user\n" \
-        "A song can be selected by reacting to the bot's\n" \
+        "Shows first 5 results from Youtube to the user\n"
+        "A song can be selected by reacting to the bot's\n"
         "message",
     "seek": 
-        "Moves currently playing song to\n" \
-        "specified time\n\n" \
-        "argument must be in `hh:mm:ss` format or\n" \
+        "Moves currently playing song to\n"
+        "specified time\n\n"
+        "argument must be in `hh:mm:ss` format or\n"
         "a time in `seconds` (`1:20` or `80`)",
     "shuffle": "Performs a random shuffle in the queue"
 }
@@ -62,6 +62,7 @@ command_descriptions = {
 
 async def help(client, ctx, *args): 
     await ctx.channel.send(embed=get_embed(client, *args))
+
 
 def get_embed(client, *args):
     title, description = get_description(*args)
@@ -87,7 +88,6 @@ def get_description(*args):
 
     description = "_Command not Found_\nUse `!help` to see available commands"
     return "Command Not Found", description
-
 
 
 def get_default_desc(commands):
