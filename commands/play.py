@@ -75,7 +75,7 @@ async def youtube_extraction(client, ctx, queue, bot_info, counter):
     with YoutubeDL(YDL_OPTIONS) as ydl:
         try:
             print(" [!] Extracting music info in " + ctx.guild.name)
-            info = ydl.extract_info("ytsearch:" + str(music_url), download=False)['entries'][0]
+            info = ydl.extract_info(music_url, download=False)
             
         except HTTPError as e:
             if e.code == 429:  # Limit of videos exceeded, chama os donos do bot
