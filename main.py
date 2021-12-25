@@ -43,7 +43,7 @@ async def on_voice_state_update(member, before, after):
             time += 1
             if voice.is_playing() or voice.is_paused():
                 time = 0
-            if time == 180:
+            if time == 60:
                 await voice.disconnect()
             if not voice.is_connected():
                 break
