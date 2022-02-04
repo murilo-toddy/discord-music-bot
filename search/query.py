@@ -1,19 +1,22 @@
-import googleapiclient.discovery, config, asyncio
+import googleapiclient.discovery
+import config
+import asyncio
 from utils import embedded_message
 from .search_utils import *
 from commands.log import log_error
 
+
 async def query_play(ctx, search_query, queue):
 
     API_KEY = config.get_youtube_key()
-    youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
+    youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=API_KEY)
 
     search_response = youtube.search().list(
-        q = search_query,
-        part = "id",
-        type = "video",
-        maxResults = 1,
-        regionCode = "BR"
+        q=search_query,
+        part="id",
+        type="video",
+        maxResults=1,
+        regionCode="BR"
     ).execute()
 
     try:
@@ -24,9 +27,9 @@ async def query_play(ctx, search_query, queue):
         return
 
     response = youtube.videos().list(
-        part= 'contentDetails,snippet',
-        id = video_id,
-        regionCode = "BR",
+        part='contentDetails,snippet',
+        id=video_id,
+        regionCode="BR",
     ).execute()
 
     set_video_info(ctx, response, queue)

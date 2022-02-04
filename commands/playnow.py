@@ -1,4 +1,6 @@
-import commands as cmd, asyncio
+import asyncio
+import commands as cmd
+
 
 async def play_now(client, ctx, queue, bot_info, counter, *url):
     size = len(queue)

@@ -1,20 +1,19 @@
 import aiohttp
 from utils import embedded_message
 
-async def lyrics(ctx, queue,*music_name):
 
-    url_busca = "https://some-random-api.ml/lyrics?title="
-
-    if music_name: url_busca += " ".join(music_name)
+async def lyrics(ctx, queue, *music_name):
+    search_url = "https://some-random-api.ml/lyrics?title="
+    if music_name: search_url += " ".join(music_name)
     
     elif len(queue) == 0:
         await embedded_message(ctx, "Not Playing", "No song currently playing")
         return
 
     else:
-        url_busca += queue[0]["title"]
+        search_url += queue[0]["title"]
     
-    async with aiohttp.request("GET", url_busca, headers={}) as response:
+    async with aiohttp.request("GET", search_url, headers={}) as response:
         if not 200 <= response.status <= 299:
             await embedded_message(ctx, "**Error in Lyrics**", "_We couldn't find_\n_the song lyrics_")
             return

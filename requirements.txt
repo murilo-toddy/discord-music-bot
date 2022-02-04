@@ -11,6 +11,6 @@ requests
 youtube_dl
 ffmpeg
 youtube-search-python
-spotipy
-aiohttp
+spotipy~=2.19.0
+aiohttp~=3.7.4.post0
 discord-py-slash-command

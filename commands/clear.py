@@ -1,5 +1,6 @@
 from utils import embedded_message
 
+
 # Removes all songs from queue
 async def clear(ctx, queue):
     if queue:

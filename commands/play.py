@@ -1,4 +1,5 @@
-import discord, asyncio
+import discord
+import asyncio
 from youtube_dl.YoutubeDL import YoutubeDL
 from search import *
 from .join import join
@@ -6,23 +7,28 @@ from utils import *
 from urllib.error import HTTPError
 from youtube_dl.utils import DownloadError
 
-YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True', 'quiet': True, 'source_address': '0.0.0.0', 'cookiefile': 'cookies.txt'}
+YDL_OPTIONS = {
+    'format': 'bestaudio',
+    'noplaylist': 'True',
+    'quiet': True,
+    'source_address': '0.0.0.0',
+    'cookiefile': 'cookies.txt'
+}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 
 async def play(client, ctx, queue, bot_info, counter, *args):
-
     if not args:
         await embedded_message(ctx, "Hey, nerd!", "You need to provide a search key\nlike a query or a music URL")
         return
 
     if not ctx.guild.voice_client:
         await join(ctx)
-    
+
     url = args[0]
 
     loop = asyncio.get_event_loop()
-    
+
     if check_play_next(client, ctx):
         loop.create_task(play_next(client, ctx, queue, bot_info, counter))
 
@@ -46,7 +52,6 @@ def check_play_next(client, ctx):
 
 
 async def play_next(client, ctx, queue, bot_info, counter):
-
     while not queue: await asyncio.sleep(0.01)
 
     guild = ctx.guild
@@ -67,7 +72,6 @@ async def play_next(client, ctx, queue, bot_info, counter):
 
 
 async def youtube_extraction(client, ctx, queue, bot_info, counter):
-
     if not queue: return False
 
     music_url = queue[0]["url"]
@@ -76,24 +80,24 @@ async def youtube_extraction(client, ctx, queue, bot_info, counter):
         try:
             print(" [!] Extracting music info in " + ctx.guild.name)
             info = ydl.extract_info(music_url, download=False)
-            
+
         except HTTPError as e:
             if e.code == 429:  # Limit of videos exceeded, chama os donos do bot
                 print(" [!!] Error in \'play\' function\n      * Ydl limit exceeded")
                 await embedded_message(ctx, "**Something broke** :cry:", "Bot will probably be out for a while\n" +
-                                                                        "Contact the devs asap!")             
+                                       "Contact the devs asap!")
             await call_next_song(client, ctx, queue, bot_info, counter)
             return False
 
         except DownloadError as e:
             print(" [!!] Error in \'play\' function\n      * {}".format(e))
             await embedded_message(ctx, "**Error in extraction**", "`" + str(queue[0]["title"]) + "`\n" +
-                                                                "_was removed from the queue_\n" +
-                                                                "_for being age restricted_\n")
+                                   "_was removed from the queue_\n" +
+                                   "_for being age restricted_\n")
             queue.remove(0)
             await call_next_song(client, ctx, queue, bot_info, counter)
             return False
-            
+
         except:
             queue.remove(0)
             print(" [!!] Error in \'play\' function\n      * Unknown error")
@@ -105,7 +109,6 @@ async def youtube_extraction(client, ctx, queue, bot_info, counter):
 
 
 async def play_song(client, ctx, queue, info, voice_client, bot_info, counter):
-    
     if not queue: return False
 
     if bot_info.get_seek():
@@ -129,7 +132,7 @@ async def play_song(client, ctx, queue, info, voice_client, bot_info, counter):
 
         if bot_info.get_seek():
             FFMPEG_OPTIONS["before_options"] = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
-        
+
         else:
             await counter.reset()
 
@@ -140,14 +143,13 @@ async def play_song(client, ctx, queue, info, voice_client, bot_info, counter):
 
 
 async def check_bot_playing(bot_info, queue):
-
     if not queue: return False
 
     if not bot_info.get_loop() and not bot_info.get_seek():
         if not bot_info.get_loop_queue():
             if queue:
                 queue.remove(0)
-        
+
         elif queue:
             next_song = queue[0]
             queue.remove(0)
@@ -157,7 +159,6 @@ async def check_bot_playing(bot_info, queue):
 
 
 async def play_loop(client, ctx, queue, bot_info, counter):
-
     # print("Entrou loop\n")
 
     if not queue: return False
@@ -165,17 +166,17 @@ async def play_loop(client, ctx, queue, bot_info, counter):
     playing_now_duration = queue[0]["duration_seconds"]
 
     while voice_client.is_playing():
-        await counter.add_timer() 
+        await counter.add_timer()
         if await counter.get_time() > playing_now_duration:
             voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             voice_client.stop()
-            print("\n Timer excedeu o tempo da musica\n")      
+            print("\n Timer excedeu o tempo da musica\n")
         await asyncio.sleep(1)
         while voice_client.is_paused():
             await asyncio.sleep(1)
-    
+
     if await counter.get_time() == 1:  # Erro de forbideen ?
-        print("\n ERRO FORBIDEN TIMER, musica "+queue[0]["title"]+"\n") 
+        print("\n ERRO FORBIDEN TIMER, musica " + queue[0]["title"] + "\n")
         await call_next_song(client, ctx, queue, bot_info, counter)
         return False
 
@@ -186,17 +187,16 @@ async def play_loop(client, ctx, queue, bot_info, counter):
 
 
 async def call_next_song(client, ctx, queue, bot_info, counter):
-
     if not queue: return False
     # guild = ctx.guild
     # voice_client = discord.utils.get(client.voice_clients, guild=guild)
-    
+
     # if not voice_client: await join(ctx)
     await counter.reset()
     await play_next(client, ctx, queue, bot_info, counter)
 
     return True
-    
+
 
 async def query(args, ctx, queue):
     search_query = " ".join(args)

@@ -5,3 +5,4 @@ client-secret.json
 *.mp4
 .cache
 .idea
+venv

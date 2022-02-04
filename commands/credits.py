@@ -1,5 +1,6 @@
 from utils import embedded_message
 
+
 async def credits(ctx):
     description = (
         "_This bot was developed by_\n_Eduardo Valença and Murilo Todão_\n\n"

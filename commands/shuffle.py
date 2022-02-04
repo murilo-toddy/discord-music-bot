@@ -1,5 +1,6 @@
 from utils import embedded_message
 
+
 # Shuffles queue
 async def shuffle(ctx, queue):
     if queue:

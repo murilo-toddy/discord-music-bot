@@ -1,6 +1,7 @@
 import discord
 from utils import embedded_message, format_time
 
+
 async def nowplaying(client, ctx, queue, counter):
 
     if len(queue) == 0:
@@ -26,9 +27,9 @@ async def nowplaying(client, ctx, queue, counter):
     progress_bar = number_before * "-" + '🔘' + number_after * "-"
 
     embed_var = discord.Embed(
-        title = '',
-        description = f"\n[{music_title}]({music_url}) \n\n**{progress_bar}**\n\n`{music_current_time}/{music_duration}`",
-        color = discord.Color.red()
+        title='',
+        description=f"\n[{music_title}]({music_url}) \n\n**{progress_bar}**\n\n`{music_current_time}/{music_duration}`",
+        color=discord.Color.red()
     )
 
     embed_var.set_footer(text=" Resquested by " + username_request, icon_url=username_img_request)

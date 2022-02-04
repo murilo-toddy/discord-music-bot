@@ -1,15 +1,17 @@
-import asyncio, discord, googleapiclient.discovery
+import asyncio
+import discord
+import googleapiclient.discovery
 from config import *
 from .search_utils import *
 from utils import embedded_message
 from commands.log import log_error
 
-async def spotify_play(url, client, ctx, queue):
 
+async def spotify_play(url, client, ctx, queue):
     # Playlist
     if url.find("playlist", 25, 35) != -1:
         playlist_items = spotify.playlist_tracks(url, offset=0, fields="items.track.name,items.track.artists.name",
-                                                    additional_types=["track"])
+                                                 additional_types=["track"])
 
         await embedded_message(ctx, "Adding Playlist to Queue", "May take a while")
 
@@ -38,16 +40,15 @@ async def spotify_play(url, client, ctx, queue):
 
 
 async def spotify_to_queue(search_spotify, ctx, queue):
-
     API_KEY = get_youtube_key()
-    youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
+    youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=API_KEY)
 
     search_response = youtube.search().list(
-        q = search_spotify,
-        part = "id",
-        type = "video",
-        maxResults = 1,
-        regionCode = "BR"
+        q=search_spotify,
+        part="id",
+        type="video",
+        maxResults=1,
+        regionCode="BR"
     ).execute()
 
     try:
@@ -59,9 +60,9 @@ async def spotify_to_queue(search_spotify, ctx, queue):
         return
 
     response = youtube.videos().list(
-        part= 'contentDetails,snippet',
-        id = video_id,
-        regionCode = "BR",
+        part='contentDetails,snippet',
+        id=video_id,
+        regionCode="BR",
     ).execute()
 
     set_video_info(ctx, response, queue)

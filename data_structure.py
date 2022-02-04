@@ -1,12 +1,11 @@
-import random, asyncio
+import random
 
 
 class Server:
     def __init__(self):
         self.queue = Queue()
         self.counter = Counter()
-        self.bot_info = BotInfo()   
-        # asyncio.get_event_loop().create_task(self.counter.start_timer())
+        self.bot_info = BotInfo()
 
     async def reset(self):
         self.queue.clear()

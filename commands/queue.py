@@ -1,8 +1,10 @@
-import discord, asyncio,math
+import discord
+import asyncio
+import math
 from utils import embedded_message, format_time
 
+
 async def queue(client, ctx, queue, bot_info, counter):
-    
     # Empty queue
     if len(queue) <= 1:
         await embedded_message(ctx, "**Empty Queue**", "_The queue is currently empty_")
@@ -15,10 +17,10 @@ async def queue(client, ctx, queue, bot_info, counter):
     description = ""
     num_pages = math.ceil((len(queue) - 1) / 10)
     total_time = await get_full_music_time(queue, counter)
-    
+
     # i = 0
     for i in range(len(queue)):
-        
+
         if i == 0:
             description += "\nCurrently playing"
             description += f" - [{queue[i]['title']}]({queue[i]['url']})"
@@ -33,7 +35,7 @@ async def queue(client, ctx, queue, bot_info, counter):
 
         # Finished loading a page
         if i % 10 == 0 or i == (len(queue) - 1):
-   
+
             if loop:
                 description += "\n :repeat_one: **Loop** _enabled_"
             if loop_queue:
@@ -43,24 +45,24 @@ async def queue(client, ctx, queue, bot_info, counter):
                 description += "\n"
 
             description += f"\n Time until complete `{total_time}"
-            description += f"`\n`{math.ceil(i/10)}/{num_pages}`"
-            
+            description += f"`\n`{math.ceil(i / 10)}/{num_pages}`"
+
             page = discord.Embed(
-                title = f"**Queue Songs!  Total: `{len(queue)-1}` **",
-                description = description,
-                color = discord.Color.red()
+                title=f"**Queue Songs!  Total: `{len(queue) - 1}` **",
+                description=description,
+                color=discord.Color.red()
             )
 
             description = ""
-            
-            page.set_footer(text = " Resquested by " + ctx.message.author.name, icon_url = ctx.message.author.avatar_url)
-            page.set_thumbnail(url = queue[0]["thumb"])
+
+            page.set_footer(text=" Resquested by " + ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+            page.set_thumbnail(url=queue[0]["thumb"])
             pages.append(page)
-            
+
             await asyncio.sleep(0.05)
 
         # i += 1
-    
+
     await print_pages(client, ctx, pages)
 
 
@@ -69,13 +71,17 @@ async def print_pages(client, ctx, pages):
     current = 0
     client.help_pages = pages
     msg = await ctx.send(embed=client.help_pages[current])
-    
+
     for button in buttons:
         await msg.add_reaction(button)
-        
+
     while True:
         try:
-            reaction, user = await client.wait_for("reaction_add", check=lambda reaction, user: user and reaction.emoji in buttons, timeout=60.0)
+            reaction, user = await client.wait_for(
+                "reaction_add",
+                check=lambda reaction, user: user and reaction.emoji in buttons,
+                timeout=60.0
+            )
 
         except asyncio.TimeoutError:
             embeded = client.help_pages[current]
@@ -85,20 +91,20 @@ async def print_pages(client, ctx, pages):
             previous_page = current
             if reaction.emoji == u"\u23EA":
                 current = 0
-                
+
             elif reaction.emoji == u"\u2B05":
                 if user != client.user:
                     if current > 0:
                         current -= 1
-                    
+
             elif reaction.emoji == u"\u27A1":
                 if user != client.user:
-                    if current < len(client.help_pages)-1:
+                    if current < len(client.help_pages) - 1:
                         current += 1
 
             elif reaction.emoji == u"\u23E9":
                 if user != client.user:
-                    current = len(client.help_pages)-1
+                    current = len(client.help_pages) - 1
 
             for button in buttons:
                 if user != client.user:
@@ -106,9 +112,8 @@ async def print_pages(client, ctx, pages):
 
             if current != previous_page:
                 await msg.edit(embed=client.help_pages[current])
-                
+
 
 async def get_full_music_time(queue, counter):
     total_time = sum(song["duration_seconds"] for song in queue)
     return format_time(total_time - await counter.get_time())
-    

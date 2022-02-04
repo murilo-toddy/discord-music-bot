@@ -1,5 +1,7 @@
-import commands as cmd, asyncio
+import asyncio
+import commands as cmd
 from .forceskip import force_skip
+
 
 async def play_skip(client, ctx, queue, bot_info, counter, *url):
     size = len(queue)
@@ -12,6 +14,3 @@ async def play_skip(client, ctx, queue, bot_info, counter, *url):
     if len(queue) == 1:
         await asyncio.sleep(1)
         await force_skip(client, ctx, queue, bot_info)
-    
-        
-        

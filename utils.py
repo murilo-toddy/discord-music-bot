@@ -1,10 +1,11 @@
-import discord, commands.join as join
+import discord
+import commands.join as join
 from commands.log import log_error
 
 numbers_emoji = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
 
 
-async def returnNumberToEmoji():
+async def return_number_to_emoji():
     global numbers_emoji
     return numbers_emoji
 
@@ -15,7 +16,7 @@ async def embedded_message(ctx, title, description):
     await ctx.channel.send(embed=embed)
 
 
-def get_time_in_seconds(time: str) -> int:
+def get_time_in_seconds(time: str):
     # Only seconds
     try:
         time = int(time)

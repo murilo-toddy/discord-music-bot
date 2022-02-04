@@ -1,5 +1,6 @@
 from utils import embedded_message
 
+
 # Changes a song position in queue
 async def move(ctx, queue, *args):
     if len(args) == 0:
@@ -32,4 +33,3 @@ async def move_to(ctx, queue, pos1, pos2):
     queue.move(pos1, pos2)
 
     await embedded_message(ctx, "**Moved!**  :nauseated_face:", f"Changed `{title}` position from `{pos1}` to `{pos2}`")
-

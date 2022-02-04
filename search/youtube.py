@@ -1,4 +1,5 @@
-import asyncio, discord
+import asyncio
+import discord
 import googleapiclient.discovery, config
 from urllib.parse import parse_qs, urlparse
 from .search_utils import *
@@ -7,21 +8,19 @@ from utils import embedded_message
 
 # Extract video or playlist info from URL
 async def youtube_play(search_youtube, client, ctx, queue):
-
     query = parse_qs(urlparse(search_youtube).query, keep_blank_values=True)
 
     try:
         # Playlist
         playlist_id = query["list"][0]
         await youtube_playlist(playlist_id, client, ctx, queue)
-    
+
     except:
         # Single video
         await youtube_video(search_youtube, ctx, queue)
 
 
 async def youtube_video(search_youtube, ctx, queue):
-    
     API_KEY = config.get_youtube_key()
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=API_KEY)
 
@@ -39,14 +38,13 @@ async def youtube_video(search_youtube, ctx, queue):
 
 
 async def youtube_playlist(playlist_id, client, ctx, queue):
-    
     API_KEY = config.get_youtube_key()
-    youtube = googleapiclient.discovery.build("youtube", "v3", developerKey = API_KEY)
+    youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=API_KEY)
 
     request = youtube.playlistItems().list(
-        part = "contentDetails",
-        playlistId = playlist_id,
-        maxResults = 50
+        part="contentDetails",
+        playlistId=playlist_id,
+        maxResults=50
     )
     response = request.execute()
 
@@ -58,14 +56,14 @@ async def youtube_playlist(playlist_id, client, ctx, queue):
     while request is not None:
         response = request.execute()
 
-        for i in range (len(response["items"])):
+        for i in range(len(response["items"])):
             if not discord.utils.get(client.voice_clients, guild=ctx.guild): return
 
             response_playlist = youtube.videos().list(
-        	    part='contentDetails,snippet',
-        	    id=response["items"][i]["contentDetails"]["videoId"]
+                part='contentDetails,snippet',
+                id=response["items"][i]["contentDetails"]["videoId"]
             ).execute()
-            
+
             if set_video_info(ctx, response_playlist, queue):
                 musics += 1
 

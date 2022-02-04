@@ -1,5 +1,6 @@
 from utils import embedded_message
 
+
 # Removes song from queue
 async def remove(ctx, queue, *args):
     if not args:
@@ -12,7 +13,7 @@ async def remove(ctx, queue, *args):
             await embedded_message(ctx, ":exclamation: **Invalid Syntax**", "Position has to be a valid number")
             return
 
-        if pos > (len(queue)+1) and pos !=0:
+        if pos > (len(queue)+1) and pos != 0:
             await embedded_message(ctx, ":exclamation: **Invalid Position**", "To check the queue, use `!queue`")
             return
 
