@@ -93,7 +93,8 @@ async def youtube_extraction(client, ctx, queue, bot_info, counter):
             print(" [!!] Error in \'play\' function\n      * {}".format(e))
             await embedded_message(ctx, "**Error in extraction**", "`" + str(queue[0]["title"]) + "`\n" +
                                    "_was removed from the queue_\n" +
-                                   "_for being age restricted_\n")
+                                   "_for error of the video or_\n" +
+                                   "_being age restricted_\n")
             queue.remove(0)
             await call_next_song(client, ctx, queue, bot_info, counter)
             return False
