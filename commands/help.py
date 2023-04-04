@@ -67,7 +67,7 @@ async def help(client, ctx, *args):
 def get_embed(client, *args):
     title, description = get_description(*args)
     embed = discord.Embed(title='', description=description, color=discord.Color.red())
-    embed.set_author(name=title, icon_url=client.user.avatar_url)
+    embed.set_author(name=title, icon_url=client.user.avatar)
     return embed
 
 

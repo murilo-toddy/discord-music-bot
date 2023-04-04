@@ -4,7 +4,7 @@ import math
 from utils import embedded_message, format_time
 
 
-async def queue(client, ctx, queue, bot_info, counter):
+async def queue(client, ctx, queue, bot_info, counter, max_pages=False):
     # Empty queue
     if len(queue) <= 1:
         await embedded_message(ctx, "**Empty Queue**", "_The queue is currently empty_")
@@ -55,15 +55,21 @@ async def queue(client, ctx, queue, bot_info, counter):
 
             description = ""
 
-            page.set_footer(text=" Resquested by " + ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+            page.set_footer(text=" Resquested by " + ctx.message.author.name, icon_url=ctx.message.author.avatar)
             page.set_thumbnail(url=queue[0]["thumb"])
             pages.append(page)
+
+            if not max_pages:
+                break
 
             await asyncio.sleep(0.05)
 
         # i += 1
 
-    await print_pages(client, ctx, pages)
+    if not max_pages:
+        await ctx.send(embed=pages[0])
+    else:
+        await print_pages(client, ctx, pages)
 
 
 async def print_pages(client, ctx, pages):

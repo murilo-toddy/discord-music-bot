@@ -42,7 +42,7 @@ def set_video_info(ctx, response, queue):
     music_info["duration"] = duration
     music_info["duration_seconds"] = duration_in_seconds
     music_info["user"] = ctx.message.author.name
-    music_info["userAvatar"] = ctx.message.author.avatar_url
+    music_info["userAvatar"] = ctx.message.author.avatar
 
     queue.append(music_info)
     return True
@@ -55,7 +55,7 @@ async def show_message_playlist(musics, playlist_name, ctx):
         color=discord.Color.red()
     )
 
-    embed.set_footer(text=" Resquested by " + ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+    embed.set_footer(text=" Resquested by " + ctx.message.author.name, icon_url=ctx.message.author.avatar)
     await ctx.channel.send(embed=embed)
 
 
@@ -72,6 +72,6 @@ async def show_message_video(video_title, ctx, queue):
         color=discord.Color.red()
     )
 
-    embed.set_footer(text=" Resquested by " + ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+    embed.set_footer(text=" Resquested by " + ctx.message.author.name, icon_url=ctx.message.author.avatar)
     await ctx.channel.send(embed=embed)
     

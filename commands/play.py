@@ -160,7 +160,6 @@ async def check_bot_playing(bot_info, queue):
 
 
 async def play_loop(client, ctx, queue, bot_info, counter):
-    # print("Entrou loop\n")
 
     if not queue: return False
     voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
@@ -180,9 +179,6 @@ async def play_loop(client, ctx, queue, bot_info, counter):
         print("\n ERRO FORBIDEN TIMER, musica " + queue[0]["title"] + "\n")
         await call_next_song(client, ctx, queue, bot_info, counter)
         return False
-
-    print(str(await counter.get_time()))
-    print("Saiu loop\n")
 
     return True
 

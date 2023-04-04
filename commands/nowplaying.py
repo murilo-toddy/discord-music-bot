@@ -33,6 +33,6 @@ async def nowplaying(client, ctx, queue, counter):
     )
 
     embed_var.set_footer(text=" Resquested by " + username_request, icon_url=username_img_request)
-    embed_var.set_author(name='Now Playing 🎵', icon_url=client.user.avatar_url)
+    embed_var.set_author(name='Now Playing 🎵', icon_url=client.user.avatar)
     embed_var.set_thumbnail(url=music_thumb)
     await ctx.channel.send(embed=embed_var)

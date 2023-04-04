@@ -3,15 +3,16 @@ from data_structure import Bot
 from dotenv import load_dotenv
 from discord.ext import commands, tasks
 from spotipy.oauth2 import SpotifyClientCredentials
-from discord_slash import SlashCommand, SlashContext
+# from discord_slash import SlashCommand, SlashContext
+import discord
 
 YOUTUBE_API_KEYS = 9
 YOUTUBE_CREDENTIALS = []
 SPOTIFY_CREDENTIALS = {}
 CURRENT_KEY_INDEX = -1
 
-client = commands.Bot(command_prefix="!", case_insensitive=True, help_command=None)
-slash = SlashCommand(client, sync_commands=True)
+client = commands.Bot(command_prefix="!", case_insensitive=True, help_command=None, intents=discord.Intents.all())
+# slash = SlashCommand(client, sync_commands=True)
 bot = Bot()
 
 

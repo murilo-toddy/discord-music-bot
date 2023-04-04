@@ -84,7 +84,7 @@ async def search_message(client, ctx, search_vector):
     )
 
     message_embed.set_footer(text=" Resquested by " + ctx.message.author.name,
-                             icon_url=ctx.message.author.avatar_url)
+                             icon_url=ctx.message.author.avatar)
 
     msg = await ctx.send(embed=message_embed)
 
