@@ -26,6 +26,7 @@ async def query_play(ctx, search_query, queue):
         await embedded_message(ctx, "Not Found", "No results found for your query")
         return
 
+    asdf
     response = youtube.videos().list(
         part='contentDetails,snippet',
         id=video_id,

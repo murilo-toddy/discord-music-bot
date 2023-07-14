@@ -2,7 +2,6 @@ import asyncio, commands
 from command import *
 from config import *
 from utils import *
-from slash import *
 
 
 @client.event
