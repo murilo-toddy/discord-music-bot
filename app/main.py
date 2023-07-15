@@ -1,13 +1,10 @@
 import discord
-import os
 from discord.ext.commands import Context, Bot
-from dotenv import load_dotenv
 
+from auth import auth
 from logger import logger
 from commands import commands
 
-
-load_dotenv()
 
 command_prefix = "!"
 instance = Bot(
@@ -26,13 +23,13 @@ async def function_handler(ctx: Context, *args):
 
 @instance.event
 async def on_ready():
-    logger.info("Bot started successfully")
+    logger.info("Bot initialized")
     await instance.change_presence(
         activity=discord.Activity(type=discord.ActivityType.listening, name="!help")
     )
-
+    logger.info("Bot status updated successfully")
 
 
 if __name__ == "__main__":
-    instance.run(os.environ["DISCORD_TOKEN_DEV"])
+    instance.run(auth["DISCORD_TOKEN_DEV"])
 

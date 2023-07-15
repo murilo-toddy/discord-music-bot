@@ -1,8 +1,10 @@
 import logging 
 from command_handler import Command
+import commands
 
 
 def help_function(*_):
+    print(commands)
     logging.info("help function called")
 
 
