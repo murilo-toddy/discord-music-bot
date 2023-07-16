@@ -1,8 +1,10 @@
 from command_handler import Commands
-from cmd.help import command as help_command
+import cmd
+
 
 commands = Commands([
-    help_command,
+    cmd.help_command,
+    cmd.play_command,
 ])
 
 
