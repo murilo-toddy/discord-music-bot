@@ -1,8 +1,11 @@
+from collections.abc import Sequence
 import discord
+from discord import Guild
 from discord.ext.commands import Context
 
 from command_handler import Commands
 from data.server import Server
+from logger import log
 
 
 class Worker:
@@ -10,11 +13,12 @@ class Worker:
         self.commands = commands
         self.servers = {}
 
-    def load(self, guilds):
+    def load(self, guilds: Sequence[Guild]):
         for guild in guilds:
             self.__create_server(guild)
 
-    def __create_server(self, guild):
+    def __create_server(self, guild: Guild):
+        log.info(f"Created server for guild {guild.name}")
         self.servers[f"{guild.id}"] = Server()
 
     async def send_embed_message(
