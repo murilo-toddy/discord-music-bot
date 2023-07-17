@@ -14,8 +14,15 @@ async def help_function(worker: Worker, ctx: Context, *args):
 
     cmd = args[0].lower()
     if cmd in worker.commands.get_all_aliases():
-        print("command in list")
-        await worker.send_embed_message(ctx, "command found", "desc")
+        command = worker.commands.alias_to_command[cmd]
+        await worker.send_embed_message(
+                ctx, 
+                f"Help for: {command.name}", 
+                (
+                    f"**Aliases:** `{'`, `'.join(command.aliases)}`\n\n"
+                    f"{command.description}"
+                )
+            )
         return
 
     title = "**Command not found**"

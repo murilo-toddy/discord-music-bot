@@ -1,8 +1,7 @@
-import logging
 from functools import reduce
-import logging
 from operator import iconcat
 from typing import Callable
+from logger import log
 
 
 class Command:
@@ -17,7 +16,7 @@ class Command:
         self.func = func
         self.aliases = aliases
         self.description = description
-        logging.info(f"Registered {aliases} with description {description}")
+        log.info(f"Command {name} registered with aliases {', '.join(aliases)}")
 
 
 class Commands:

@@ -1,5 +1,5 @@
-from discord.ext.commands import Context
 import discord
+from discord.ext.commands import Context
 
 from command_handler import Commands
 

@@ -16,3 +16,4 @@ def log_command(ctx: Context, cmd: str):
     log.info(
         f"User '{ctx.author.name}' issued command '{cmd}' in channel {ctx.channel.name} ({ctx.guild.name})"
     )
+
