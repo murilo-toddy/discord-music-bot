@@ -1,6 +1,6 @@
 from discord.ext.commands import Context 
 
-from worker import Worker
+from data.worker import Worker
 
 
 async def help_function(worker: Worker, ctx: Context, *args):

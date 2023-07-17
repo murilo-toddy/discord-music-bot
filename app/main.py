@@ -3,7 +3,7 @@ from discord.ext.commands import Context, Bot
 
 import logger
 from auth import authentication
-from worker import Worker
+from data.worker import Worker
 from cmd import commands
 
 
