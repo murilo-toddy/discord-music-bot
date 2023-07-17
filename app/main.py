@@ -1,8 +1,8 @@
 import discord
 from discord.ext.commands import Context, Bot
 
+import logger
 from auth import authentication
-from logger import log
 from worker import Worker
 from cmd import commands
 
@@ -23,16 +23,17 @@ worker = Worker(commands)
 async def function_handler(ctx: Context, *args):
     # ignore command_prefix
     command, *args = ctx.message.content.split(command_prefix)[1].split(" ")
+    logger.log_command(ctx, command, *args)
     await commands.execute_command(command, worker, ctx, *args)
 
 
 @instance.event
 async def on_ready():
-    log.info("Bot initialized")
+    logger.log.info("Bot initialized")
     await instance.change_presence(
         activity=discord.Activity(type=discord.ActivityType.listening, name="!help")
     )
-    log.info("Bot status updated successfully")
+    logger.log.info("Bot status updated successfully")
 
 
 if __name__ == "__main__":
