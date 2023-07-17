@@ -1,18 +1,18 @@
-from command_handler import Command 
+from command_handler import Command, Commands
 import cmd.help
 
 
-help_command = Command(
-    name="help",
-    func=cmd.help.help_function, 
-    aliases=["help"], 
-    description="""help"""
-)
-
-play_command = Command(
-    name="play",
-    func=cmd.help.help_function, 
-    aliases=["play", "p"], 
-    description="""play"""
-)
-
+commands = Commands([
+    Command(
+        name="help",
+        func=cmd.help.help_function, 
+        aliases=["help"], 
+        description="""help"""
+    ),
+    Command(
+        name="play",
+        func=cmd.help.help_function, 
+        aliases=["play", "p"], 
+        description="""play"""
+    ),
+])
