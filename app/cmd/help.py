@@ -5,7 +5,7 @@ from worker import Worker
 
 
 async def help_function(worker: Worker, ctx: Context, *args):
-    logger.log_command(ctx, "help")
+    logger.log_command(ctx, "help", *args)
 
     commands_dict = worker.commands.alias_to_command
     if not args or len(args) > 1 or args[0].lower() in commands_dict["help"].aliases:

@@ -12,8 +12,13 @@ logging.basicConfig(
 log = logging.getLogger()
 
 
-def log_command(ctx: Context, cmd: str):
-    log.info(
-        f"User '{ctx.author.name}' issued command '{cmd}' in channel {ctx.channel.name} ({ctx.guild.name})"
-    )
+def log_command(ctx: Context, cmd: str, *args):
+    if args:
+        log.info(
+            f"User '{ctx.author.name}' issued command '{cmd} {' '.join(args)}' in channel {ctx.channel.name} ({ctx.guild.name})"
+        )
+    else:
+        log.info(
+            f"User '{ctx.author.name}' issued command '{cmd}' in channel {ctx.channel.name} ({ctx.guild.name})"
+        )
 
