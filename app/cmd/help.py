@@ -9,9 +9,9 @@ async def help_function(worker: Worker, ctx: Context, *args):
         available_commands = worker.commands.get_all_commands()
         commands_per_line = 4
         available_commands_formatted = " ".join([
-                f"`{cmd}`,\n" if (i + 1) % commands_per_line == 0 else f"`{cmd}`, " \
-                for i, cmd in enumerate(available_commands)
-            ])
+            f"`{cmd}`,\n" if (i + 1) % commands_per_line == 0 else f"`{cmd}`, " \
+            for i, cmd in enumerate(available_commands)
+        ])
 
         description = (
             f"_Use_ `!help <cmd>` _to get help for a\nspecific command_\n\n"
